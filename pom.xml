@@ -9,6 +9,7 @@
   	<module>check-security</module>
   	<module>check-model-jpa</module>
   	<module>check-web</module>
+  	<module>check-tools</module>
   </modules>
   <properties>
 		<java-version>1.6</java-version>
