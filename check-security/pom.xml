@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.check</groupId>
+    <artifactId>check</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>check-security</artifactId>
+  <dependencies>
+	<!-- Security -->
+		<dependency>
+  			<groupId>org.apache.shiro</groupId>
+  			<artifactId>shiro-core</artifactId>
+  			<version>${org.apache.shiro-version}</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>org.apache.shiro</groupId>
+  			<artifactId>shiro-web</artifactId>
+  			<version>${org.apache.shiro-version}</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>org.apache.shiro</groupId>
+  			<artifactId>shiro-aspectj</artifactId>
+  			<version>${org.apache.shiro-version}</version>
+		</dependency>
+	
+		<dependency>
+  			<groupId>org.apache.shiro</groupId>
+  			<artifactId>shiro-cas</artifactId>
+  			<version>${org.apache.shiro-version}</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>org.apache.shiro</groupId>
+  			<artifactId>shiro-ehcache</artifactId>
+  			<version>${org.apache.shiro-version}</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>org.apache.shiro</groupId>
+  			<artifactId>shiro-spring</artifactId>
+  			<version>${org.apache.shiro-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.check</groupId>
+			<artifactId>check-model-jpa</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+  </dependencies>
+  
+</project>
