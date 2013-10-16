@@ -20,10 +20,8 @@ public class UserTool {
 		System.err.println("test some.......");
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
 		System.err.println("test some.......");
-
-		ctx.load("classpath:application-context.xml");
+		ctx.load("classpath*:/application-context.xml,        classpath*:/application-security-context.xml");
 		System.err.println("test some.......");
-
 		ctx.refresh();
 		System.err.println("test some.......");
 

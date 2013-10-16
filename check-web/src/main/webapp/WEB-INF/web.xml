@@ -3,7 +3,8 @@
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
-        classpath*:application-context.xml
+        classpath*:/application-context.xml,
+        classpath*:/application-security-context.xml
     </param-value>
   </context-param>
   <listener>
