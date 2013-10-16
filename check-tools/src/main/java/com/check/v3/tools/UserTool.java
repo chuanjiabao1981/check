@@ -17,9 +17,16 @@ public class UserTool {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.err.println("test some.......");
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
+		System.err.println("test some.......");
+
 		ctx.load("classpath:application-context.xml");
+		System.err.println("test some.......");
+
 		ctx.refresh();
+		System.err.println("test some.......");
+
 		
 		UserService 					    userService 			= (UserService) 		ctx.getBean("userService");
 		DefaultWebSecurityManager			securityManager			=  (DefaultWebSecurityManager) ctx.getBean("securityManager");
