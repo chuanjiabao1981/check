@@ -17,13 +17,13 @@ public class UserTool {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.err.println("test some.......");
+		System.err.println("1.test some.......");
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
-		System.err.println("test some.......");
-		ctx.load("classpath*:/application-context.xml,        classpath*:/application-security-context.xml");
-		System.err.println("test some.......");
+		System.err.println("2.test some.......");
+		ctx.load("classpath*:application-context.xml");
+		System.err.println("3.test some.......");
 		ctx.refresh();
-		System.err.println("test some.......");
+		System.err.println("4.test some.......");
 
 		
 		UserService 					    userService 			= (UserService) 		ctx.getBean("userService");
@@ -35,7 +35,7 @@ public class UserTool {
 		SecurityUtils.setSecurityManager((org.apache.shiro.mgt.SecurityManager) securityManager);
 		User		user		= new User();
 		logger.info("new a user");
-		user.setAccount("test");
+		user.setAccount("test222");
 		user.setPassword("12345");
 		logger.info("begin save user");
 		userService.save(user);
