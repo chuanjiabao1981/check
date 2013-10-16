@@ -19,6 +19,7 @@ import com.check.v3.service.UserService;
 public class CheckRealm extends AuthorizingRealm{
 	private static final Logger Logger = LoggerFactory.getLogger(CheckRealm.class);
 
+	
 	@Autowired
 	UserService userService;
 	
