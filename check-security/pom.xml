@@ -7,6 +7,11 @@
   </parent>
   <artifactId>check-security</artifactId>
   <dependencies>
+      <dependency>
+			<groupId>com.check</groupId>
+			<artifactId>check-model-jpa</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 	<!-- Security -->
 		<dependency>
   			<groupId>org.apache.shiro</groupId>
@@ -43,11 +48,7 @@
   			<artifactId>shiro-spring</artifactId>
   			<version>${org.apache.shiro-version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.check</groupId>
-			<artifactId>check-model-jpa</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
+		
   </dependencies>
   
 </project>
