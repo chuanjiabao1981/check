@@ -60,6 +60,7 @@
       </plugins>
       <pluginManagement>
 	<plugins>
+	<!-- m2 不支持 copy-dependencies 通过如下方式解决 -->
     <!-- Ignore/Execute plugin execution -->
     <plugin>
         <groupId>org.eclipse.m2e</groupId>
