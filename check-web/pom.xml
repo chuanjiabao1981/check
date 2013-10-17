@@ -53,7 +53,8 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>${javax.validation.api-version}</version>
-		</dependency>	
+		</dependency>
+			
 		<!-- json -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>

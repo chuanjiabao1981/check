@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import com.check.v3.domain.User;
+import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.UserService;
 
 public class UserTool {
@@ -17,13 +18,9 @@ public class UserTool {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.err.println("1.test some.......");
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
-		System.err.println("2.test some.......");
-		ctx.load("classpath*:application-context.xml");
-		System.err.println("3.test some.......");
+		ctx.load("classpath*:/application-context.xml","classpath*:/application-security-context.xml");
 		ctx.refresh();
-		System.err.println("4.test some.......");
 
 		
 		UserService 					    userService 			= (UserService) 		ctx.getBean("userService");
@@ -35,8 +32,9 @@ public class UserTool {
 		SecurityUtils.setSecurityManager((org.apache.shiro.mgt.SecurityManager) securityManager);
 		User		user		= new User();
 		logger.info("new a user");
-		user.setAccount("test222");
-		user.setPassword("12345");
+		user.setAccount("xxxx");
+		user.setPassword_cryp(SecurityTools.getEncryptPassword("12345"));
+		System.err.println(user.getAccount());
 		logger.info("begin save user");
 		userService.save(user);
 		logger.info("after save user");

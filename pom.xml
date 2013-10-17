@@ -85,8 +85,8 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
-		
-  	</dependencies>
+
+	</dependencies>
     <build>
         <plugins>
             <plugin>
@@ -115,32 +115,31 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
-            <!--plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
                     <mainClass>org.test.int1.Main</mainClass>
                 </configuration>
-            </plugin-->
-            <!--plugin>
+            </plugin>
+            <plugin>
         		<groupId>org.apache.maven.plugins</groupId>
         		<artifactId>maven-dependency-plugin</artifactId>
         		<version>2.8</version>
         		<executions>
           			<execution>
-            <id>analyze</id>
-            <goals>
-              <goal>analyze-only</goal>
-            </goals>
-            <configuration>
-              <failOnWarning>true</failOnWarning>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin-->
-            
-     </plugins>
+            			<id>analyze</id>
+           					<goals>
+              					<goal>analyze-only</goal>
+            				</goals>
+            				<configuration>
+              					<failOnWarning>false</failOnWarning>
+            				</configuration>
+          			</execution>
+        		</executions>
+      		</plugin>
+        </plugins>
     </build>
   
 </project>
