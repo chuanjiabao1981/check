@@ -31,16 +31,13 @@ public class UserTool {
 		 */
 		SecurityUtils.setSecurityManager((org.apache.shiro.mgt.SecurityManager) securityManager);
 		User		user		= new User();
-		logger.info("new a user");
-		user.setAccount("xxxx");
+		user.setAccount("test");
 		user.setPassword_cryp(SecurityTools.getEncryptPassword("12345"));
 		System.err.println(user.getAccount());
-		logger.info("begin save user");
+		logger.info("add user "+user.getAccount());
 		userService.save(user);
-		logger.info("after save user");
-
+		logger.info("save user "+user.getAccount());
 		ctx.close();
-		logger.info("end");
 
 	}
 
