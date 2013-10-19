@@ -2,6 +2,8 @@ package com.check.v3.dto;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class SessionDTO implements Serializable{
 	
 	private static final long serialVersionUID = -901893144190378361L;
@@ -11,6 +13,7 @@ public class SessionDTO implements Serializable{
 	{
 		this.sessionId = sessionId;
 	}
+	@JsonProperty("session_id")
 	public String getSessionId() {
 		return sessionId;
 	}

@@ -34,4 +34,10 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(user);
 	}
 
+	@Override
+	@Transactional(readOnly=true)
+	public Object load(Long id) {
+		return findById(id);
+	}
+
 }

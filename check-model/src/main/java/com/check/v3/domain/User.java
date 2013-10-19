@@ -3,6 +3,7 @@ package com.check.v3.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.util.Set;
 //import java.util.Collection;
 
 import javax.persistence.Column;
@@ -23,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements Serializable,Affiliation {
 	
 	private static final Logger logger = LoggerFactory.getLogger(User.class);
 
@@ -36,6 +37,7 @@ public class User implements Serializable {
 	private String  password;
 	private String  password_verify;
 	private String 	password_cryp;
+	private Role  	defaultRole = Role.USER;
 	
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
@@ -63,7 +65,21 @@ public class User implements Serializable {
 	public String getAccount() {
 		return account;
 	}
+	@Override
+	@Transient//TODO::删除这个annotation
+	public Set<Organization> getBelongsToOrganizations() {
+		return null;
+	}
 	
+	@Transient//TODO::删除这个annotation
+	public Role getDefaultRole() {
+		return defaultRole;
+	}
+
+	public void setDefaultRole(Role defaultRole) {
+		this.defaultRole = defaultRole;
+	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -118,7 +134,8 @@ public class User implements Serializable {
 		}
 		return false;
 	}
-	
+
+		
 	
 	
 
