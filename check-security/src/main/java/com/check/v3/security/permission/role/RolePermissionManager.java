@@ -20,6 +20,8 @@ public class RolePermissionManager {
 	private OrganizationMemberPermission organizationMemberPermission;
 	@Autowired
 	private UserPermission userPermission;
+	@Autowired
+	private OrganizationAdminPermission organizationAdminPermission;
 	
 	public  boolean isAllowed(Role role,String controller,String action,Object instance )
 	{
@@ -33,6 +35,8 @@ public class RolePermissionManager {
 				return organizationSupervisorPermission.isAllowed(controller, action, instance);
 			case ORGANIZATION_MEMBER:
 				return organizationMemberPermission.isAllowed(controller, action, instance);
+			case ORGANIZATION_ADMIN:
+				return organizationAdminPermission.isAllowed(controller, action, instance);
 			case USER:
 				return userPermission.isAllowed(controller, action, instance);
 			default:

@@ -1,4 +1,4 @@
-package com.check.v3.security.permission;
+package com.check.v3.security.permission.role;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ import com.check.v3.domain.Organization;
 import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.security.SecurityConstant;
-import com.check.v3.security.permission.role.RolePermissionManager;
+import com.check.v3.security.permission.BasePermission;
 import com.check.v3.service.LoadInstanceService;
 
 public class PermissionManager {
@@ -69,6 +69,9 @@ public class PermissionManager {
 	private Role getUserRoleFromOganizations(User user,Set<Organization> organizations)
 	{
 		//TODO::
+		//1. 获取用户直接所属机构
+		//2. 和organizations是否有交集
+		//3. 交集中的最优权限
 		return Role.ORGANIZATION_SUPERVISOR;
 	}
 
