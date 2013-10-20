@@ -3,13 +3,18 @@ package com.check.v3.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 //import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -30,15 +35,25 @@ public class User implements Serializable,Affiliation {
 
 	private static final long serialVersionUID = -15913810676325L;
 	
-	private long 	id;
-	private int 	version; 
-	private String 	name;
-	private String  account;
-	private String  password;
-	private String  password_verify;
-	private String 	password_cryp;
-	private Role  	defaultRole = Role.USER;
+	private long 					id;
+	private int 					version; 
+	private String 					name;
+	private String  				account;
+	private String  				password;
+	private String  				password_verify;
+	private String 					password_cryp;
+	private Role  					defaultRole 		= Role.USER;
+	private Set<OrganizationPost> 	organizationPosts 	= new HashSet<OrganizationPost>();
 	
+	
+	public User()
+	{
+		
+	}
+	public User(String name)
+	{
+		this.name = name;
+	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
 	@Column(name = "id")
@@ -51,7 +66,7 @@ public class User implements Serializable,Affiliation {
 		return version;
 	}
 	
-	@Column(name = "name")
+	@Column(name = "name",unique=true)
 	public String getName() {
 		return name;
 	}
@@ -75,7 +90,15 @@ public class User implements Serializable,Affiliation {
 	public Role getDefaultRole() {
 		return defaultRole;
 	}
-
+	@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_organization_posts",
+    		   joinColumns = @JoinColumn(name = "user_id"),
+    		   inverseJoinColumns = @JoinColumn(name = "organization_post_id"))
+	public Set<OrganizationPost> getOrganizationPosts()
+	{
+		return organizationPosts;
+	}
+	
 	public void setDefaultRole(Role defaultRole) {
 		this.defaultRole = defaultRole;
 	}
@@ -115,6 +138,11 @@ public class User implements Serializable,Affiliation {
 	public void setAccount(String account) {
 		this.account = account;
 	}
+	
+	public void setOrganizationPosts(Set<OrganizationPost> organizationPosts) {
+		this.organizationPosts = organizationPosts;
+	}
+
 	public boolean equals(Object obj)
 	{
 		if (!(obj instanceof User)){

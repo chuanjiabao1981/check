@@ -7,5 +7,6 @@ public interface UserService extends LoadInstanceService{
 	public User findById(Long id);
 	public User findByAccount(String account);
 	public User save(User user);
+	public void delete(User user);
 
 }
