@@ -32,11 +32,11 @@ public class OrganizationPostTool {
 		
 		organization										= new Organization(organizationName,OrganizationType.NON_LEAF_NODE);
 		user												= new User(userAccount);
-
 		organizationService.save(organization);
 		
-		for(OrganizationPost p : organization.getOrganizationPosts())
+		for(OrganizationPost p : organization.getOrganizationPosts()){
 			user.getOrganizationPosts().add(p);
+		}
 		userService.save(user);
 	}
 

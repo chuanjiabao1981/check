@@ -18,17 +18,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="organizations")
-public class Organization implements Serializable{
+public class Organization implements Serializable,Affiliation{
 	
 	
 	private static final long serialVersionUID = -3552455311356671929L;
 	
-	private long 	id;
+	private Long 	id;
 	private String 	name;
 	private Set<OrganizationPost> organizationPosts = new HashSet<OrganizationPost>();
 	private Set<Organization> subOrganizations		= new HashSet<Organization>();
@@ -37,7 +37,13 @@ public class Organization implements Serializable{
 	
 	public Organization()
 	{
-			}
+		OrganizationPost op1 = new OrganizationPost(OrganizationPostType.MANAGER);
+		OrganizationPost op2 = new OrganizationPost(OrganizationPostType.MEMEBER);
+		op1.setOrganization(this);
+		op2.setOrganization(this);
+		organizationPosts.add(op1);
+		organizationPosts.add(op2);
+	}
 	public Organization(String name,OrganizationType type)
 	{
 		this();
@@ -45,25 +51,19 @@ public class Organization implements Serializable{
 		this.type = type;
 	}
 	
-	public void test()
+	public void init()
 	{
-		OrganizationPost op1 = new OrganizationPost(OrganizationPostType.MANAGER);
-		OrganizationPost op2 = new OrganizationPost(OrganizationPostType.MEMEBER);
-		op1.setOrganization(this);
-		op2.setOrganization(this);
-		organizationPosts.add(op1);
-		organizationPosts.add(op2);
-
+		
 	}
 	
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
 	@Column(name = "id")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	@Column(name = "name")
-//	@NotEmpty
+	@NotNull
 	public String getName() {
 		return name;
 	}
@@ -123,6 +123,11 @@ public class Organization implements Serializable{
 	{
 		organization.setParentOrganization(this);
 		this.subOrganizations.add(organization);
+	}
+	@Override
+	public Set<Organization> getBelongsToOrganizations() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

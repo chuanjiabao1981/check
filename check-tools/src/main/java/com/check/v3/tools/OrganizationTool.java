@@ -1,14 +1,10 @@
 package com.check.v3.tools;
 
-import java.util.HashSet;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import com.check.v3.domain.Organization;
-import com.check.v3.domain.OrganizationPost;
-import com.check.v3.domain.OrganizationPostType;
 import com.check.v3.domain.OrganizationType;
 import com.check.v3.service.OrganizationService;
 
@@ -25,9 +21,9 @@ public class OrganizationTool {
 		OrganizationService organizationService = (OrganizationService) ctx.getBean("organizationService");
 		
 		organizationAndPosition(organizationService);
-//		createOrganizationHierachy(organizationService);
-//		getOrganizationHierachy(organizationService,organizationService.findByName("a"));
-//		deleteOrganizationHierachy(organizationService,organizationService.findByName("a"));
+		createOrganizationHierachy(organizationService);
+		getOrganizationHierachy(organizationService,organizationService.findByName("a"));
+		deleteOrganizationHierachy(organizationService,organizationService.findByName("a"));
 
 
 	}
@@ -73,24 +69,9 @@ public class OrganizationTool {
 			organizationService.delete(f);
 		}
 		/**add a new organization **/
-		Organization o = new Organization();
-		o.setName(orgName);
-		o.test();
+		Organization o = new Organization(orgName,OrganizationType.NON_LEAF_NODE);
 		/** add organizationPost **/
-//		OrganizationPost op1 = new OrganizationPost(OrganizationPostType.MANAGER);
-//		OrganizationPost op2 = new OrganizationPost(OrganizationPostType.MEMEBER);
-		
-//		op1.setOrganization(o);
-//		op2.setOrganization(o);
-//		HashSet<OrganizationPost> ops = new HashSet<OrganizationPost>();
-//		ops.add(op1);
-//		ops.add(op2);
-//		o.setOrganizationPosts(ops);
-
-//		o.getOrganizationPosts().add(op1);
-//		o.getOrganizationPosts().add(op2);
-		
-		
+		//构造函数完成此操作
 		/** save organization **/
 		
 		organizationService.save(o);

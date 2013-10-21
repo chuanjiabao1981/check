@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 //import org.apache.shiro.SecurityUtils;
 //import org.apache.shiro.authc.credential.PasswordMatcher;
@@ -50,9 +51,9 @@ public class User implements Serializable,Affiliation {
 	{
 		
 	}
-	public User(String name)
+	public User(String account)
 	{
-		this.name = name;
+		this.account = account;
 	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
@@ -77,6 +78,7 @@ public class User implements Serializable,Affiliation {
 	}
 	
 	@Column(name="account")
+	@NotNull
 	public String getAccount() {
 		return account;
 	}

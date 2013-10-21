@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,11 +22,11 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "organization_posts")
-public class OrganizationPost implements Serializable{
+public class OrganizationPost implements Serializable,Affiliation{
 	
 	private static final long serialVersionUID = -4907955816987201008L;
 	
-	private long id;
+	private Long id;
 	private OrganizationPostType type;
 	private Organization organization;
 	private Set<User> users 			= new HashSet<User>();
@@ -39,14 +40,14 @@ public class OrganizationPost implements Serializable{
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
 	@Column(name = "id")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
     @Enumerated(EnumType.STRING)
 	public OrganizationPostType getType() {
 		return type;
 	}
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "organization_id")
 	@NotNull
 	public Organization getOrganization() {
@@ -68,6 +69,11 @@ public class OrganizationPost implements Serializable{
 	}
 	public void setUsers(Set<User> users) {
 		this.users = users;
+	}
+	@Override
+	public Set<Organization> getBelongsToOrganizations() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
