@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 
@@ -47,7 +48,7 @@ public class OrganizationPost implements Serializable,Affiliation{
 	public OrganizationPostType getType() {
 		return type;
 	}
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "organization_id")
 	@NotNull
 	public Organization getOrganization() {
@@ -71,6 +72,7 @@ public class OrganizationPost implements Serializable,Affiliation{
 		this.users = users;
 	}
 	@Override
+	@Transient
 	public Set<Organization> getBelongsToOrganizations() {
 		// TODO Auto-generated method stub
 		return null;

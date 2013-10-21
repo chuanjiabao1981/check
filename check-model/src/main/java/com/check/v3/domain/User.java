@@ -92,7 +92,7 @@ public class User implements Serializable,Affiliation {
 	public Role getDefaultRole() {
 		return defaultRole;
 	}
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
     @JoinTable(name = "user_organization_posts",
     		   joinColumns = @JoinColumn(name = "user_id"),
     		   inverseJoinColumns = @JoinColumn(name = "organization_post_id"))

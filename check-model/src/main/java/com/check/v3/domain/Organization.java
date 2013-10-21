@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 
@@ -113,6 +114,7 @@ public class Organization implements Serializable,Affiliation{
 		this.subOrganizations.add(organization);
 	}
 	@Override
+	@Transient
 	public Set<Organization> getBelongsToOrganizations() {
 		// TODO Auto-generated method stub
 		return null;
