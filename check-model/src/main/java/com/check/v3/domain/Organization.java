@@ -51,11 +51,6 @@ public class Organization implements Serializable,Affiliation{
 		this.type = type;
 	}
 	
-	public void init()
-	{
-		
-	}
-	
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
 	@Column(name = "id")
@@ -108,14 +103,7 @@ public class Organization implements Serializable,Affiliation{
 	}
 	
 	public void setOrganizationPosts(Set<OrganizationPost> organizationPosts) {
-//		if (organizationPosts != null){
-//			if (organizationPosts.size() > OrganizationPostType.END.ordinal()){
-//				throw new RuntimeException("no more then "+OrganizationPostType.END.ordinal()+" organization post type!");
-//			}
-//			this.organizationPosts = organizationPosts;
-//		}
 		this.organizationPosts = organizationPosts;
-
 	}
 	//TODO::
 	// 1. validator only NON_LEAF_NODE can has organization
