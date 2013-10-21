@@ -30,7 +30,7 @@
                                                                           
         </table>         
        
-        <a href="${editUserUrl}/${user.id}?form">Edit user info</a>     
+        <a href="${editUserUrl}/${user.id}?edit">Edit user info</a>     
                       
     </div>
 
