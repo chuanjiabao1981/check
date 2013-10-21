@@ -6,7 +6,7 @@
      version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <spring:url value="/users/${user.id}?form" var="editUserUrl"/>
+    <spring:url value="/users/${user.id}?edit" var="editUserUrl"/>
 
     <h1>Edit User</h1>
 

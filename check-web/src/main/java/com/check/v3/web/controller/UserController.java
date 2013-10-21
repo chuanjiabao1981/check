@@ -46,13 +46,13 @@ public class UserController {
 		uiModel.addAttribute("user", user);
         return "users/show";
     }
-	@RequestMapping(value = "/users/{id}", params = "form", method = RequestMethod.GET)
-    public String editUser(@PathVariable("id") Long id, Model uiModel) {
+	@RequestMapping(value = "/users/{id}", params = "edit", method = RequestMethod.GET)
+    public String edit(@PathVariable("id") Long id, Model uiModel) {
         uiModel.addAttribute("user", userService.findById(id));
         return "users/edit";
 	}	
-	@RequestMapping(value = "/users/{id}", params = "form", method = RequestMethod.POST)
-    public String edit(@ModelAttribute User user,
+	@RequestMapping(value = "/users/{id}", params = "edit", method = RequestMethod.POST)
+    public String update(@ModelAttribute User user,
 			Model model
     		) {
         userService.save(user);
