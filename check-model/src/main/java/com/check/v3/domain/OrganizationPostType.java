@@ -2,9 +2,9 @@ package com.check.v3.domain;
 
 public enum OrganizationPostType 
 {
-	MANAGER("管理"),
+	SUPERVISOR("管理"),
 	MEMEBER("成员"),
-	END;
+	ADMIN("维护");
 	
 	private String text;
 
@@ -16,9 +16,5 @@ public enum OrganizationPostType
 	OrganizationPostType(String text)
 	{
 		this.text = text;
-	}
-	OrganizationPostType()
-	{
-		this.text = "_LAST";
 	}
 }

@@ -20,7 +20,11 @@ public class OrganizationPostTool {
 		ctx.refresh();
 		String userAccount									= "organization_user_test";
 		String organizationName								= "organization_tools";
+		newUserWithPosition(ctx, userAccount, organizationName);
 		
+	}
+	public static void newUserWithPosition(GenericXmlApplicationContext ctx,String userAccount,String organizationName)
+	{
 		UserService                   userService 			= (UserService) 		ctx.getBean("userService");
 		OrganizationService	   organizationService 			= (OrganizationService) ctx.getBean("organizationService");
 		User			              user					= userService.findByAccount(userAccount);
@@ -38,6 +42,6 @@ public class OrganizationPostTool {
 			user.getOrganizationPosts().add(p);
 		}
 		userService.save(user);
-	}
 
+	}
 }

@@ -5,9 +5,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-//import java.util.Collection;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,11 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-//import org.apache.shiro.SecurityUtils;
-//import org.apache.shiro.authc.credential.PasswordMatcher;
-//import org.apache.shiro.mgt.RealmSecurityManager;
-//import org.apache.shiro.realm.AuthorizingRealm;
-//import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,9 +76,17 @@ public class User implements Serializable,Affiliation {
 		return account;
 	}
 	@Override
-	@Transient//TODO::删除这个annotation
+	@Transient
 	public Set<Organization> getBelongsToOrganizations() {
-		return null;
+		if (organizationPosts == null || organizationPosts.isEmpty()){
+			return null;
+		}
+		Set<Organization> s = new HashSet<Organization>();
+		for(OrganizationPost post:organizationPosts){
+			s.add(post.getOrganization());
+		}
+		return s;
+		
 	}
 	
 	@Transient//TODO::删除这个annotation

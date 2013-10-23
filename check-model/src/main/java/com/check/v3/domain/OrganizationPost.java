@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -74,7 +73,6 @@ public class OrganizationPost implements Serializable,Affiliation{
 	@Override
 	@Transient
 	public Set<Organization> getBelongsToOrganizations() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

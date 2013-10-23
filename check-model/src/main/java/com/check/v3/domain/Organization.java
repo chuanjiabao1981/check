@@ -21,12 +21,18 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Sets;
+
 
 @Entity
 @Table(name="organizations")
 public class Organization implements Serializable,Affiliation{
 	
-	
+	private static final Logger logger = LoggerFactory.getLogger(Organization.class);
+
 	private static final long serialVersionUID = -3552455311356671929L;
 	
 	private Long 	id;
@@ -38,12 +44,15 @@ public class Organization implements Serializable,Affiliation{
 	
 	public Organization()
 	{
-		OrganizationPost op1 = new OrganizationPost(OrganizationPostType.MANAGER);
+		OrganizationPost op1 = new OrganizationPost(OrganizationPostType.SUPERVISOR);
 		OrganizationPost op2 = new OrganizationPost(OrganizationPostType.MEMEBER);
+		OrganizationPost op3 = new OrganizationPost(OrganizationPostType.ADMIN);
 		op1.setOrganization(this);
 		op2.setOrganization(this);
+		op3.setOrganization(this);
 		organizationPosts.add(op1);
 		organizationPosts.add(op2);
+		organizationPosts.add(op3);
 	}
 	public Organization(String name,OrganizationType type)
 	{
@@ -106,17 +115,30 @@ public class Organization implements Serializable,Affiliation{
 	public void setOrganizationPosts(Set<OrganizationPost> organizationPosts) {
 		this.organizationPosts = organizationPosts;
 	}
-	//TODO::
-	// 1. validator only NON_LEAF_NODE can has organization
 	public void addSubOrganization(Organization organization)
 	{
+		if (this.type  != OrganizationType.NON_LEAF_NODE){
+			logger.warn("this organization can't have child node");
+			return;
+		}
 		organization.setParentOrganization(this);
 		this.subOrganizations.add(organization);
+	}
+	public boolean isContainOrganization(Organization s){
+		if (s.getId() == this.getId()){
+			return true;
+		}
+		for(Organization o:this.getSubOrganizations()){
+			return o.isContainOrganization(s);
+		}
+		return false;
 	}
 	@Override
 	@Transient
 	public Set<Organization> getBelongsToOrganizations() {
-		// TODO Auto-generated method stub
+		if (parentOrganization != null){
+			return Sets.newHashSet(parentOrganization);
+		}
 		return null;
 	}
 

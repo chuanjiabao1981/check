@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.check.v3.domain.Affiliation;
 import com.check.v3.domain.Organization;
+import com.check.v3.domain.OrganizationPost;
 import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.security.SecurityConstant;
@@ -51,7 +52,7 @@ public class PermissionManager {
 					logger.trace("current instace dose not belongs to any organizations");
 					return false;
 				}
-				//3.2 当前用户在instance的角色(ORGANIZATION_SUPERVISOR,ORGANIZATION_MEMBER)
+				//3.2 当前用户在instance的角色(ORGANIZATION_SUPERVISOR,ORGANIZATION_MEMBER,ORGANIZATION_ADMIN)
 				Role role							= getUserRoleFromOganizations(current_user, organizations);
 				if (role == null){
 					logger.trace("current user has not to any role on current instace");
@@ -68,11 +69,25 @@ public class PermissionManager {
 	
 	private Role getUserRoleFromOganizations(User user,Set<Organization> organizations)
 	{
-		//TODO::
-		//1. 获取用户直接所属机构
-		//2. 和organizations是否有交集
-		//3. 交集中的最优权限
-		return Role.ORGANIZATION_SUPERVISOR;
+		//1. 用户直接所属机构以及它的下属机构和organizations 是否有交集
+		//2. 如果有，则返回用户直接所在机构的角色
+		for(OrganizationPost post:user.getOrganizationPosts()){
+			for(Organization organization: organizations){
+				if (post.getOrganization().isContainOrganization(organization)){
+					switch(post.getType()){
+						case SUPERVISOR:
+							return Role.ORGANIZATION_SUPERVISOR;
+						case MEMEBER:
+							return Role.ORGANIZATION_MEMBER;
+						case ADMIN:
+							return Role.ORGANIZATION_ADMIN;
+					}
+					
+				}
+			}
+
+		}
+		return null;
 	}
 
 }
