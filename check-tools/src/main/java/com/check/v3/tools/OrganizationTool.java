@@ -20,11 +20,19 @@ public class OrganizationTool {
 		ctx.refresh();
 		OrganizationService organizationService = (OrganizationService) ctx.getBean("organizationService");
 		
-		organizationAndPosition(organizationService);
-		createOrganizationHierachy(organizationService);
-		getOrganizationHierachy(organizationService,organizationService.findByName("a"));
-		deleteOrganizationHierachy(organizationService,organizationService.findByName("a"));
+//		organizationAndPosition(organizationService);
+//		createOrganizationHierachy(organizationService);
+//		getOrganizationHierachy(organizationService,organizationService.findByName("a"));
+//		deleteOrganizationHierachy(organizationService,organizationService.findByName("a"));
+		testRingOrganization();
 
+
+	}
+	private static void testRingOrganization()
+	{
+		Organization o1 = new Organization("o1",OrganizationType.NON_LEAF_NODE);
+		Organization o2 = new Organization("o2",OrganizationType.NON_LEAF_NODE);
+		o1.addSubOrganization(o2);
 
 	}
 	private static void deleteOrganizationHierachy(OrganizationService organizationService,Organization o)

@@ -115,14 +115,26 @@ public class Organization implements Serializable,Affiliation{
 	public void setOrganizationPosts(Set<OrganizationPost> organizationPosts) {
 		this.organizationPosts = organizationPosts;
 	}
-	public void addSubOrganization(Organization organization)
+	public Organization addSubOrganization(Organization organization)
 	{
+		if (organization == null){
+			logger.warn("null sub organization is given");
+			return organization;
+		}
+		Organization parent = this;
+		while(parent != null){
+			if (parent == organization || (parent.id != null && organization.id != null && organization.id == parent.id)){
+				throw new RuntimeException("the organization is point to the farther");
+			}
+			parent = parent.getParentOrganization();
+		}
 		if (this.type  != OrganizationType.NON_LEAF_NODE){
 			logger.warn("this organization can't have child node");
-			return;
+			return organization;
 		}
 		organization.setParentOrganization(this);
 		this.subOrganizations.add(organization);
+		return organization;
 	}
 	public boolean isContainOrganization(Organization s){
 		if (s.getId() == this.getId()){

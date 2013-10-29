@@ -33,7 +33,10 @@ public class PermissionManager {
 		User				current_user			= null;
 		if (load_instance !=null){
 			current_instance = load_instance.load(instanceId);
-			httpServletRequest.setAttribute(SecurityConstant.CurrentInstance, current_instance);
+			if (httpServletRequest != null)
+				httpServletRequest.setAttribute(SecurityConstant.CurrentInstance, current_instance);
+			else
+				logger.warn("httpServletRequest is null");
 		}
 		//1. Guest权限判断
 		if (subject == null || subject.getPrincipal() == null){
