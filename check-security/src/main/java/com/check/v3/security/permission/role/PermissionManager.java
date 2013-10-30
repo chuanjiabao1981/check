@@ -85,10 +85,8 @@ public class PermissionManager {
 						case ADMIN:
 							return Role.ORGANIZATION_ADMIN;
 					}
-					
 				}
 			}
-
 		}
 		return null;
 	}
