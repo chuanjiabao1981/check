@@ -22,6 +22,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.check.v3.domain.Organization;
+
 
 @Entity
 @Table(name = "users")

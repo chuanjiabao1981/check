@@ -11,13 +11,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.check.v3.domain.Affiliation;
-import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationPost;
 import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.security.SecurityConstant;
 import com.check.v3.security.permission.BasePermission;
 import com.check.v3.service.LoadInstanceService;
+import com.check.v3.domain.Organization;
 
 public class PermissionManager {
 	private static final Logger logger = LoggerFactory.getLogger(PermissionManager.class);
@@ -85,10 +85,8 @@ public class PermissionManager {
 						case ADMIN:
 							return Role.ORGANIZATION_ADMIN;
 					}
-					
 				}
 			}
-
 		}
 		return null;
 	}

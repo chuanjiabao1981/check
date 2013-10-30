@@ -1,7 +1,7 @@
 package com.check.v3.tools;
 
-import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationType;
+import com.check.v3.domain.Organization;
 
 public class Security {
 

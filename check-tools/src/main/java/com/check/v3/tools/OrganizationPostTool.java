@@ -2,12 +2,12 @@ package com.check.v3.tools;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationPost;
 import com.check.v3.domain.OrganizationType;
 import com.check.v3.domain.User;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.UserService;
+import com.check.v3.domain.Organization;
 
 public class OrganizationPostTool {
 

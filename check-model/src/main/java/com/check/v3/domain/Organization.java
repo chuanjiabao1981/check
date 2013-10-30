@@ -137,7 +137,10 @@ public class Organization implements Serializable,Affiliation{
 		return organization;
 	}
 	public boolean isContainOrganization(Organization s){
-		if (s.getId() == this.getId()){
+		if (this.getId() != null && s.getId() != null && s.getId() == this.getId()){
+			return true;
+		}
+		if (this.equals(s)){
 			return true;
 		}
 		for(Organization o:this.getSubOrganizations()){
