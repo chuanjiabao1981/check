@@ -40,7 +40,7 @@
 	    <property name="jpaVendorAdapter">
 	        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 	    </property>
-	    <property name="packagesToScan" value="com.check.v3.domain"/>
+	    <property name="packagesToScan" value="com.check.v3.test.domain"/>
 	    <property name="jpaProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect </prop>

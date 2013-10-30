@@ -5,9 +5,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.check.v3.domain.Organization;
 import com.check.v3.repository.OrganizationRepository;
 import com.check.v3.service.OrganizationService;
+import com.check.v3.domain.Organization;
 
 @Service("organizationService")
 @Repository

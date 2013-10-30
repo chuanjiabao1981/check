@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationType;
 import com.check.v3.service.OrganizationService;
+import com.check.v3.domain.Organization;
 
 public class OrganizationTool {
 	private static final Logger logger = LoggerFactory.getLogger(OrganizationTool.class);
@@ -20,10 +20,10 @@ public class OrganizationTool {
 		ctx.refresh();
 		OrganizationService organizationService = (OrganizationService) ctx.getBean("organizationService");
 		
-//		organizationAndPosition(organizationService);
-//		createOrganizationHierachy(organizationService);
-//		getOrganizationHierachy(organizationService,organizationService.findByName("a"));
-//		deleteOrganizationHierachy(organizationService,organizationService.findByName("a"));
+		organizationAndPosition(organizationService);
+		createOrganizationHierachy(organizationService);
+		getOrganizationHierachy(organizationService,organizationService.findByName("a"));
+		deleteOrganizationHierachy(organizationService,organizationService.findByName("a"));
 		testRingOrganization();
 
 

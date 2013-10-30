@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import com.check.v3.domain.Organization;
+
 
 @Entity
 @Table(name = "organization_posts")
