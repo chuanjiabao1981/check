@@ -1,5 +1,6 @@
 package com.check.v3.domain;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -51,7 +52,23 @@ public class TestOrganization {
 	public void testAddOrganization()
 	{
 		o1.addSubOrganization(o2);
+		o2.addSubOrganization(o3);
 		assertTrue(o2.getParentOrganization().equals(o1));
+		assertTrue(o1.isContainOrganization(o2));
+		assertTrue(o1.isContainOrganization(o3));
+		assertTrue(o1.getSubOrganizations().contains(o2));
+		assertTrue(o2.getSubOrganizations().contains(o3));
+		//测试反例
+		assertFalse(o1.isContainOrganization(o4));
+		//测试正例
+		assertFalse(o1.getSubOrganizations().contains(o3));
+	}
+	@Test
+	public void testDebug()
+	{
+		Organization a = new Organization("ss",OrganizationType.LEAF_NODE);
+		Organization b = new Organization("ss",OrganizationType.LEAF_NODE);
+		assertTrue(a.equals(a));
 	}
 	
 }
