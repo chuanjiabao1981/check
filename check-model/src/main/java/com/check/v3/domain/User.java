@@ -16,7 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,11 @@ public class User implements Serializable,Affiliation {
 	
 	private long 					id;
 	private int 					version; 
+	@NotEmpty(message="{validation.name.NotEmpty.message}")
+	@Size(min=5, max=60, message="{validation.user.name.Size.message}")
 	private String 					name;
+	@NotEmpty(message="{validation.account.NotEmpty.message}")
+	@Size(min=5, max=60, message="{validation.user.account.Size.message}")
 	private String  				account;
 	private String  				password;
 	private String  				password_verify;
@@ -89,7 +95,7 @@ public class User implements Serializable,Affiliation {
 		
 	}
 	
-	@Transient//TODO::删除这个annotation
+	@Transient//TODO::������������annotation
 	public Role getDefaultRole() {
 		return defaultRole;
 	}

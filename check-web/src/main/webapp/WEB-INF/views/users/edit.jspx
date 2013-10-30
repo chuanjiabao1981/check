@@ -8,7 +8,10 @@
     <jsp:output omit-xml-declaration="yes"/>
     <spring:url value="/users/${user.id}?edit" var="editUserUrl"/>
 
-    <h1>Edit User</h1>
+	<spring:message code="label_user_edit" var="labelUserEdit" />
+	<spring:message code="label_user_name" var="labelUserName" />
+	<spring:message code="label_user_account" var="labelUserAccount" />
+    <h1>${labelUserEdit }</h1>
 
     <div id="userEdit">
     <form:form modelAttribute="user" id="userEditForm" method="post" action="${editUserUrl}">
@@ -18,7 +21,7 @@
         </c:if>
 
         <form:label path="name">
-            Name* 
+            ${labelUserName }* 
         </form:label>
         <form:input path="name" />
         <div>
@@ -27,7 +30,7 @@
         <p/>
 
         <form:label path="account">
-            Account* 
+            ${labelUserAccount }* 
         </form:label>
         <form:input path="account" />
         <div>

@@ -15,12 +15,14 @@
 	<aop:aspectj-autoproxy />
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven>
+	<annotation-driven validator="validator">
 	    <message-converters>
 	        <beans:bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
 	    </message-converters>
 	</annotation-driven>
-
+	<beans:bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<beans:property name="validationMessageSource" ref="messageSource" />
+	</beans:bean>
 	<!--
 		把如下两个目录下的静态文件映射到uri /resources/下
 		1. / 表示 ${webappRoot}目录,也就是/src/main/webapp
@@ -46,7 +48,7 @@
 	
 	<beans:bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" 
 	    		id="messageSource" 
-	    		p:basenames="WEB-INF/i18n/messages,WEB-INF/i18n/application" 
+	    		p:basenames="WEB-INF/i18n/messages,WEB-INF/i18n/application,WEB-INF/i18n/validation_messages"
 	    		p:fallbackToSystemLocale="false"/>
 		
 </beans:beans>
