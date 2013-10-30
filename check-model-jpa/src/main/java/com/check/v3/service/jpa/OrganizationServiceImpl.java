@@ -30,6 +30,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 	}
 
 	@Override
+	@Transactional
 	public Organization save(Organization organization) {
 		return organizationRepository.save(organization);
 	}
