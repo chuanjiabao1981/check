@@ -1,6 +1,7 @@
 package com.check.v3.service.jpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.check.v3.domain.User;
 import com.check.v3.repository.UserRepository;
 import com.check.v3.service.UserService;
+import com.check.v3.service.exception.UserAccountDuplicateException;
 
 @Service("userService")
 @Repository
@@ -30,8 +32,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User save(User user) {
-		return userRepository.save(user);
+	public User save(User user)  throws UserAccountDuplicateException{
+		try {
+				return userRepository.save(user);
+		}catch(DataIntegrityViolationException ex){
+			if (ex.getMessage().contains("users_unique_account")){
+				throw new UserAccountDuplicateException();
+			}else{
+				throw ex;
+			}
+		}catch (Exception ex){
+			throw ex;
+		}
 	}
 
 	@Override

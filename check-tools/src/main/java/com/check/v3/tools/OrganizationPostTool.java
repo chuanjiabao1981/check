@@ -7,14 +7,16 @@ import com.check.v3.domain.OrganizationType;
 import com.check.v3.domain.User;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.UserService;
+import com.check.v3.service.exception.UserAccountDuplicateException;
 import com.check.v3.domain.Organization;
 
 public class OrganizationPostTool {
 
 	/**
 	 * @param args
+	 * @throws UserAccountDuplicateException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UserAccountDuplicateException {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
 		ctx.load("classpath*:/application-context.xml");
 		ctx.refresh();
@@ -23,7 +25,7 @@ public class OrganizationPostTool {
 		newUserWithPosition(ctx, userAccount, organizationName);
 		
 	}
-	public static void newUserWithPosition(GenericXmlApplicationContext ctx,String userAccount,String organizationName)
+	public static void newUserWithPosition(GenericXmlApplicationContext ctx,String userAccount,String organizationName) throws UserAccountDuplicateException
 	{
 		UserService                   userService 			= (UserService) 		ctx.getBean("userService");
 		OrganizationService	   organizationService 			= (OrganizationService) ctx.getBean("organizationService");
