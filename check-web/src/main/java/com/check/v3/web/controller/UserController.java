@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.check.v3.domain.User;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.UserService;
+import com.check.v3.service.exception.UserAccountDuplicateException;
 import com.check.v3.web.form.Message;
 
 
@@ -52,17 +53,15 @@ public class UserController {
 		}
 		model.asMap().clear();
 		user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
-		try{
+		try {
 			userService.save(user);
-		}catch(Exception e){
-			System.out.println(e.getMessage());
-			if (e.getMessage().contains("users_unique_account")){
-				model.addAttribute("message",
-						new Message("error", messageSource.getMessage("user_create_fail", new Object[] {}, locale)));
-				bindingResult.rejectValue("account", "user_account_duplicate", messageSource.getMessage("user_account_duplicate", new Object[] {}, locale));
-				model.addAttribute("user", user);
-				return "users/new";
-			}
+		} catch (UserAccountDuplicateException e) {
+			bindingResult.rejectValue("account", "user_account_duplicate",
+					messageSource.getMessage("user_account_duplicate", new Object[] {}, locale));
+			model.addAttribute("message",
+					new Message("error", messageSource.getMessage("user_create_fail", new Object[] {}, locale)));
+			model.addAttribute("user", user);
+			return "users/new";
 		}
 		redirectAttributes.addFlashAttribute("message",
 				new Message("success", messageSource.getMessage("user_create_success", new Object[] {}, locale)));
@@ -92,7 +91,12 @@ public class UserController {
 			model.addAttribute("user", user);
 			return "users/edit";
 		}
-        userService.save(user);
+        try {
+			userService.save(user);
+		} catch (UserAccountDuplicateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         redirectAttributes.addFlashAttribute("message",
 				new Message("success", messageSource.getMessage("user_update_success", new Object[] {}, locale)));
         return "redirect:/users/" + + user.getId();
