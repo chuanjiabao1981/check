@@ -54,8 +54,8 @@ public class UserController {
 		user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
 		userService.save(user);
 		redirectAttributes.addFlashAttribute("message",
-				new Message("success", messageSource.getMessage("contact_create_success", new Object[] {}, locale)));
-		return "redirect:/users/" + userService.findByAccount(user.getAccount()).getId();
+				new Message("success", messageSource.getMessage("user_create_success", new Object[] {}, locale)));
+		return "redirect:/users/" + user.getId();
 	}
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public String show(@PathVariable("id") Long id, Model uiModel) {
@@ -79,11 +79,11 @@ public class UserController {
 			model.addAttribute("message",
 					new Message("error", messageSource.getMessage("user_update_fail", new Object[] {}, locale)));
 			model.addAttribute("user", user);
-			return "users/new";
+			return "users/edit";
 		}
         userService.save(user);
         redirectAttributes.addFlashAttribute("message",
-				new Message("success", messageSource.getMessage("contact_update_success", new Object[] {}, locale)));
+				new Message("success", messageSource.getMessage("user_update_success", new Object[] {}, locale)));
         return "redirect:/users/" + + user.getId();
     }	
 }
