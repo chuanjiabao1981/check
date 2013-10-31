@@ -20,7 +20,7 @@
   	    <table>
 	    <tr>
 	        <td><form:label path="name">${labelUserName }*</form:label></td>
-	        <td><form:input path="name" /></td>
+	        <td><form:input path="name" id="name"/></td>
 			<div>
 				<form:errors path="name" cssClass="error" />
 			</div>

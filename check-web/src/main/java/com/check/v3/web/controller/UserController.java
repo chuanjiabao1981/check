@@ -5,6 +5,8 @@ import java.util.Locale;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,9 @@ import com.check.v3.web.form.Message;
 
 @Controller
 public class UserController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
 
 	@Autowired
 	UserService userService;
@@ -39,7 +44,7 @@ public class UserController {
 	}
 	@RequestMapping(value="/users",method = RequestMethod.POST)
 	public String create(
-			@ModelAttribute @Valid User user,
+			@Valid User user,
 			BindingResult bindingResult, 
 			Model model,
 			RedirectAttributes redirectAttributes,
@@ -56,10 +61,12 @@ public class UserController {
 		try {
 			userService.save(user);
 		} catch (UserAccountDuplicateException e) {
-			bindingResult.rejectValue("account", "user_account_duplicate",
-					messageSource.getMessage("user_account_duplicate", new Object[] {}, locale));
 			model.addAttribute("message",
 					new Message("error", messageSource.getMessage("user_create_fail", new Object[] {}, locale)));
+			bindingResult.rejectValue("account","user_account_duplicate",
+					messageSource.getMessage("user_account_duplicate", new Object[] {}, locale));
+
+			model.addAllAttributes(bindingResult.getModel());
 			model.addAttribute("user", user);
 			return "users/new";
 		}
