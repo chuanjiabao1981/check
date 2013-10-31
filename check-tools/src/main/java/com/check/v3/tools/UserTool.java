@@ -9,6 +9,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import com.check.v3.domain.User;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.UserService;
+import com.check.v3.service.exception.UserAccountDuplicateException;
 
 public class UserTool {
 
@@ -16,8 +17,9 @@ public class UserTool {
 
 	/**
 	 * @param args
+	 * @throws UserAccountDuplicateException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UserAccountDuplicateException {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
 		ctx.load("classpath*:/application-context.xml","classpath*:/application-security-context.xml");
 

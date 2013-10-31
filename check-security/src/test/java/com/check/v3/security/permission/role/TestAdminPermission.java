@@ -1,6 +1,8 @@
 package com.check.v3.security.permission.role;
 
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +24,11 @@ public class TestAdminPermission {
 	@Before
 	public void init()
 	{
-		
 	}
 	@Test
 	public void testAdminPermission()
 	{
+		assertTrue(adminPermission.isAllowed("anyController", "anyAction", new Object()));
 	}
 	
 }
