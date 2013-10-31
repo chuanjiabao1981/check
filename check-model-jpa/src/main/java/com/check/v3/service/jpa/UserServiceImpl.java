@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 				return userRepository.save(user);
 		}catch(DataIntegrityViolationException ex){
 			if (ex.getMessage().contains("users_unique_account")){
-				throw new UserAccountDuplicateException();
+				throw new UserAccountDuplicateException("account");
 			}else{
 				throw ex;
 			}
