@@ -1,6 +1,12 @@
 package com.check.v3.service.exception;
 
-public class UserAccountDuplicateException extends Exception{
+import org.springframework.dao.DataIntegrityViolationException;
+
+public class UserAccountDuplicateException extends DataIntegrityViolationException{
+
+	public UserAccountDuplicateException(String msg) {
+		super(msg);
+	}
 
 	/**
 	 * 
