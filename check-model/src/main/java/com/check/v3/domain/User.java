@@ -97,7 +97,7 @@ public class User implements Serializable,Affiliation {
 		
 	}
 	
-	@Transient//TODO::������������annotation
+	@Transient
 	public Role getDefaultRole() {
 		return defaultRole;
 	}
