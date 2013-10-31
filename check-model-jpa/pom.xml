@@ -52,6 +52,17 @@
 		<groupId>org.springframework.data</groupId>
 		<artifactId>spring-data-jpa</artifactId>
 		<version>${org.springframework.data-version}</version>
+		<!-- 
+			1. spring data 依赖的spring-asm 版本太老了，导致有一些异常抛出
+				java.lang.IncompatibleClassChangeError:  class org.springframework.core.type.classreading.ClassMetadataReadingVisitor has interface org.springframework.asm.ClassVisitor as super class
+			2. 参考http://www.mkyong.com/mongodb/spring-asm-dependency-issue-in-spring-data/
+		 -->
+		<exclusions>
+		   <exclusion>
+		      <groupId>org.springframework</groupId>
+                      <artifactId>spring-asm</artifactId>
+		  </exclusion>
+		</exclusions>
 	</dependency>
 	
 	<dependency>

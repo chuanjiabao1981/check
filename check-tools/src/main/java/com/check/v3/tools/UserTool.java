@@ -19,30 +19,26 @@ public class UserTool {
 	 */
 	public static void main(String[] args) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
-		//ctx.load("classpath*:/application-context.xml","classpath*:/application-security-context.xml");
-		ctx.load("classpath*:application-context.xml");
+		ctx.load("classpath*:/application-context.xml","classpath*:/application-security-context.xml");
 
 		ctx.refresh();
 
-		/*
 		UserService 					    userService 			= (UserService) 		ctx.getBean("userService");
 		DefaultWebSecurityManager			securityManager			=  (DefaultWebSecurityManager) ctx.getBean("securityManager");
-		*/
 		/*
 		 *  由于AbstractShiroFilter默认不会设置SecurityMananger给当前线程，每次请求来才设置。(staticSecurityManagerEnabled)
 		 *  且ShiroFilterFactoryBean也没有接口设置staticSecurityManagerEnabled，所以在非请求模式下，只能手动设置securityManager了。
 		 */
-		/*
 		SecurityUtils.setSecurityManager((org.apache.shiro.mgt.SecurityManager) securityManager);
 		User		user		= new User();
-		user.setAccount("test");
+		user.setAccount("test_test");
+		user.setName("test_test");
 		user.setPassword_cryp(SecurityTools.getEncryptPassword("12345"));
 		System.err.println(user.getAccount());
 		logger.info("add user "+user.getAccount());
 		userService.save(user);
 		logger.info("save user "+user.getAccount());
 		ctx.close();
-		*/
 	}
 
 }
