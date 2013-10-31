@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.check.v3.domain.exception.OrganizationRingException;
+
 public class TestOrganization {
 	/*          o4  
 	 * 		  / 
@@ -42,7 +44,7 @@ public class TestOrganization {
 	{
 		o1.addSubOrganization(o1);
 	}
-	@Test(expected = RuntimeException.class)
+	@Test(expected = OrganizationRingException.class)
 	public void testParentRing()
 	{
 		o1.addSubOrganization(o2).addSubOrganization(o3);

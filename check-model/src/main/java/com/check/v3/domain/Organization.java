@@ -24,6 +24,8 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+import com.check.v3.domain.exception.OrganizationRingException;
 import com.google.common.collect.Sets;
 
 
@@ -124,7 +126,7 @@ public class Organization implements Serializable,Affiliation{
 		Organization parent = this;
 		while(parent != null){
 			if (parent == organization || (parent.id != null && organization.id != null && organization.id == parent.id)){
-				throw new RuntimeException("the organization is point to the farther");
+				throw new OrganizationRingException("the organization is point to the farther");
 			}
 			parent = parent.getParentOrganization();
 		}
