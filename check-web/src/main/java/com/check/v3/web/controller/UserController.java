@@ -51,10 +51,10 @@ public class UserController {
 			return "users/new";
 		}
 		model.asMap().clear();
-		redirectAttributes.addFlashAttribute("message",
-				new Message("success", messageSource.getMessage("contact_create_success", new Object[] {}, locale)));
 		user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
 		userService.save(user);
+		redirectAttributes.addFlashAttribute("message",
+				new Message("success", messageSource.getMessage("contact_create_success", new Object[] {}, locale)));
 		return "redirect:/users/" + userService.findByAccount(user.getAccount()).getId();
 	}
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
@@ -70,9 +70,20 @@ public class UserController {
 	}	
 	@RequestMapping(value = "/users/{id}", params = "edit", method = RequestMethod.POST)
     public String update(@ModelAttribute @Valid User user,
-			Model model
+			BindingResult bindingResult, 
+			Model model,
+			RedirectAttributes redirectAttributes,
+			Locale locale
     		) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("message",
+					new Message("error", messageSource.getMessage("user_update_fail", new Object[] {}, locale)));
+			model.addAttribute("user", user);
+			return "users/new";
+		}
         userService.save(user);
+        redirectAttributes.addFlashAttribute("message",
+				new Message("success", messageSource.getMessage("contact_update_success", new Object[] {}, locale)));
         return "redirect:/users/" + + user.getId();
     }	
 }

@@ -33,7 +33,7 @@ public class User implements Serializable,Affiliation {
 
 	private static final long serialVersionUID = -15913810676325L;
 	
-	private long 					id;
+	private Long 					id;
 	private int 					version; 
 	@NotEmpty(message="{validation.name.NotEmpty.message}")
 	@Size(min=5, max=60, message="{validation.user.name.Size.message}")
@@ -59,7 +59,7 @@ public class User implements Serializable,Affiliation {
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
 	@Column(name = "id")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	
@@ -114,7 +114,7 @@ public class User implements Serializable,Affiliation {
 		this.defaultRole = defaultRole;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public void setVersion(int version) {
