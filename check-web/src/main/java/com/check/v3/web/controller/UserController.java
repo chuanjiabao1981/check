@@ -52,7 +52,18 @@ public class UserController {
 		}
 		model.asMap().clear();
 		user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
-		userService.save(user);
+		try{
+			userService.save(user);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+			if (e.getMessage().contains("users_unique_account")){
+				model.addAttribute("message",
+						new Message("error", messageSource.getMessage("user_create_fail", new Object[] {}, locale)));
+				bindingResult.rejectValue("account", "user_account_duplicate", messageSource.getMessage("user_account_duplicate", new Object[] {}, locale));
+				model.addAttribute("user", user);
+				return "users/new";
+			}
+		}
 		redirectAttributes.addFlashAttribute("message",
 				new Message("success", messageSource.getMessage("user_create_success", new Object[] {}, locale)));
 		return "redirect:/users/" + user.getId();

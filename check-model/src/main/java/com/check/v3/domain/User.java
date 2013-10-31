@@ -78,7 +78,7 @@ public class User implements Serializable,Affiliation {
 		return password_cryp;
 	}
 	
-	@Column(name="account")
+	@Column(name="account",unique=true)
 	@NotNull
 	public String getAccount() {
 		return account;
