@@ -56,6 +56,11 @@ public class User implements Serializable,Affiliation {
 	{
 		this.account = account;
 	}
+	public User(String account,String name)
+	{
+		this(account);
+		this.name = name;
+	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
 	@Column(name = "id")
@@ -160,6 +165,9 @@ public class User implements Serializable,Affiliation {
 			return false;
 		}
 		User other = (User) obj;
+		if (this.getId() != null && other.getId() != null && this.getId() == other.getId()){
+			return true;
+		}
 		if (other.getAccount() != null){
 			if (other.getAccount().equals(this.account)){
 				return true;

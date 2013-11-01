@@ -78,6 +78,14 @@ public class Organization implements Serializable,Affiliation{
 	public Set<OrganizationPost> getOrganizationPosts() {
 		return organizationPosts;
 	}
+	public OrganizationPost getOrganizationPost(OrganizationPostType type)
+	{
+		for(OrganizationPost post:organizationPosts){
+			if (post.getType().equals(type))
+				return post;
+		}
+		return null;
+	}
 	//TODO::eager load 优化之?
 	@OneToMany(mappedBy = "parentOrganization",cascade=CascadeType.ALL,orphanRemoval=true,fetch = FetchType.EAGER)
 	public Set<Organization> getSubOrganizations()

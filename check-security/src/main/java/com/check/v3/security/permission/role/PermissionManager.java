@@ -40,11 +40,11 @@ public class PermissionManager {
 		}
 		//1. Guest权限判断
 		if (subject == null || subject.getPrincipal() == null){
-			return rolePermissionManager.isAllowed(Role.GUEST, controller, action, current_instance);
+			return rolePermissionManager.isAllowed(current_user,Role.GUEST, controller, action, current_instance);
 		}
 		current_user = (User) subject.getPrincipal();
 		//2. 用户默认权限判断(USER\ADMIN)
-		if (!rolePermissionManager.isAllowed(current_user.getDefaultRole(), controller, action, current_instance)){
+		if (!rolePermissionManager.isAllowed(current_user,current_user.getDefaultRole(), controller, action, current_instance)){
 			//3. 用户在当前instance上的权限判断
 			Affiliation 			affiliation 	= (Affiliation) current_instance;
 			Set<Organization>		organizations	= null;
@@ -61,7 +61,7 @@ public class PermissionManager {
 					logger.trace("current user has not to any role on current instace");
 					return false;
 				}
-				return rolePermissionManager.isAllowed(role,controller,action,current_instance);
+				return rolePermissionManager.isAllowed(current_user,role,controller,action,current_instance);
 			}
 			
 		}else{
