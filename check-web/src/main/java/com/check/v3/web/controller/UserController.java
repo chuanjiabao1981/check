@@ -44,7 +44,7 @@ public class UserController {
 	}
 	@RequestMapping(value="/users",method = RequestMethod.POST)
 	public String create(
-			@Valid User user,
+			@ModelAttribute("user") @Valid User user,
 			BindingResult bindingResult, 
 			Model model,
 			RedirectAttributes redirectAttributes,
@@ -56,7 +56,7 @@ public class UserController {
 			model.addAttribute("user", user);
 			return "users/new";
 		}
-		model.asMap().clear();
+		
 		user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
 		try {
 			userService.save(user);
@@ -66,10 +66,12 @@ public class UserController {
 			bindingResult.rejectValue("account","user_account_duplicate",
 					messageSource.getMessage("user_account_duplicate", new Object[] {}, locale));
 
-			model.addAllAttributes(bindingResult.getModel());
 			model.addAttribute("user", user);
 			return "users/new";
 		}
+		//注意这句只能在redirect的时候使用
+		model.asMap().clear();
+
 		redirectAttributes.addFlashAttribute("message",
 				new Message("success", messageSource.getMessage("user_create_success", new Object[] {}, locale)));
 		return "redirect:/users/" + user.getId();
