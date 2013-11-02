@@ -70,7 +70,7 @@ public class PermissionManager {
 		return false;
 	}
 	
-	private Role getUserRoleFromOganizations(User user,Set<Organization> organizations)
+	public Role getUserRoleFromOganizations(User user,Set<Organization> organizations)
 	{
 		//1. 用户直接所属机构以及它的下属机构和organizations 是否有交集
 		//2. 如果有，则返回用户直接所在机构的角色
@@ -84,10 +84,13 @@ public class PermissionManager {
 							return Role.ORGANIZATION_MEMBER;
 						case ADMIN:
 							return Role.ORGANIZATION_ADMIN;
+						default :
+							throw new RuntimeException("crazy man!");
 					}
 				}
 			}
 		}
+		//logger.info("====:"+null);
 		return null;
 	}
 

@@ -154,7 +154,9 @@ public class Organization implements Serializable,Affiliation{
 			return true;
 		}
 		for(Organization o:this.getSubOrganizations()){
-			return o.isContainOrganization(s);
+			if (o.isContainOrganization(s)){
+				return true;
+			}
 		}
 		return false;
 	}
