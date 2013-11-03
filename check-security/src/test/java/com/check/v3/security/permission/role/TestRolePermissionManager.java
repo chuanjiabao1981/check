@@ -1,8 +1,6 @@
 package com.check.v3.security.permission.role;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +12,6 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.check.v3.domain.Organization;
-import com.check.v3.domain.OrganizationPost;
 import com.check.v3.domain.OrganizationPostType;
 import com.check.v3.domain.OrganizationType;
 import com.check.v3.domain.Role;

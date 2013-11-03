@@ -9,6 +9,8 @@ public class SessionDTO implements Serializable{
 	private static final long serialVersionUID = -901893144190378361L;
 	private String sessionId;
 
+	public SessionDTO()
+	{}
 	public SessionDTO(String sessionId)
 	{
 		this.sessionId = sessionId;
@@ -21,6 +23,12 @@ public class SessionDTO implements Serializable{
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
 	}
+	@Override
+	public String toString() {
+		return "SessionDTO [sessionId=" + sessionId + "]";
+	}
+	
+	
 	
 	
 }

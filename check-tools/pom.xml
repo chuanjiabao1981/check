@@ -31,7 +31,29 @@
 			<version>${javax.servlet-api-version}</version>
 			<scope>provided</scope>
 		</dependency>
-  	
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${org.apache.httpcomponents-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.check</groupId>
+			<artifactId>check-common</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
   </dependencies>
   <build>
       <plugins>

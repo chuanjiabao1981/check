@@ -3,6 +3,8 @@ package com.check.v3.web.controller;
 
 import java.util.Locale;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.check.v3.ControllerActionConstant;
 import com.check.v3.domain.User;
+import com.check.v3.security.ControllerActionInstanceLoader;
+import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.UserService;
 import com.check.v3.service.exception.UserAccountDuplicateException;
@@ -35,6 +40,8 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	MessageSource messageSource;
+	@Autowired
+	ControllerActionInstanceLoader controllerActionInstanceLoader;
 
 	@RequestMapping(value="/users/new",method=RequestMethod.GET)
 	public String newUser(Model model)
@@ -83,7 +90,7 @@ public class UserController {
         return "users/show";
     }
 	@RequestMapping(value = "/users/{id}", params = "edit", method = RequestMethod.GET)
-    public String edit(@PathVariable("id") Long id, Model uiModel) {
+    public String edit(@InstanceId @PathVariable("id") Long id, Model uiModel,HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("user", userService.findById(id));
         return "users/edit";
 	}	
@@ -110,4 +117,17 @@ public class UserController {
 				new Message("success", messageSource.getMessage("user_update_success", new Object[] {}, locale)));
         return "redirect:/users/" + + user.getId();
     }	
+	
+	
+	/*
+	 * 构造函数中不能调用registerInstanceLoaderService，因为
+	 * 构造函数运行的时候userService还未被Injected!
+	 */
+	@PostConstruct 
+	public void init()
+	{
+		controllerActionInstanceLoader.registerInstanceLoaderService(ControllerActionConstant.USER,ControllerActionConstant.EDIT,userService);
+		controllerActionInstanceLoader.registerInstanceLoaderService(ControllerActionConstant.USER,ControllerActionConstant.UPDATE,userService);
+
+	}
 }

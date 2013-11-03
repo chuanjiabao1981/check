@@ -3,10 +3,10 @@ package com.check.v3.security.permission.role;
 import org.springframework.stereotype.Service;
 
 import com.check.v3.domain.User;
-import com.check.v3.security.permission.WebBasePermission;
+import com.check.v3.security.permission.BasePermission;
 
 @Service("adminPermssion")
-public class AdminPermission extends WebBasePermission {
+public class AdminPermission extends BasePermission {
 
 	public AdminPermission()
 	{

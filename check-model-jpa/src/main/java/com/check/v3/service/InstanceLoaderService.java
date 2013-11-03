@@ -1,5 +1,5 @@
 package com.check.v3.service;
 
-public interface LoadInstanceService {
+public interface InstanceLoaderService {
 	Object load(Long id);
 }

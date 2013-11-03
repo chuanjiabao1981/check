@@ -55,17 +55,12 @@
 			<version>${javax.validation.api-version}</version>
 		</dependency>
 			
-		<!-- json -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>${org.codehaus.jackson-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-lgpl</artifactId>
-			<version>${org.codehaus.jackson-version}</version>
-		</dependency>
 		
+
+		<dependency>
+			<groupId>com.check</groupId>
+			<artifactId>check-common</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
     </dependencies>
 </project>

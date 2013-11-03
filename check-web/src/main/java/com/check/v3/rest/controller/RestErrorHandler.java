@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,15 @@ public class RestErrorHandler {
     public ErrorsDTO processAuthenticationError(AuthenticationException ex,Locale locale)
     {
         ErrorsDTO dto = new ErrorsDTO();
-        logger.trace(locale.toString());
+        dto.addFieldError(ApplicationConstant.AuthenticationField, messageSource.getMessage(ApplicationConstant.AuthenticationFailCode, null,locale));
+        return dto;
+    }
+    @ExceptionHandler(UnauthenticatedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorsDTO processAuthorizationError(UnauthenticatedException ex,Locale locale)
+    {
+        ErrorsDTO dto = new ErrorsDTO();
         dto.addFieldError(ApplicationConstant.AuthenticationField, messageSource.getMessage(ApplicationConstant.AuthenticationFailCode, null,locale));
         return dto;
     }

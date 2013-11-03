@@ -48,7 +48,12 @@
   			<artifactId>shiro-spring</artifactId>
   			<version>${org.apache.shiro-version}</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>com.check</groupId>
+			<artifactId>check-common</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
   </dependencies>
   
 </project>

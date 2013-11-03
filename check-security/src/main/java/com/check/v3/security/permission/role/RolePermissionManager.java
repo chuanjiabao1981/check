@@ -3,10 +3,12 @@ package com.check.v3.security.permission.role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 
+@Service("rolePermissionManager")
 public class RolePermissionManager {
 	private static final Logger logger = LoggerFactory.getLogger(RolePermissionManager.class);
 

@@ -12,8 +12,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.check.v3.ControllerActionConstant;
 import com.check.v3.domain.User;
-import com.check.v3.security.ControllerActionConstant;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

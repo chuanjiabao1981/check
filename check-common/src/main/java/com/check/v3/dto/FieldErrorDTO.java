@@ -8,7 +8,7 @@ public class FieldErrorDTO implements Serializable{
 	private String field;
 	private String message;
 	
-	
+	public FieldErrorDTO(){}
 	public FieldErrorDTO(String field,String message)
 	{
 		this.field  		= field;

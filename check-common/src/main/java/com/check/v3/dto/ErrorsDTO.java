@@ -9,6 +9,7 @@ public class ErrorsDTO implements Serializable{
 	private static final long serialVersionUID = -3100656665600367544L;
 	private List<FieldErrorDTO> errors = new ArrayList<FieldErrorDTO>();
 	
+	public ErrorsDTO(){}
 	public void addFieldError(String path,String message)
 	{
 		FieldErrorDTO fieldError = new FieldErrorDTO(path,message);
