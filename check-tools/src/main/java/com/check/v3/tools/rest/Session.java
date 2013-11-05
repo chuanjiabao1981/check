@@ -5,7 +5,6 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.check.v3.dto.SessionDTO;
@@ -28,7 +27,7 @@ public class Session {
 		restTemplate.setErrorHandler(new CustomResponseErrorHandler());
 		UserPasswordDTO userPasswordDTO = new UserPasswordDTO();
 		userPasswordDTO.setName("test_test");
-		userPasswordDTO.setPassword("123456");
+		userPasswordDTO.setPassword("12345");
 		try{
 			SessionDTO s = restTemplate.postForObject(SESSION_CREATE, userPasswordDTO, SessionDTO.class);
 			System.err.println(s.toString());

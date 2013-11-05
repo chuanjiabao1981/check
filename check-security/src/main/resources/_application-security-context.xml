@@ -9,30 +9,29 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 	<context:annotation-config/>
-	<import resource="classpath:application-context.xml" />
 	
 	<context:component-scan base-package="com.check.v3.security" />
     
-	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+	<!--  bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 	    <property name="securityManager" ref="securityManager"/>
 	    <property name="loginUrl" value="/login"/>
     	<property name="successUrl" value="/"/>
-	    <property name="unauthorizedUrl" value="/login"/>
+	    <property name="unauthorizedUrl" value="/login"/-->
 	    <!--property name="filters">
         	<util:map>
             	<entry key="formAuthenticationFilter" value-ref="formAuthenticationFilter"/>
         	</util:map>
     	</property-->
-    	<property name="filterChainDefinitions">
+    	<!-- property name="filterChainDefinitions"-->
     	    <!-- authc 是shiro默认支持的filter，其他参见 http://shiro.apache.org/web.html#Web-DefaultFilters -->
-        	<value>
+        	<!-- value>
         	    /api/v1/sessions/** = anon
         	    /login 	= authc
         	    /logout	= logout
             	/** = user
         	</value>
-    	</property>
-    </bean>
+    	</property-->
+    <!-- /bean-->
 	
     
     <bean id="formAuthenticationFilter" class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter"/>

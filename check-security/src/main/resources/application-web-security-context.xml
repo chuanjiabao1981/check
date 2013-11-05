@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<import resource="classpath:_application-security-context.xml" />
+    
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+	    <property name="securityManager" ref="securityManager"/>
+	    <property name="loginUrl" value="/login"/>
+    	<property name="successUrl" value="/"/>
+	    <property name="unauthorizedUrl" value="/login"/>
+	    <!--property name="filters">
+        	<util:map>
+            	<entry key="formAuthenticationFilter" value-ref="formAuthenticationFilter"/>
+        	</util:map>
+    	</property-->
+    	<property name="filterChainDefinitions">
+    	    <!-- authc 是shiro默认支持的filter，其他参见 http://shiro.apache.org/web.html#Web-DefaultFilters -->
+        	<value>
+        	    /api/v1/sessions/** = anon
+        	    /login 	= authc
+        	    /logout	= logout
+            	/** = user
+        	</value>
+    	</property>
+    </bean>
+</beans>
