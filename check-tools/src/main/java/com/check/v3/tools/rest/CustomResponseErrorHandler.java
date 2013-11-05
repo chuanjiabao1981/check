@@ -25,7 +25,9 @@ public class CustomResponseErrorHandler implements ResponseErrorHandler{
 	    ErrorsDTO eDTO = mapper.readValue(theString, ErrorsDTO.class);
 	    System.err.println(theString);
 	    System.err.println(eDTO.getErrors().size());
-		
+	    CheckApiException e= new CheckApiException();
+	    e.setErrorsDTO(eDTO);
+	    throw e;
 	}
 
 }

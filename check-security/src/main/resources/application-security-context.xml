@@ -54,6 +54,5 @@
 	
 	<bean id="passwordMatcher" class="org.apache.shiro.authc.credential.PasswordMatcher">
 	</bean>
-	
 	<bean class="com.check.v3.security.PermissionCheck" />
 </beans>

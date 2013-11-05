@@ -11,6 +11,7 @@
   	<module>check-web</module>
   	<module>check-tools</module>
   	<module>check-common</module>
+  	<module>check-service</module>
   </modules>
   <properties>
 		<java-version>1.6</java-version>
