@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -55,6 +56,7 @@ public class OrganizationPost implements Serializable,Affiliation{
 	public Organization getOrganization() {
 		return organization;
 	}
+    //TODO::优化
     @ManyToMany(mappedBy = "organizationPosts")
     public Set<User> getUsers()
     {

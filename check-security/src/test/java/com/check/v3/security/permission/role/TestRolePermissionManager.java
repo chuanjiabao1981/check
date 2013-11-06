@@ -21,7 +21,7 @@ import com.check.v3.service.UserService;
 import com.google.common.collect.Sets;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-security-context.xml"})
+@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-web-security-context.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
 public class TestRolePermissionManager {

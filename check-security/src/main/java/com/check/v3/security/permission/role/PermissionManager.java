@@ -17,6 +17,7 @@ import com.check.v3.domain.User;
 import com.check.v3.security.ControllerActionInstanceLoader;
 import com.check.v3.security.Role;
 import com.check.v3.security.SecurityConstant;
+import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.InstanceLoaderService;
 import com.check.v3.domain.Organization;
 
@@ -63,28 +64,40 @@ public class PermissionManager {
 			return rolePermissionManager.isAllowed(current_user,Role.GUEST, controller, action, current_instance);
 		}
 		current_user = (User) subject.getPrincipal();
-		//2. 用户在当前instance上的权限判断
+		
+		
+		//2. 如果访问的是集合，则没有instance(例如：users的index)
+		//   那么就确定当前用户设定的集合是什么角色
+		if (current_instance == null){
+			Organization o = SecurityTools.getCurrentOrganization();
+			if (o != null){
+				// 2.1 判断用户在当前organization上的角色
+				Role role		= getUserRoleFromOrganization(current_user, o);
+				if (role != null){
+					return rolePermissionManager.isAllowed(current_user,role,controller,action,current_instance);
+				}
+			}
+		}
+		
+		
+		
+		//3. 用户在当前instance上的权限判断
 		Affiliation 			affiliation 	= (Affiliation) current_instance;
 		Set<Organization>		organizations	= null;
-		if (affiliation != null){
-				//2.1 当前instance归属的Organization集合
-				organizations = affiliation.getBelongsToOrganizations();
-				if (organizations == null){
-					logger.trace("current instace dose not belongs to any organizations");
-					return false;
-				}
-				//2.2 当前用户在instance的角色(ORGANIZATION_SUPERVISOR,ORGANIZATION_MEMBER,ORGANIZATION_ADMIN)
-				Role role							= getUserRoleFromOganizations(current_user, organizations);
-				if (role == null){
-					logger.trace("current user has not to any role on current instace");
-					return false;
-				}
-				return rolePermissionManager.isAllowed(current_user,role,controller,action,current_instance);
-		}else{
-			//当前instance 无organization
-			logger.warn("current instance doesn't belong to any organization");
+		//3.1 当前instance归属的Organization集合
+		organizations = affiliation.getBelongsToOrganizations();
+		if (organizations == null){
+			//理论上不应该出现这种类型
+			logger.error("current instace dose not belongs to any organizations");
 			return false;
 		}
+		//3.2 当前用户在instance的角色(ORGANIZATION_SUPERVISOR,ORGANIZATION_MEMBER,ORGANIZATION_ADMIN)
+		Role role							= getUserRoleFromOganizations(current_user, organizations);
+		if (role == null){
+			logger.warn("current user has not to any role on current instace");
+			return false;
+		}
+		return rolePermissionManager.isAllowed(current_user,role,controller,action,current_instance);
 	}
 	
 	public Role getUserRoleFromOganizations(User user,Set<Organization> organizations)
@@ -93,6 +106,7 @@ public class PermissionManager {
 		//2. 如果有，则返回用户直接所在机构的角色
 		
 		//TODO::找到交集中权限最大的返回
+		/*
 		for(OrganizationPost post:user.getOrganizationPosts()){
 			for(Organization organization: organizations){
 				if (post.getOrganization().isContainOrganization(organization)){
@@ -106,6 +120,31 @@ public class PermissionManager {
 						default :
 							throw new RuntimeException("crazy man!");
 					}
+				}
+			}
+		}
+		return null;
+		*/
+		for(Organization organization:organizations){
+			Role r = getUserRoleFromOrganization(user,organization);
+			if (r != null){
+				return r;
+			}
+		}
+		return null;
+	}
+	
+	private Role getUserRoleFromOrganization(User user,Organization organization)
+	{
+		for(OrganizationPost post:user.getOrganizationPosts()){
+			if (post.getOrganization().isContainOrganization(organization)){
+				switch(post.getType()){
+					case SUPERVISOR:
+						return Role.ORGANIZATION_SUPERVISOR;
+					case MEMEBER:
+						return Role.ORGANIZATION_MEMBER;
+					case ADMIN:
+						return Role.ORGANIZATION_ADMIN;
 				}
 			}
 		}

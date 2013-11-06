@@ -2,7 +2,6 @@ package com.check.v3.tools;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import com.check.v3.domain.Organization;

@@ -41,7 +41,7 @@ public class CheckRealm extends AuthorizingRealm{
         UsernamePasswordToken upToken 	= (UsernamePasswordToken) token;
         String account 					= upToken.getUsername();
         User   user 					= userService.findByAccount(account);
-        
+//        user.getOrganizationPosts();
         if (user != null ){
         	Logger.info(account);
         	Logger.info(String.valueOf(upToken.getPassword()));
