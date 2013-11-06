@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.check.v3.domain.Affiliation;
 import com.check.v3.domain.OrganizationPost;
-import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.security.ControllerActionInstanceLoader;
+import com.check.v3.security.Role;
 import com.check.v3.security.SecurityConstant;
 import com.check.v3.service.InstanceLoaderService;
 import com.check.v3.domain.Organization;
@@ -60,43 +60,39 @@ public class PermissionManager {
 		//1. Guest权限判断
 		if (subject == null || subject.getPrincipal() == null){
 			logger.trace("current user is Guest");
-			logger.trace(controller);
-			logger.trace(action);
 			return rolePermissionManager.isAllowed(current_user,Role.GUEST, controller, action, current_instance);
 		}
 		current_user = (User) subject.getPrincipal();
-		//2. 用户默认权限判断(USER\ADMIN)
-		if (!rolePermissionManager.isAllowed(current_user,current_user.getDefaultRole(), controller, action, current_instance)){
-			logger.trace("default permission is not allowed do the job");
-			//3. 用户在当前instance上的权限判断
-			Affiliation 			affiliation 	= (Affiliation) current_instance;
-			Set<Organization>		organizations	= null;
-			if (affiliation != null){
-				//3.1 当前instance归属的Organization集合
+		//2. 用户在当前instance上的权限判断
+		Affiliation 			affiliation 	= (Affiliation) current_instance;
+		Set<Organization>		organizations	= null;
+		if (affiliation != null){
+				//2.1 当前instance归属的Organization集合
 				organizations = affiliation.getBelongsToOrganizations();
 				if (organizations == null){
 					logger.trace("current instace dose not belongs to any organizations");
 					return false;
 				}
-				//3.2 当前用户在instance的角色(ORGANIZATION_SUPERVISOR,ORGANIZATION_MEMBER,ORGANIZATION_ADMIN)
+				//2.2 当前用户在instance的角色(ORGANIZATION_SUPERVISOR,ORGANIZATION_MEMBER,ORGANIZATION_ADMIN)
 				Role role							= getUserRoleFromOganizations(current_user, organizations);
 				if (role == null){
 					logger.trace("current user has not to any role on current instace");
 					return false;
 				}
 				return rolePermissionManager.isAllowed(current_user,role,controller,action,current_instance);
-			}
-			
 		}else{
-			return true;
+			//当前instance 无organization
+			logger.warn("current instance doesn't belong to any organization");
+			return false;
 		}
-		return false;
 	}
 	
 	public Role getUserRoleFromOganizations(User user,Set<Organization> organizations)
 	{
 		//1. 用户直接所属机构以及它的下属机构和organizations 是否有交集
 		//2. 如果有，则返回用户直接所在机构的角色
+		
+		//TODO::找到交集中权限最大的返回
 		for(OrganizationPost post:user.getOrganizationPosts()){
 			for(Organization organization: organizations){
 				if (post.getOrganization().isContainOrganization(organization)){

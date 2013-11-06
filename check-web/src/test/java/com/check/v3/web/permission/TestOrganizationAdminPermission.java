@@ -1,5 +1,4 @@
-package com.check.v3.security.permission.role;
-
+package com.check.v3.web.permission;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,28 +11,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-security-context.xml"})
+@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-web-role-permission.xml","classpath:application-web-security-context.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
-public class TestAdminPermission {
-
+public class TestOrganizationAdminPermission {
 	@Autowired
-	AdminPermission adminPermission;
-	private User user;
+	OrganizationAdminPermissionSet organizationAdminPermissionSet;
+	User user ;
 	@Before
 	public void init()
 	{
 		user = new User();
-		user.setDefaultRole(Role.ADMIN);
 	}
 	@Test
-	public void testAdminPermission()
+	public void testAdminPermision()
 	{
-		assertTrue(adminPermission.isAllowed(user,"anyController", "anyAction", new Object()));
+		assertTrue(organizationAdminPermissionSet.isAllowed(user, "any controller", "any action","any instance"));
+		assertTrue(organizationAdminPermissionSet.isAllowed(user, "any controller", "any action"));
 	}
-	
 }

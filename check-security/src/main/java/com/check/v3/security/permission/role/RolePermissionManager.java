@@ -1,60 +1,36 @@
 package com.check.v3.security.permission.role;
 
-import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
+import com.check.v3.security.Role;
 import com.check.v3.security.permission.PermissionSet;
 
 @Service("rolePermissionManager")
 public class RolePermissionManager {
 	private static final Logger logger = LoggerFactory.getLogger(RolePermissionManager.class);
 
+	private Map<Role,PermissionSet> rolePermissionSet = new HashMap<Role,PermissionSet>();
 	
-	@Resource(name="guestPermissionSet")
-	private PermissionSet guestPermissionSet;
-	
-	@Resource(name="organizationSupervisorPermissionSet")
-	private PermissionSet organizationSupervisorPermissionSet;
-	
-	@Resource(name="organizationMemberPermissionSet")
-	private PermissionSet organizationMemberPermissionSet;
-	
-	@Resource(name="organizationAdminPermissionSet")
-	private PermissionSet organizationAdminPermissionSet;
-	
-	@Autowired
-	private AdminPermission adminPermission;
-	
-	@Autowired
-	private UserPermission userPermission;
+	public void register(Role role,PermissionSet permissionSet)
+	{
+		rolePermissionSet.put(role,permissionSet);
+	}
 	
 	public  boolean isAllowed(User user,Role role,String controller,String action,Object instance )
 	{
-		switch (role)
-		{
-			case GUEST:
-				return guestPermissionSet.isAllowed(user,controller, action, instance);
-			case ADMIN:
-				return adminPermission.isAllowed(user,controller, action, instance);
-			case ORGANIZATION_SUPERVISOR:
-				return organizationSupervisorPermissionSet.isAllowed(user,controller, action, instance);
-			case ORGANIZATION_MEMBER:
-				return organizationMemberPermissionSet.isAllowed(user,controller, action, instance);
-			case ORGANIZATION_ADMIN:
-				return organizationAdminPermissionSet.isAllowed(user,controller, action, instance);
-			case USER:
-				return userPermission.isAllowed(user,controller, action, instance);
-			default:
-				logger.trace("no role is match");
-				return false;
-				
+		PermissionSet pSet = rolePermissionSet.get(role);
+		if (pSet == null){
+			logger.warn("no ["+role+"] permission is found");
+			return false;
 		}
+		return pSet.isAllowed(user, controller, action, instance);
 	}
 
 }

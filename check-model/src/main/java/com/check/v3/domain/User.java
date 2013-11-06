@@ -39,12 +39,11 @@ public class User implements Serializable,Affiliation {
 	@Size(min=5, max=60, message="{validation.user.name.Size.message}")
 	private String 					name;
 	@NotEmpty(message="{validation.account.NotEmpty.message}")
-	@Size(min=5, max=60, message="{validation.user.account.Size.message}")
+	@Size(min=4, max=60, message="{validation.user.account.Size.message}")
 	private String  				account;
 	private String  				password;
 	private String  				password_verify;
 	private String 					password_cryp;
-	private Role  					defaultRole 		= Role.USER;
 	private Set<OrganizationPost> 	organizationPosts 	= new HashSet<OrganizationPost>();
 	
 	
@@ -102,10 +101,6 @@ public class User implements Serializable,Affiliation {
 		
 	}
 	
-	@Transient
-	public Role getDefaultRole() {
-		return defaultRole;
-	}
 	@ManyToMany
     @JoinTable(name = "user_organization_posts",
     		   joinColumns = @JoinColumn(name = "user_id"),
@@ -115,10 +110,6 @@ public class User implements Serializable,Affiliation {
 		return organizationPosts;
 	}
 	
-	public void setDefaultRole(Role defaultRole) {
-		this.defaultRole = defaultRole;
-	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -181,9 +172,5 @@ public class User implements Serializable,Affiliation {
 		}
 		return false;
 	}
-
-		
-	
-	
 
 }

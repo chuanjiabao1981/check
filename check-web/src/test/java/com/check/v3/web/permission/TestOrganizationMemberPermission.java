@@ -1,4 +1,4 @@
-package com.check.v3.jsr303.service;
+package com.check.v3.web.permission;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -3,20 +3,31 @@ package com.check.v3.security.permission;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.check.v3.domain.User;
 import com.check.v3.security.permission.filter.GrantedPermissionFilter;
+import com.check.v3.security.permission.role.RolePermissionManager;
 import com.check.v3.util.KeyUtils;
 
-public class  PermissionSet {
+public abstract class   PermissionSet {
+	
+	
 	private static final Logger logger = LoggerFactory.getLogger(PermissionSet.class);
 
-	
 	private static final PermissionFilter 	 DEFAULT_PERMISSION_FILTER 				= new GrantedPermissionFilter();
 	
 	private Map<String,PermissionFilter> controllerActionPermissionFilter 			= new HashMap<String,PermissionFilter>();
+	
+	@Autowired
+	protected RolePermissionManager rolepermissionManager;
+	@PostConstruct
+	public abstract void register();
+	
 	
 	public PermissionFilter getPermissionFilter(String controller,String action)
 	{
