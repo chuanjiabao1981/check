@@ -75,7 +75,13 @@ public class PermissionManager {
 				Role role		= getUserRoleFromOrganization(current_user, o);
 				if (role != null){
 					return rolePermissionManager.isAllowed(current_user,role,controller,action,current_instance);
+				}else{
+					return false;
 				}
+			}else{
+				//无法计算当前organization
+				logger.warn("Can't get current organization");
+				return false;
 			}
 		}
 		

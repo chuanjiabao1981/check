@@ -56,7 +56,6 @@ public class OrganizationPost implements Serializable,Affiliation{
 	public Organization getOrganization() {
 		return organization;
 	}
-    //TODO::优化
     @ManyToMany(mappedBy = "organizationPosts")
     public Set<User> getUsers()
     {
