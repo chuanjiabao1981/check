@@ -126,8 +126,8 @@ public class UserController {
 	@PostConstruct 
 	public void init()
 	{
-		controllerActionInstanceLoader.registerInstanceLoaderService(ControllerActionConstant.USER,ControllerActionConstant.EDIT,userService);
-		controllerActionInstanceLoader.registerInstanceLoaderService(ControllerActionConstant.USER,ControllerActionConstant.UPDATE,userService);
+		controllerActionInstanceLoader.registerInstanceLoaderService(this.getClass().getName(),ControllerActionConstant.EDIT,userService);
+		controllerActionInstanceLoader.registerInstanceLoaderService(this.getClass().getName(),ControllerActionConstant.UPDATE,userService);
 
 	}
 }

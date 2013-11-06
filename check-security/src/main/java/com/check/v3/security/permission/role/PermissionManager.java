@@ -60,6 +60,8 @@ public class PermissionManager {
 		//1. Guest权限判断
 		if (subject == null || subject.getPrincipal() == null){
 			logger.trace("current user is Guest");
+			logger.trace(controller);
+			logger.trace(action);
 			return rolePermissionManager.isAllowed(current_user,Role.GUEST, controller, action, current_instance);
 		}
 		current_user = (User) subject.getPrincipal();

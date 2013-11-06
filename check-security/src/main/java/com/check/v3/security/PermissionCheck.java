@@ -25,7 +25,11 @@ public class PermissionCheck {
 	
     @Around("execution(* com.check.v3.web.controller.*.*(..)) && @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-  	 	System.err.println(permissionManager.isAllowed(getHttpServletRequest(joinPoint), getControllerName(joinPoint), getActionName(joinPoint), (Long) getInstanceId(joinPoint)));
+    	boolean r = permissionManager.isAllowed(getHttpServletRequest(joinPoint), getControllerName(joinPoint), getActionName(joinPoint), (Long) getInstanceId(joinPoint));
+    	if (!r){
+//    		 return "redirect:http://www.baidu.com/";
+    		throw new UnauthenticatedException();
+    	}
         Object result = joinPoint.proceed();
         return result;
     }

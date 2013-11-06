@@ -10,8 +10,8 @@ import com.check.v3.domain.User;
 import com.check.v3.security.permission.filter.GrantedPermissionFilter;
 import com.check.v3.util.KeyUtils;
 
-public class  BasePermission {
-	private static final Logger logger = LoggerFactory.getLogger(BasePermission.class);
+public class  PermissionSet {
+	private static final Logger logger = LoggerFactory.getLogger(PermissionSet.class);
 
 	
 	private static final PermissionFilter 	 DEFAULT_PERMISSION_FILTER 				= new GrantedPermissionFilter();
@@ -48,12 +48,13 @@ public class  BasePermission {
 	}
 	protected void allow(String controller,String action)
 	{
+		logger.trace("allow controller["+controller+"] action["+action+"]");
 		allow(controller,action,DEFAULT_PERMISSION_FILTER);
 	}
 		
 	private void addPermissionFilter(String controller,String action,PermissionFilter permissionFilter)
 	{
-		logger.trace("add PermissionFilter{} for controller{} action{} ",new Object[]{permissionFilter,controller,action});
+		logger.trace("add PermissionFilter{} for controller[{}] action[{}] ",new Object[]{permissionFilter,controller,action});
 		controllerActionPermissionFilter.put(KeyUtils.buildKey(controller,action), permissionFilter);
 	}
 	

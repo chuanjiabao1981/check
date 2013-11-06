@@ -1,21 +1,22 @@
-package com.check.v3.security.permission.role;
+package com.check.v3.web.permission;
 
 import org.springframework.stereotype.Service;
 
 import com.check.v3.ControllerActionConstant;
 import com.check.v3.domain.User;
 import com.check.v3.security.permission.PermissionFilter;
+import com.check.v3.web.controller.UserController;
 
-@Service("organizationMemberPermission")
-public class OrganizationMemberPermission extends OrganizationUserSharePermission {
+@Service("organizationMemberPermissionSet")
+public class OrganizationMemberPermissionSet extends OrganizationUserSharePermissionSet {
 
 		
 	private OrganizationMemberPermissionFilter organizationMemberPermissionFilter = new OrganizationMemberPermissionFilter();
-	public OrganizationMemberPermission()
+	public OrganizationMemberPermissionSet()
 	{
 		super();
-		allow(ControllerActionConstant.USER, ControllerActionConstant.EDIT,  organizationMemberPermissionFilter);
-		allow(ControllerActionConstant.USER, ControllerActionConstant.UPDATE, organizationMemberPermissionFilter);
+		allow(UserController.class.getSimpleName(), ControllerActionConstant.EDIT,  organizationMemberPermissionFilter);
+		allow(UserController.class.getSimpleName(), ControllerActionConstant.UPDATE, organizationMemberPermissionFilter);
 	}
 	
 	
