@@ -47,7 +47,7 @@ public class HomeController {
 		logger.info(SecurityUtils.getSubject().getSession().getId().toString());
 		logger.info(subject.getPrincipal().toString());
 		logger.info(String.valueOf(userRepository.findByAccount("test") == null));
-		return "home";
+		return "home/home";
 	}
 	
 }

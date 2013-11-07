@@ -3,7 +3,7 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-	<definition extends="default" name="login/*"> 
-	    <put-attribute name="body" value="/WEB-INF/views/login/{1}.jspx" /> 
+	<definition extends="login_layout" name="login/*">
+	  	<put-attribute name="body" value="/WEB-INF/views/login/{1}.jsp" /> 
 	</definition>
 </tiles-definitions>

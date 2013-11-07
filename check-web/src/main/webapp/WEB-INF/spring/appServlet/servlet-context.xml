@@ -25,7 +25,8 @@
 		1. / 表示 ${webappRoot}目录,也就是/src/main/webapp
 		2. class:/META-INF/web-resources。这个在为了包含库中的静态文件，例如Spring JavaScript库会吧静态文件放在这个地方
 	 -->
-	<resources location="/, classpath:/META-INF/web-resources/" mapping="/resources/**"/>
+	<resources location="/, classpath:/META-INF/web-resources/" 	mapping="/resources/**"/>
+	<resources location="/resources/assets/" 	mapping="/assets/**" />    
 	
 	<!-- 这个是为了让 dispatch servlet 处理静态资源-->
 	
