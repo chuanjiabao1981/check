@@ -4,6 +4,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 	  
 <jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+<spring:message code="login_forget_password" 		var="loginForgetPassword"></spring:message>
+
 	  
 
 <html>
@@ -11,7 +13,7 @@
 			<meta charset="utf-8" />
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     		<meta http-equiv="X-UA-Compatible" content="IE=8" /> 
-			<title>Login Page - Ace Admin</title>
+			<title><tiles:getAsString name="title"/></title>
 
 			<meta name="description" content="User login page" />
 			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -58,10 +60,10 @@
 							<div class="center">
 								<h1>
 									<i class="icon-leaf green"></i>
-									<span class="red">Ace</span>
-									<span class="white">Application</span>
+									<span class="red">Check</span>
+									<span class="white">Cloud</span>
 								</h1>
-								<h4 class="blue"> &copy; Company Name</h4>
+								<h4 class="blue"> &copy; 维幄通达</h4>
 							</div>
 
 							<div class="space-6"></div>
@@ -103,7 +105,7 @@
 											<div>
 												<a href="#" onclick="show_box('forgot-box'); return false;" class="forgot-password-link">
 													<i class="icon-arrow-left"></i>
-													I forgot my password
+													${loginForgetPassword}
 												</a>
 											</div>
 

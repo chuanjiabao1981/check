@@ -63,7 +63,6 @@ public class UserController {
 			model.addAttribute("user", user);
 			return "users/new";
 		}
-		
 		user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
 		try {
 			userService.save(user);
