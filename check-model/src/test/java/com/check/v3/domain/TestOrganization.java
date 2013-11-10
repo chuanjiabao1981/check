@@ -1,6 +1,7 @@
 package com.check.v3.domain;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -26,8 +27,6 @@ public class TestOrganization {
 	private Organization o2 = null;
 	private Organization o3 = null;
     private Organization o4 = null;
-    private Organization o5 = null;
-    private Organization o6 = null;
 	@Before
 	public void init()
 	{
@@ -35,8 +34,6 @@ public class TestOrganization {
 		 o2 = new Organization("o2",OrganizationType.NON_LEAF_NODE);
 		 o3 = new Organization("o3",OrganizationType.NON_LEAF_NODE);
 		 o4 = new Organization("o4",OrganizationType.LEAF_NODE);
-		 o5 = new Organization("o5",OrganizationType.LEAF_NODE);
-		 o6 = new Organization("o6",OrganizationType.LEAF_NODE);
 	}
     
 	@Test(expected = RuntimeException.class)
@@ -66,11 +63,41 @@ public class TestOrganization {
 		assertFalse(o1.getSubOrganizations().contains(o3));
 	}
 	@Test
-	public void testDebug()
+	public void testEqual()
 	{
-		Organization a = new Organization("ss",OrganizationType.LEAF_NODE);
-		Organization b = new Organization("ss",OrganizationType.LEAF_NODE);
-		assertTrue(a.equals(a));
+		Organization o = new Organization("xx",OrganizationType.NON_LEAF_NODE);
+		Organization p = new Organization("xx",OrganizationType.NON_LEAF_NODE); 
+		assertTrue(o.equals(o));
+		assertFalse(o.equals(null));
+		assertFalse(o.equals(p));
+		o.setId(10);
+		p.setId(10);
+		assertTrue(o.equals(p));
+		p.setId(20);
+		assertFalse(o.equals(p));
+	}
+	@Test
+	public void TestAddSubOrganization()
+	{
+		o1.addSubOrganization(o2);
+		assertTrue(o2.getParentOrganization().equals(o1));
+		assertTrue(o1.getSubOrganizations().contains(o2));
+	}
+	@Test
+	public void TestSetParentOrganization()
+	{
+		o2.setParentOrganization(o1);
+		assertTrue(o2.getParentOrganization().equals(o1));
+		assertTrue(o1.getSubOrganizations().contains(o2));
+	}
+	@Test
+	public void TestRemoveSubOrganization()
+	{
+		o1.addSubOrganization(o2);
+		assertTrue(o1.getSubOrganizations().contains(o2));
+		o1.removeSubOrganization(o2);
+		assertFalse(o1.getSubOrganizations().contains(o2));
+		assertNull(o2.getParentOrganization());
 	}
 	
 }

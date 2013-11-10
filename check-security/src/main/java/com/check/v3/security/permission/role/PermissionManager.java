@@ -1,5 +1,6 @@
 package com.check.v3.security.permission.role;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -80,7 +81,7 @@ public class PermissionManager {
 				}
 			}else{
 				//无法计算当前organization
-				logger.warn("Can't get current organization");
+				logger.warn("Current User does not belong to any organization,please check the database!");
 				return false;
 			}
 		}
@@ -89,7 +90,7 @@ public class PermissionManager {
 		
 		//3. 用户在当前instance上的权限判断
 		Affiliation 			affiliation 	= (Affiliation) current_instance;
-		Set<Organization>		organizations	= null;
+		List<Organization>		organizations	= null;
 		//3.1 当前instance归属的Organization集合
 		organizations = affiliation.getBelongsToOrganizations();
 		if (organizations == null){
@@ -106,31 +107,12 @@ public class PermissionManager {
 		return rolePermissionManager.isAllowed(current_user,role,controller,action,current_instance);
 	}
 	
-	public Role getUserRoleFromOganizations(User user,Set<Organization> organizations)
+	public Role getUserRoleFromOganizations(User user,List<Organization> organizations)
 	{
 		//1. 用户直接所属机构以及它的下属机构和organizations 是否有交集
 		//2. 如果有，则返回用户直接所在机构的角色
 		
 		//TODO::找到交集中权限最大的返回
-		/*
-		for(OrganizationPost post:user.getOrganizationPosts()){
-			for(Organization organization: organizations){
-				if (post.getOrganization().isContainOrganization(organization)){
-					switch(post.getType()){
-						case SUPERVISOR:
-							return Role.ORGANIZATION_SUPERVISOR;
-						case MEMEBER:
-							return Role.ORGANIZATION_MEMBER;
-						case ADMIN:
-							return Role.ORGANIZATION_ADMIN;
-						default :
-							throw new RuntimeException("crazy man!");
-					}
-				}
-			}
-		}
-		return null;
-		*/
 		for(Organization organization:organizations){
 			Role r = getUserRoleFromOrganization(user,organization);
 			if (r != null){

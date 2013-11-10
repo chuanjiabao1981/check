@@ -3,7 +3,9 @@ package com.check.v3.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -90,13 +92,17 @@ public class User implements Serializable,Affiliation {
 	}
 	@Override
 	@Transient
-	public Set<Organization> getBelongsToOrganizations() {
+	public List<Organization> getBelongsToOrganizations() {
 		if (organizationPosts == null || organizationPosts.isEmpty()){
 			return null;
 		}
-		Set<Organization> s = new HashSet<Organization>();
+		List<Organization> s = new ArrayList<Organization>();
+		HashSet<Long>	   t = new HashSet<Long>();
 		for(OrganizationPost post:organizationPosts){
-			s.add(post.getOrganization());
+			if (t.contains(post.getOrganization().getId())){
+				t.add(post.getOrganization().getId());
+				s.add(post.getOrganization());
+			}
 		}
 		return s;
 		

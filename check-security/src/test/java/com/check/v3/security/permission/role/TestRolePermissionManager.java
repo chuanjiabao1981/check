@@ -18,7 +18,7 @@ import com.check.v3.domain.User;
 import com.check.v3.security.Role;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.UserService;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-web-security-context.xml"})
@@ -96,10 +96,10 @@ public class TestRolePermissionManager {
 	@Test
 	public void testGetUserRoleFromOganizations()
 	{
-		assertEquals(Role.ORGANIZATION_MEMBER,permissionManager.getUserRoleFromOganizations(user_o3, Sets.newHashSet(o5)));
-		assertEquals(null,permissionManager.getUserRoleFromOganizations(user_o3, Sets.newHashSet(o1)));
-		assertEquals(null,permissionManager.getUserRoleFromOganizations(user_o3, Sets.newHashSet(o2)));
-		assertEquals(Role.ORGANIZATION_MEMBER,permissionManager.getUserRoleFromOganizations(user_o3, Sets.newHashSet(o3)));
+		assertEquals(Role.ORGANIZATION_MEMBER,permissionManager.getUserRoleFromOganizations(user_o3, Lists.newArrayList(o5)));
+		assertEquals(null,permissionManager.getUserRoleFromOganizations(user_o3, Lists.newArrayList(o1)));
+		assertEquals(null,permissionManager.getUserRoleFromOganizations(user_o3, Lists.newArrayList(o2)));
+		assertEquals(Role.ORGANIZATION_MEMBER,permissionManager.getUserRoleFromOganizations(user_o3, Lists.newArrayList(o3)));
 
 	}
 }

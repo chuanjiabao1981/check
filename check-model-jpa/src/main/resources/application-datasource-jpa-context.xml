@@ -51,7 +51,6 @@
 			</props> 
 		</property>
 	</bean>
-    <context:annotation-config/>
     
     <jpa:repositories base-package="com.check.v3.repository" entity-manager-factory-ref="emf" transaction-manager-ref="transactionManager"/>
 </beans>

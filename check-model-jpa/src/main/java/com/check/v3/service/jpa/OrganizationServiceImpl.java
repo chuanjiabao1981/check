@@ -37,7 +37,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 
 	@Override
 	public void delete(Organization organization) {
-		organizationRepository.delete(organization);
+		organizationRepository.delete(organization.getId());
 	}
 
 	@Override

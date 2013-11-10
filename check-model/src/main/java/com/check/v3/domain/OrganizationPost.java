@@ -4,13 +4,13 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -75,7 +75,7 @@ public class OrganizationPost implements Serializable,Affiliation{
 	}
 	@Override
 	@Transient
-	public Set<Organization> getBelongsToOrganizations() {
+	public List<Organization> getBelongsToOrganizations() {
 		return null;
 	}
 	
