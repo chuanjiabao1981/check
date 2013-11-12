@@ -1,6 +1,5 @@
 package com.check.v3.service;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -16,12 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationType;
+import com.check.v3.domain.exception.OrganizationRingException;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="classpath:application-context.xml")
 @Transactional
-@TransactionConfiguration(defaultRollback=false,transactionManager="transactionManager") 
+@TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
 public class TestOrganizationService {
 	
 	@Autowired
@@ -37,33 +37,33 @@ public class TestOrganizationService {
 	public void init()
 	{
 		
-		Organization organization = new Organization(TEST_ORG_NAME,OrganizationType.LEAF_NODE);
 		o1 						  = new Organization("o1",OrganizationType.NON_LEAF_NODE);
 		o2 						  = new Organization("o2",OrganizationType.NON_LEAF_NODE);
 		o3 						  = new Organization("o3",OrganizationType.LEAF_NODE);
 		o4 						  = new Organization("o4",OrganizationType.NON_LEAF_NODE);
 		
-//		organizationService.save(organization);
 	}
-//	@Test
+	@Test
 	public void testSave1()
 	{
+		Organization organization = new Organization(TEST_ORG_NAME,OrganizationType.LEAF_NODE);
+		organizationService.save(organization);
 		assertNotNull(organizationService.findByName(TEST_ORG_NAME));
 	}
-//	@Test
+	@Test
 	public void testSave2()
 	{
 		organizationService.save(o1);
-		assertNotNull(organizationService.findByName("o2"));
+		assertNotNull(organizationService.findByName("o1"));
 		
 	}
-//	@Test
+	@Test
 	public void testFindByName()
 	{
 		assertNull(organizationService.findByName(TEST_ORG_NOT_EXSIT));
 	}
 	
-//	@Test(expected=OrganizationRingException.class)
+	@Test(expected=OrganizationRingException.class)
 	public void testAddSubOrganization()
 	{
 		o1.addSubOrganization(o2).addSubOrganization(o3);
@@ -79,7 +79,7 @@ public class TestOrganizationService {
 		Organization o3 = organizationService.findByName("o3");
 		Organization o2 = organizationService.findByName("o2");
 		assertTrue(o1.isContainOrganization(o3));
-		assertFalse(o1.isContainOrganization(o4));
+		assertTrue(o1.isContainOrganization(o4));
 		assertNotNull(o3);
 		assertNotNull(o2);
 		assertNotNull(o3.getId());
@@ -89,16 +89,14 @@ public class TestOrganizationService {
 	@Test
 	public void testDeleteOrganization()
 	{
-//		o1.addSubOrganization(o2).addSubOrganization(o3);
-//		o2.addSubOrganization(o4);
-//		organizationService.save(o1);
-		Organization o1 = organizationService.findByName("o1");
-		Organization o2  = organizationService.findByName("o2");
-		o1.removeSubOrganization(o2);
+		o1.addSubOrganization(o2).addSubOrganization(o3);
+		o2.addSubOrganization(o4);
+		organizationService.save(o1);
 		organizationService.delete(organizationService.findByName("o2"));
-//		Organization orgnaizaion = organizationService.findByName("o1");
-		
-//		assertNull(orgnaizaion);
+		assertNotNull(organizationService.findByName("o1"));
+		assertNull(organizationService.findByName("o2"));
+		assertNull(organizationService.findByName("o3"));
+		assertNull(organizationService.findByName("04"));
 		
 	}
 }

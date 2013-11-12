@@ -29,7 +29,7 @@ public class SystemInit {
 		userService			= (UserService) ctx.getBean("userService");
 		Organization r	= initRootOrganization();
 		
-		initRootUser(ctx,r);
+//		initRootUser(ctx,r);
 	}
 	
 	public static Organization initRootOrganization()

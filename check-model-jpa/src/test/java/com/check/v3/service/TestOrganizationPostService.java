@@ -1,7 +1,6 @@
 package com.check.v3.service;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;

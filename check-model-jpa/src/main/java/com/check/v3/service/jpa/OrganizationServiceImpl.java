@@ -1,5 +1,8 @@
 package com.check.v3.service.jpa;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,9 @@ public class OrganizationServiceImpl implements OrganizationService{
 
 	@Autowired
 	private OrganizationRepository organizationRepository;
+	
+	@PersistenceContext 
+	private EntityManager em;
 
 	@Override
 	@Transactional(readOnly=true)
@@ -36,8 +42,11 @@ public class OrganizationServiceImpl implements OrganizationService{
 	}
 
 	@Override
+	@Transactional
 	public void delete(Organization organization) {
-		organizationRepository.delete(organization.getId());
+		Organization o = em.merge(organization);
+		o.getParentOrganization().removeSubOrganization(o);
+		em.remove(o);
 	}
 
 	@Override

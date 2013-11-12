@@ -45,13 +45,13 @@ public class Organization implements Serializable,Affiliation{
 	private Long 	id;
 	
 	@Column(name = "name")
-	@NotNull
+//	@NotNull
 	private String 	name;
 	
 	@OneToMany(mappedBy = "organization", cascade=CascadeType.ALL,fetch = FetchType.EAGER)
 	private Set<OrganizationPost> organizationPosts = new HashSet<OrganizationPost>();
 	
-	@OneToMany(mappedBy = "parentOrganization",cascade=CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "parentOrganization",cascade={ CascadeType.PERSIST,CascadeType.REMOVE},fetch = FetchType.EAGER)
 	private List<Organization> subOrganizations		= new LinkedList<Organization>();
 	
 	@ManyToOne
