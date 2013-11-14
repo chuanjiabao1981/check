@@ -1,7 +1,7 @@
 package com.check.v3.service;
 
-import static org.junit.Assert.assertNotNull;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +10,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.check.v3.domain.Organization;
-import com.check.v3.domain.OrganizationPostType;
-import com.check.v3.domain.OrganizationType;
+import com.check.v3.domain.Department;
+import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.service.exception.UserAccountDuplicateException;
 
@@ -27,40 +26,45 @@ public class TestUser {
 	@Autowired
 	private OrganizationService organizationService;
 	
-	private Organization 	organization;
-	private User		 	user;
-	private static String   UserAccount = "test_test";
-	private static String   UserName	= "kkkkkkk";
+	@Autowired
+	private DepartmentService departmentService;
+
+	
+	private Department   department			 = null;
+
+	@Before
 	public void init()
 	{
-		organization = new Organization("testme",OrganizationType.NON_LEAF_NODE);
-		user 		 = new User(UserAccount,UserName);
-		organizationService.save(organization);
-		user.getOrganizationPosts().add(organization.getOrganizationPost(OrganizationPostType.ADMIN));
-		userService.save(user);
+		
+
 	}
 	@Test(expected=UserAccountDuplicateException.class)
 	public void testSameAccount() throws UserAccountDuplicateException 
 	{
+		department 				  = new Department("xxxxxxxx");
+		department				  = departmentService.save(department);
+		if (department == null){
+			throw new RuntimeException("no departe if create");
+		}
+		System.err.println("1.---------------------------------------------");
 		String account = "samesame";
 		User user1 = new User();
 		user1.setAccount(account);
 		user1.setName("bigbigbig");
 		user1.setPassword_cryp("1");
+		user1.setDepartment(department);
+		user1.setRole(Role.DEPARTMENT_ADMIN);
 		User user2 = new User();
 		user2.setAccount(account);
 		user2.setName("bigbigbig");
 		user2.setPassword_cryp("2");
-		
+		user2.setDepartment(department);
+		user2.setRole(Role.DEPARTMENT_ADMIN);
+
+		System.err.println("2.---------------------------------------------");
+		System.err.println(user1.getDepartment().getId());
 		userService.save(user1);
 		userService.save(user2);
 	}
 	
-	@Test
-	public void testGetOrganizationPost()
-	{
-		User user = userService.findByAccount(UserAccount);
-		assertNotNull(user);
-		assertNotNull(user.getOrganizationPosts());
-	}
 }

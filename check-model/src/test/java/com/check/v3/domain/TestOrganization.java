@@ -1,5 +1,6 @@
 package com.check.v3.domain;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -70,10 +71,10 @@ public class TestOrganization {
 		assertTrue(o.equals(o));
 		assertFalse(o.equals(null));
 		assertFalse(o.equals(p));
-		o.setId(10);
-		p.setId(10);
+		o.setId(10L);
+		p.setId(10L);
 		assertTrue(o.equals(p));
-		p.setId(20);
+		p.setId(20L);
 		assertFalse(o.equals(p));
 	}
 	@Test
@@ -98,6 +99,19 @@ public class TestOrganization {
 		o1.removeSubOrganization(o2);
 		assertFalse(o1.getSubOrganizations().contains(o2));
 		assertNull(o2.getParentOrganization());
+	}
+	@Test
+	public void TestSetDepartment()
+	{
+		Organization t = new Organization();
+		Department   d = new Department();
+		assertEquals(d.getOrganizations().size(),0);
+		t.setDepartment(d);
+		assertEquals(d.getOrganizations().size(),1);
+		assertEquals(t.getDepartment(),d);
+		assertTrue(d.getOrganizations().contains(t));
+		
+
 	}
 	
 }

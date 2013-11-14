@@ -3,19 +3,15 @@ package com.check.v3.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -25,12 +21,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.check.v3.domain.Organization;
-
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable,Affiliation {
+public class User implements Serializable {
 	
 	private static final Logger logger = LoggerFactory.getLogger(User.class);
 
@@ -47,9 +41,16 @@ public class User implements Serializable,Affiliation {
 	private String  				password;
 	private String  				password_verify;
 	private String 					password_cryp;
-	private Set<OrganizationPost> 	organizationPosts 	= new HashSet<OrganizationPost>();
 	
-	
+    
+	private Department				department;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    @NotNull
+    private Role					role;
+    
+    
 	public User()
 	{
 		
@@ -90,32 +91,7 @@ public class User implements Serializable,Affiliation {
 	public String getAccount() {
 		return account;
 	}
-	@Override
-	@Transient
-	public List<Organization> getBelongsToOrganizations() {
-		if (organizationPosts == null || organizationPosts.isEmpty()){
-			return null;
-		}
-		List<Organization> s = new ArrayList<Organization>();
-		HashSet<Long>	   t = new HashSet<Long>();
-		for(OrganizationPost post:organizationPosts){
-			if (t.contains(post.getOrganization().getId())){
-				t.add(post.getOrganization().getId());
-				s.add(post.getOrganization());
-			}
-		}
-		return s;
-		
-	}
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_organization_posts",
-    		   joinColumns = @JoinColumn(name = "user_id"),
-    		   inverseJoinColumns = @JoinColumn(name = "organization_post_id"))
-	public Set<OrganizationPost> getOrganizationPosts()
-	{
-		return organizationPosts;
-	}
 	
 	public void setId(Long id) {
 		this.id = id;
@@ -153,31 +129,40 @@ public class User implements Serializable,Affiliation {
 		this.account = account;
 	}
 	
-	public void setOrganizationPosts(Set<OrganizationPost> organizationPosts) {
-		this.organizationPosts = organizationPosts;
+	public void setDepartment(Department d)
+	{
+		this.department = d;
+	}
+	@ManyToOne
+	@JoinColumn(name="department_id", nullable=false)
+	public Department getDepartment()
+	{
+		return this.department;
 	}
 
-	public boolean equals(Object obj)
+	
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	public boolean equals(Object object)
 	{
-		if (!(obj instanceof User)){
-			return false;
-		}
-		User other = (User) obj;
-		if (this.getId() != null && other.getId() != null && this.getId() == other.getId()){
+		if (object == this){
 			return true;
 		}
-		if (other.getAccount() != null){
-			if (other.getAccount().equals(this.account)){
-				return true;
-			}
-		}else{
-			if (this.account == null){
-				return true;
-			}else{
-				return false;
-			}
+		if ((object == null) || ! (object instanceof User)){
+			return false;
+		}
+		
+		final User other = (User)object;
+		
+		if ((other.getId()!=null) && (this.getId() !=null)){
+			return other.getId().equals(this.getId());
 		}
 		return false;
+
 	}
 
 }

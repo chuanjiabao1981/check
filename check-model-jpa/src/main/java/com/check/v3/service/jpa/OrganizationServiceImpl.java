@@ -46,6 +46,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 	public void delete(Organization organization) {
 		Organization o = em.merge(organization);
 		o.getParentOrganization().removeSubOrganization(o);
+		o.getDepartment().removeOrganization(o);
 		em.remove(o);
 	}
 

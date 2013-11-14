@@ -27,12 +27,7 @@ public class SessionsRestController {
 		
 		currentUser.login(token);
 		currentUser.getSession().getId();
-		set();
 		return new SessionDTO(currentUser.getSession().getId().toString());
-	}
-	public void set()
-	{
-		
 	}
 	
 }

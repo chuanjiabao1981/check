@@ -1,26 +1,21 @@
 package com.check.v3.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
@@ -28,75 +23,47 @@ import org.slf4j.LoggerFactory;
 
 
 import com.check.v3.domain.exception.OrganizationRingException;
-import com.google.common.collect.Lists;
 
 
 @Entity
-@Table(name="organizations")
-public class Organization implements Serializable,Affiliation{
+@Table(name="units")
+@DiscriminatorValue("organization")
+public class Organization extends Unit implements Serializable{
 	
 	private static final Logger logger = LoggerFactory.getLogger(Organization.class);
 
 	private static final long serialVersionUID = -3552455311356671929L;
 	
-	@Id
-	@GeneratedValue(strategy = IDENTITY) 
-	@Column(name = "id")
-	private Long 	id;
 	
-	@Column(name = "name")
-//	@NotNull
-	private String 	name;
-	
-	@OneToMany(mappedBy = "organization", cascade=CascadeType.ALL,fetch = FetchType.EAGER)
-	private Set<OrganizationPost> organizationPosts = new HashSet<OrganizationPost>();
-	
-	@OneToMany(mappedBy = "parentOrganization",cascade={ CascadeType.PERSIST,CascadeType.REMOVE},fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "parentOrganization",cascade={ CascadeType.ALL},fetch = FetchType.EAGER)
 	private List<Organization> subOrganizations		= new LinkedList<Organization>();
 	
 	@ManyToOne
-    @JoinColumn(name="parent_id")
+    @JoinColumn(name="parent_organization_id")
 	private Organization parentOrganization;
 	
     @Enumerated(EnumType.STRING)
+    @Column(name = "organization_type")
 	private OrganizationType type 					= OrganizationType.NON_LEAF_NODE;
+    
+    @ManyToOne
+    @JoinColumn(name="department_id")
+    @NotNull
+    private Department department;
 	
 	public Organization()
 	{
-		OrganizationPost op1 = new OrganizationPost(OrganizationPostType.SUPERVISOR);
-		OrganizationPost op2 = new OrganizationPost(OrganizationPostType.MEMEBER);
-		OrganizationPost op3 = new OrganizationPost(OrganizationPostType.ADMIN);
-		op1.setOrganization(this);
-		op2.setOrganization(this);
-		op3.setOrganization(this);
-		organizationPosts.add(op1);
-		organizationPosts.add(op2);
-		organizationPosts.add(op3);
+	}
+	public Organization(Department department)
+	{
+		this.setDepartment(department);
 	}
 	public Organization(String name,OrganizationType type)
 	{
-		this();
-		this.name = name;
+		this.setName(name);
 		this.type = type;
 	}
-	
-	public Long getId() {
-		return id;
-	}
-	public String getName() {
-		return name;
-	}
-	public Set<OrganizationPost> getOrganizationPosts() {
-		return organizationPosts;
-	}
-	public OrganizationPost getOrganizationPost(OrganizationPostType type)
-	{
-		for(OrganizationPost post:organizationPosts){
-			if (post.getType().equals(type))
-				return post;
-		}
-		return null;
-	}
+		
 	public List<Organization> getSubOrganizations()
 	{
 		return subOrganizations;
@@ -110,12 +77,6 @@ public class Organization implements Serializable,Affiliation{
 	{
 		return type;
 	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public void setSubOrganizations(List<Organization> subOrganizations) {
 		this.subOrganizations = subOrganizations;
 	}
@@ -124,8 +85,20 @@ public class Organization implements Serializable,Affiliation{
 	}
 	
 	
-	public void setOrganizationPosts(Set<OrganizationPost> organizationPosts) {
-		this.organizationPosts = organizationPosts;
+	public void setDepartment(Department department)
+	{
+		setDepartment(department,true);
+	}
+	public Department getDepartment()
+	{
+		return this.department;
+	}
+	public void setDepartment(Department department,boolean add)
+	{
+		this.department = department;
+		if (department != null && add){
+			this.department.addOrganization(this,false);
+		}
 	}
 	public void setParentOrganization(Organization parentOrganization) {
 		setParentOrganization(parentOrganization,true);
@@ -192,15 +165,7 @@ public class Organization implements Serializable,Affiliation{
 		}
 		return false;
 	}
-	@Override
-	@Transient
-	public List<Organization> getBelongsToOrganizations() {
-		if (parentOrganization != null){
-			return Lists.newArrayList(parentOrganization);
-		}
-		return null;
-	}
-	
+		
 	public boolean equals(Object object)
 	{
 		if (object == this){
@@ -212,8 +177,8 @@ public class Organization implements Serializable,Affiliation{
 		
 		final Organization other = (Organization)object;
 		
-		if ((other.getId()!=null) && (id !=null)){
-			return other.getId().equals(id);
+		if ((other.getId()!=null) && (this.getId() !=null)){
+			return other.getId().equals(this.getId());
 		}
 		return false;
 	}

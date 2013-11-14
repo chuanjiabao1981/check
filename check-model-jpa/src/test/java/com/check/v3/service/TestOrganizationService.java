@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.check.v3.domain.Department;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationType;
 import com.check.v3.domain.exception.OrganizationRingException;
@@ -26,13 +27,15 @@ public class TestOrganizationService {
 	
 	@Autowired
 	private OrganizationService organizationService;
+	@Autowired
+	private DepartmentService departmentService;
 	private final String TEST_ORG_NAME		 = "AA";
 	private final String TEST_ORG_NOT_EXSIT  = "NOT_EXIST"; 
 	private Organization o1;
 	private Organization o2;
 	private Organization o3;
 	private Organization o4;
-	
+	private Department   department			 = null;
 	@Before
 	public void init()
 	{
@@ -41,18 +44,22 @@ public class TestOrganizationService {
 		o2 						  = new Organization("o2",OrganizationType.NON_LEAF_NODE);
 		o3 						  = new Organization("o3",OrganizationType.LEAF_NODE);
 		o4 						  = new Organization("o4",OrganizationType.NON_LEAF_NODE);
+		department 				  = new Department("xxxxxxxx");
+		department				  = departmentService.save(department);
 		
 	}
 	@Test
 	public void testSave1()
 	{
 		Organization organization = new Organization(TEST_ORG_NAME,OrganizationType.LEAF_NODE);
+		organization.setDepartment(department);
 		organizationService.save(organization);
 		assertNotNull(organizationService.findByName(TEST_ORG_NAME));
 	}
 	@Test
 	public void testSave2()
 	{
+		o1.setDepartment(department);
 		organizationService.save(o1);
 		assertNotNull(organizationService.findByName("o1"));
 		
@@ -66,6 +73,10 @@ public class TestOrganizationService {
 	@Test(expected=OrganizationRingException.class)
 	public void testAddSubOrganization()
 	{
+		o1.setDepartment(department);
+		o2.setDepartment(department);
+		o3.setDepartment(department);
+		o4.setDepartment(department);
 		o1.addSubOrganization(o2).addSubOrganization(o3);
 		o2.addSubOrganization(o4);
 		
@@ -89,6 +100,7 @@ public class TestOrganizationService {
 	@Test
 	public void testDeleteOrganization()
 	{
+		setDepartment();
 		o1.addSubOrganization(o2).addSubOrganization(o3);
 		o2.addSubOrganization(o4);
 		organizationService.save(o1);
@@ -96,7 +108,15 @@ public class TestOrganizationService {
 		assertNotNull(organizationService.findByName("o1"));
 		assertNull(organizationService.findByName("o2"));
 		assertNull(organizationService.findByName("o3"));
-		assertNull(organizationService.findByName("04"));
+		assertNull(organizationService.findByName("o4"));
 		
+	}
+	
+	private void setDepartment()
+	{
+		o1.setDepartment(department);
+		o2.setDepartment(department);
+		o3.setDepartment(department);
+		o4.setDepartment(department);
 	}
 }
