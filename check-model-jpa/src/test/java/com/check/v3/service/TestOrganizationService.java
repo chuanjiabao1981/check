@@ -1,5 +1,6 @@
 package com.check.v3.service;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.check.v3.domain.Department;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationType;
+import com.check.v3.domain.User;
 import com.check.v3.domain.exception.OrganizationRingException;
+import com.check.v3.domain.test.util.UserBuilder;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,6 +32,8 @@ public class TestOrganizationService {
 	private OrganizationService organizationService;
 	@Autowired
 	private DepartmentService departmentService;
+	@Autowired
+	private UserService userService;
 	private final String TEST_ORG_NAME		 = "AA";
 	private final String TEST_ORG_NOT_EXSIT  = "NOT_EXIST"; 
 	private Organization o1;
@@ -109,6 +114,25 @@ public class TestOrganizationService {
 		assertNull(organizationService.findByName("o2"));
 		assertNull(organizationService.findByName("o3"));
 		assertNull(organizationService.findByName("o4"));
+		
+	}
+	
+	
+	@Test
+	public void testAddUser()
+	{
+		o1.setDepartment(department);
+		organizationService.save(o1);
+		assertEquals(organizationService.findByName(o1.getName()).getUsers().size(),0);
+		User user = new UserBuilder().build(department, "xxxx");
+		userService.save(user);
+		o1.addUser(user);
+		organizationService.save(o1);
+		assertEquals(organizationService.findByName(o1.getName()).getUsers().size(),1);
+	}
+	@Test 
+	public void removeUser()
+	{
 		
 	}
 	

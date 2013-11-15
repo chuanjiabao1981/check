@@ -5,7 +5,8 @@ public enum Role {
 	SYS_ADMIN("系统管理员"),
 	DEPARTMENT_ADMIN("部门系统管理员"),
 	DEPARTMENT_SUPERVISOR("部门领导"),
-	DEPARTMENT_MEMEBER("部门成员");
+	DEPARTMENT_MEMEBER("部门成员"),
+	GUEST("零时用户");
 
 	private String text;
 	

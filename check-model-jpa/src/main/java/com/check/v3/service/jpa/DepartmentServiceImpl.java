@@ -23,4 +23,16 @@ public class DepartmentServiceImpl implements DepartmentService{
 		return departmentRepository.save(department);
 	}
 
+	@Override
+	@Transactional
+	public void delete(Department department) {
+		 departmentRepository.delete(department);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public Department findByName(String name) {
+		return departmentRepository.findByName(name);
+	}
+
 }

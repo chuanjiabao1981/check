@@ -3,14 +3,20 @@ package com.check.v3.domain;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -49,6 +55,9 @@ public class User implements Serializable {
     @Column(name = "role")
     @NotNull
     private Role					role;
+    
+    
+    private List<Organization>		organizations	= new ArrayList<Organization>();
     
     
 	public User()
@@ -146,6 +155,34 @@ public class User implements Serializable {
 	}
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	public void addOrganization(Organization o)
+	{
+		if (this.getOrganizations().contains(o)){
+			return;
+		}else{
+			this.getOrganizations().add(o);
+		}
+		o.addUser(this);
+	}
+	
+	public void removeOrganization(Organization o)
+	{
+		if (!this.getOrganizations().contains(o))
+			return;
+		this.getOrganizations().remove(o);
+		o.removeUser(this);
+	}
+	@ManyToMany
+    @JoinTable(name="user_organizations", 
+                joinColumns={@JoinColumn(name="user_id")}, 
+                inverseJoinColumns={@JoinColumn(name="organization_id")})
+	public List<Organization> getOrganizations() {
+		return organizations;
+	}
+	public void setOrganizations(List<Organization> organizations) {
+		this.organizations = organizations;
 	}
 	public boolean equals(Object object)
 	{

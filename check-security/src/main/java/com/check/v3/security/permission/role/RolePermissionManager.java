@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
-import com.check.v3.security.Role;
 import com.check.v3.security.permission.PermissionSet;
 
 @Service("rolePermissionManager")
@@ -23,11 +23,16 @@ public class RolePermissionManager {
 		rolePermissionSet.put(role,permissionSet);
 	}
 	
-	public  boolean isAllowed(User user,Role role,String controller,String action,Object instance )
+	public  boolean isAllowed(User user,String controller,String action,Object instance )
 	{
-		PermissionSet pSet = rolePermissionSet.get(role);
+		PermissionSet pSet = null;
+		if (user == null){
+			pSet = rolePermissionSet.get(Role.GUEST);
+		}else{
+			pSet = rolePermissionSet.get(user.getRole());
+		}
 		if (pSet == null){
-			logger.warn("no ["+role+"] permission is found");
+			logger.warn("no ["+user.getRole()+"] permission is found");
 			return false;
 		}
 		return pSet.isAllowed(user, controller, action, instance);

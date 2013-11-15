@@ -54,6 +54,11 @@
 			<artifactId>check-common</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.check</groupId>
+			<artifactId>check-model</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
   </dependencies>
   
 </project>

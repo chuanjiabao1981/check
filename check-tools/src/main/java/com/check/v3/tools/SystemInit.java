@@ -5,7 +5,6 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import com.check.v3.domain.Organization;
-import com.check.v3.domain.OrganizationPostType;
 import com.check.v3.domain.OrganizationType;
 import com.check.v3.domain.User;
 import com.check.v3.security.util.SecurityTools;
@@ -29,7 +28,7 @@ public class SystemInit {
 		userService			= (UserService) ctx.getBean("userService");
 		Organization r	= initRootOrganization();
 		
-//		initRootUser(ctx,r);
+		initRootUser(ctx,r);
 	}
 	
 	public static Organization initRootOrganization()
@@ -40,7 +39,6 @@ public class SystemInit {
 	public static User initRootUser(GenericXmlApplicationContext ctx,Organization o)
 	{
 		User user  = new User(ROOT_ACCOUNT,ROOT_NAME);
-		user.getOrganizationPosts().add(o.getOrganizationPost(OrganizationPostType.ADMIN));
 		DefaultWebSecurityManager			securityManager			=  (DefaultWebSecurityManager) ctx.getBean("securityManager");
 		/*
 		 *  由于AbstractShiroFilter默认不会设置SecurityMananger给当前线程，每次请求来才设置。(staticSecurityManagerEnabled)

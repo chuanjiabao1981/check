@@ -4,4 +4,7 @@ import com.check.v3.domain.Department;
 
 public interface DepartmentService {
 	public Department save(Department department);
+	public void delete(Department department);
+	public Department findByName(String name);
+
 }

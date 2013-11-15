@@ -23,9 +23,9 @@ public class Department extends Unit implements Serializable{
 	
 	private static final long serialVersionUID = 5620006938704778198L;
 	
-	@OneToMany(mappedBy = "department", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "department", cascade={CascadeType.REMOVE,CascadeType.MERGE})
 	private List<Organization> organizations   = new ArrayList<Organization>();
-	@OneToMany(mappedBy = "department")
+	@OneToMany(mappedBy = "department", cascade={CascadeType.REMOVE,CascadeType.MERGE})
 	private List<User> users 					= new ArrayList<User>();
 	public Department()
 	{}

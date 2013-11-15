@@ -19,7 +19,7 @@ import com.check.v3.domain.User;
 @TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
 public class TestOrganizationAdminPermission {
 	@Autowired
-	OrganizationAdminPermissionSet organizationAdminPermissionSet;
+	DepartmentAdminPermissionSet organizationAdminPermissionSet;
 	User user ;
 	@Before
 	public void init()

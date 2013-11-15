@@ -2,6 +2,7 @@ package com.check.v3.domain;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -50,13 +53,28 @@ public class Organization extends Unit implements Serializable{
     @JoinColumn(name="department_id")
     @NotNull
     private Department department;
-	
+    //(cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany
+    @JoinTable(name="user_organizations", 
+                joinColumns={@JoinColumn(name="organization_id")}, 
+                inverseJoinColumns={@JoinColumn(name="user_id")})
+    private List<User> users = new ArrayList<User>();
+    
+    
+    
+    
 	public Organization()
 	{
 	}
 	public Organization(Department department)
 	{
 		this.setDepartment(department);
+	}
+	public Organization(Department department,String name,OrganizationType type)
+	{
+		this.setDepartment(department);
+		this.setName(name);
+		this.type = type;;
 	}
 	public Organization(String name,OrganizationType type)
 	{
@@ -165,7 +183,28 @@ public class Organization extends Unit implements Serializable{
 		}
 		return false;
 	}
-		
+	public void addUser(User user)
+	{
+		if (this.getUsers().contains(user)){
+			return;
+		}else{
+			this.getUsers().add(user);
+		}
+		user.addOrganization(this);
+	}
+	public void removeUser(User user)
+	{
+		if (!user.getOrganizations().contains(user))
+			return;
+		this.getUsers().remove(user);
+		user.removeOrganization(this);
+	}
+	public List<User> getUsers() {
+		return users;
+	}
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
 	public boolean equals(Object object)
 	{
 		if (object == this){

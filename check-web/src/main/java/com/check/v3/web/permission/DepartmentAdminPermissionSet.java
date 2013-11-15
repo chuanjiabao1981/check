@@ -4,14 +4,14 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
+import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
-import com.check.v3.security.Role;
 
 
-@Service("organizationAdminPermissionSet")
-public class OrganizationAdminPermissionSet extends OrganizationUserSharePermissionSet {
+@Service("departmentAdminPermissionSet")
+public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionSet {
 	
-	public OrganizationAdminPermissionSet()
+	public DepartmentAdminPermissionSet()
 	{
 		super();
 	}
@@ -29,6 +29,6 @@ public class OrganizationAdminPermissionSet extends OrganizationUserSharePermiss
 	@Override
 	@PostConstruct
 	public void register() {
-		this.rolepermissionManager.register(Role.ORGANIZATION_ADMIN, this);
+		this.rolepermissionManager.register(Role.DEPARTMENT_ADMIN, this);
 	}
 }

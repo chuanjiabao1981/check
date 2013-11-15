@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import com.check.v3.ControllerActionConstant;
-import com.check.v3.security.Role;
+import com.check.v3.domain.Role;
 import com.check.v3.security.permission.PermissionSet;
 import com.check.v3.web.controller.LoginController;
 

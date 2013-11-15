@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.check.v3.domain.User;
-import com.check.v3.security.permission.filter.GrantedPermissionFilter;
+import com.check.v3.security.permission.policy.GrantedPermission;
 import com.check.v3.security.permission.role.RolePermissionManager;
 import com.check.v3.util.KeyUtils;
 
@@ -19,9 +19,9 @@ public abstract class   PermissionSet {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PermissionSet.class);
 
-	private static final PermissionFilter 	 DEFAULT_PERMISSION_FILTER 				= new GrantedPermissionFilter();
+	private static final PermissionPolicy 	 DEFAULT_PERMISSION_FILTER 				= new GrantedPermission();
 	
-	private Map<String,PermissionFilter> controllerActionPermissionFilter 			= new HashMap<String,PermissionFilter>();
+	private Map<String,PermissionPolicy> controllerActionPermissionFilter 			= new HashMap<String,PermissionPolicy>();
 	
 	@Autowired
 	protected RolePermissionManager rolepermissionManager;
@@ -29,16 +29,16 @@ public abstract class   PermissionSet {
 	public abstract void register();
 	
 	
-	public PermissionFilter getPermissionFilter(String controller,String action)
+	public PermissionPolicy getPermissionFilter(String controller,String action)
 	{
-		PermissionFilter permissionFilter = controllerActionPermissionFilter.get(KeyUtils.buildKey(controller,action));
+		PermissionPolicy permissionFilter = controllerActionPermissionFilter.get(KeyUtils.buildKey(controller,action));
 		if (permissionFilter == null)
 			logger.trace("can't find controller [{}] action [{}] permissionFilter",controller,action);
 		return permissionFilter;
 	}
 	public boolean isAllowed(User user,String controller,String action,Object instance)
 	{
-		PermissionFilter permissionFilter = getPermissionFilter(controller,action);
+		PermissionPolicy permissionFilter = getPermissionFilter(controller,action);
 		if (permissionFilter == null){
 			return false;
 		}
@@ -46,14 +46,14 @@ public abstract class   PermissionSet {
 	}
 	public boolean isAllowed(User user,String controller,String action)
 	{
-		PermissionFilter permissionFilter = getPermissionFilter(controller,action);
+		PermissionPolicy permissionFilter = getPermissionFilter(controller,action);
 		if (permissionFilter == null){
 			return false;
 		}
 		return permissionFilter.filter(user,null);
 	}
 	
-	protected void allow(String controller,String action,PermissionFilter permissionFilter)
+	protected void allow(String controller,String action,PermissionPolicy permissionFilter)
 	{
 		addPermissionFilter(controller,action,permissionFilter);
 	}
@@ -63,7 +63,7 @@ public abstract class   PermissionSet {
 		allow(controller,action,DEFAULT_PERMISSION_FILTER);
 	}
 		
-	private void addPermissionFilter(String controller,String action,PermissionFilter permissionFilter)
+	private void addPermissionFilter(String controller,String action,PermissionPolicy permissionFilter)
 	{
 		logger.trace("add PermissionFilter{} for controller[{}] action[{}] ",new Object[]{permissionFilter,controller,action});
 		controllerActionPermissionFilter.put(KeyUtils.buildKey(controller,action), permissionFilter);

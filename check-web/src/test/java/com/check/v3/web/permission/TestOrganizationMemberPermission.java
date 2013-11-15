@@ -16,7 +16,7 @@ import com.check.v3.ControllerActionConstant;
 import com.check.v3.domain.User;
 import com.check.v3.web.controller.HomeController;
 import com.check.v3.web.controller.UserController;
-import com.check.v3.web.permission.OrganizationMemberPermissionSet;
+import com.check.v3.web.permission.DepartmentMemberPermissionSet;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,7 +27,7 @@ public class TestOrganizationMemberPermission
 {
 	
 	@Autowired
-	OrganizationMemberPermissionSet organizationMemberPermission;
+	DepartmentMemberPermissionSet organizationMemberPermission;
 
 	private User current_user;
 	private User other_user;
