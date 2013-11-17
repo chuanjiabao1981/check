@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "units")
@@ -26,12 +29,15 @@ public class Unit {
 	private Long id;
 	
     @Column(name = "name")
+    @NotEmpty
 	private String name;
+    
+    @Transient
+    private String test;
 
 	public Long getId() {
 		return id;
 	}
-
 	public String getName() {
 		return name;
 	}
@@ -42,5 +48,15 @@ public class Unit {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getTest()
+	{
+		return test;
+	}
+	public void setTest(String t)
+	{
+		
+		System.err.println("lkklkllkkk");
+		this.test = t;
 	}
 }

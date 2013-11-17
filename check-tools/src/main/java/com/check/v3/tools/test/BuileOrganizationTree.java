@@ -43,7 +43,7 @@ public class BuileOrganizationTree {
 	{
 		OrganizationService organizationService =  (OrganizationService) ctx.getBean("organizationService");
 
-		Organization rootOrganization		= organizationService.findByName(SystemInit.ROOT_ORGANIZATION_NAME);
+		Organization rootOrganization		= organizationService.findByName(SystemInit.ROOT_DEPARTMENT_NAME);
 		Organization oo1 = new Organization("oo1",OrganizationType.NON_LEAF_NODE);
 		Organization oo2 = new Organization("oo2",OrganizationType.NON_LEAF_NODE);
 		Organization oo3 = new Organization("oo3",OrganizationType.NON_LEAF_NODE);

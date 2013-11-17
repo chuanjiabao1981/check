@@ -4,39 +4,39 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-import com.check.v3.domain.Organization;
-import com.check.v3.domain.OrganizationType;
+import com.check.v3.domain.Department;
+import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.security.util.SecurityTools;
-import com.check.v3.service.OrganizationService;
+import com.check.v3.service.DepartmentService;
 import com.check.v3.service.UserService;
 
 public class SystemInit {
 	
-	public static final String ROOT_ORGANIZATION_NAME	="root";
+	public static final String ROOT_DEPARTMENT_NAME		="root";
 	public static final String ROOT_ACCOUNT				="root";
 	public static final String ROOT_NAME				= "系统管理员";
 	public static final String ROOT_PASSWORD			= "12345";
-	private static OrganizationService organizationService;
+	private static DepartmentService departmentService;
 	private static UserService userService;
 	public static void main(String[] args)
 	{
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
 		ctx.load("classpath*:/application-context.xml","classpath*:/application-web-security-context.xml");
 		ctx.refresh();
-		organizationService = (OrganizationService) ctx.getBean("organizationService");
+		departmentService 	= (DepartmentService) ctx.getBean("departmentService");
 		userService			= (UserService) ctx.getBean("userService");
-		Organization r	= initRootOrganization();
+		Department d		= initRootDepartment();
 		
-		initRootUser(ctx,r);
+		initRootUser(ctx,d);
 	}
 	
-	public static Organization initRootOrganization()
+	public static Department initRootDepartment()
 	{
-		Organization root_organization = new Organization(ROOT_ORGANIZATION_NAME,OrganizationType.NON_LEAF_NODE);
-		return organizationService.save(root_organization);
+		Department root_department = new Department(ROOT_DEPARTMENT_NAME);
+		return departmentService.save(root_department);
 	}
-	public static User initRootUser(GenericXmlApplicationContext ctx,Organization o)
+	public static User initRootUser(GenericXmlApplicationContext ctx,Department d)
 	{
 		User user  = new User(ROOT_ACCOUNT,ROOT_NAME);
 		DefaultWebSecurityManager			securityManager			=  (DefaultWebSecurityManager) ctx.getBean("securityManager");
@@ -46,6 +46,8 @@ public class SystemInit {
 		 */
 		SecurityUtils.setSecurityManager((org.apache.shiro.mgt.SecurityManager) securityManager);
 		user.setPassword_cryp(SecurityTools.getEncryptPassword(ROOT_PASSWORD));
+		user.setRole(Role.SYS_ADMIN);
+		user.setDepartment(d);
 		return userService.save(user);
 	}
 
