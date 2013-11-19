@@ -8,5 +8,4 @@ import com.check.v3.domain.Department;
 public interface DepartmentRepository  extends CrudRepository<Department,Long>
 {
 	public Department findByName(String name);
-
 }

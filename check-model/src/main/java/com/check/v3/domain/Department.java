@@ -2,20 +2,27 @@ package com.check.v3.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+
 @Entity
 @Table(name="units")
 @DiscriminatorValue("department")
+@NamedQuery(name="Department.findByIdWithUsers",query="select distinct d from Department d left join fetch d.users u where d.id = :id")
 public class Department extends Unit implements Serializable{
 	
 	private static final Logger logger = LoggerFactory.getLogger(Department.class);
@@ -71,6 +78,25 @@ public class Department extends Unit implements Serializable{
 	}
 	
 	
+	public List<User> getUsers() {
+		return users;
+	}
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+	public List<User> getDepartmentAdmins()
+	{
+		Collection<User> u = Collections2.filter(users, new Predicate<User>(){
+			public boolean apply(User i)
+			{
+				if (i.getRole() == Role.DEPARTMENT_ADMIN){
+					return true;
+				}
+				return false;
+			}
+		} );
+		return Lists.newArrayList(u.iterator());
+	}
 	public boolean equals(Object object)
 	{
 		if (object == this){

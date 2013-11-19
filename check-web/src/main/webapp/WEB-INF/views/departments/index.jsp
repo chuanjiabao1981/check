@@ -5,7 +5,7 @@
 
 <jsp:directive.page contentType="text/html;charset=UTF-8" /> 
 <spring:url    value="/departments" var="urlEditDepartment"></spring:url>
-
+<spring:url    value="/departments" var="urlDepartmentAdminIndex"></spring:url>
 <c:if test="${not empty departments}"> 
 <table>
 	<thead>
@@ -13,6 +13,7 @@
 			<th>Name</th>
 			<th>Delete</th>
 			<th>Edit</th>
+			<th>Department Admins</th>
 		</tr> 
     </thead>
 	<tbody>
@@ -27,6 +28,7 @@
         			</form:form>
         		</td>
         		<td><a href="${urlEditDepartment}/${department.id}/edit">Edit</a></td>
+        		<td><a href="${urlDepartmentAdminIndex}/${department.id}/department_admins">Department Admins</a></td>
 			 </tr>
 		</c:forEach>
 	</tbody>

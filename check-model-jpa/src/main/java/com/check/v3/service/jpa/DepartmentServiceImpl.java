@@ -8,7 +8,6 @@ import javax.persistence.PersistenceContext;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.check.v3.domain.Department;
 import com.check.v3.repository.DepartmentRepository;
 import com.check.v3.service.DepartmentService;
-import com.check.v3.service.exception.DepartmentNameDuplicateException;
 import com.google.common.collect.Lists;
 
 @Service("departmentService")
@@ -32,21 +30,11 @@ public class DepartmentServiceImpl implements DepartmentService{
 
 
 	@Override
-	@Transactional(rollbackFor={DepartmentNameDuplicateException.class,DataIntegrityViolationException.class})
-	public Department save(Department department) throws DataIntegrityViolationException,DepartmentNameDuplicateException{
-		try{
-			return departmentRepository.save(department);
-		}catch(DataIntegrityViolationException ex){
-			throw new DepartmentNameDuplicateException("name");
-		}
-	}
 	@Transactional
-	public Department update(Department department)
-	{
-		Department s = em.merge(department);
-		return s;
-		
+	public Department save(Department department){
+			return departmentRepository.save(department);
 	}
+	
 	@Override
 	@Transactional
 	public void delete(Department department) {
@@ -66,6 +54,7 @@ public class DepartmentServiceImpl implements DepartmentService{
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public Department findById(Long id) {
 		return departmentRepository.findOne(id);
 	}
@@ -73,6 +62,12 @@ public class DepartmentServiceImpl implements DepartmentService{
 	@Override
 	public void delete(Long id) {
 		departmentRepository.delete(id);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public Department findByIdWithUsers(Long id) {
+		return em.createNamedQuery("Department.findByIdWithUsers", Department.class).setParameter("id", id).getSingleResult();
 	}
 
 }

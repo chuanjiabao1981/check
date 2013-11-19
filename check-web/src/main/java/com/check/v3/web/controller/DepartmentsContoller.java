@@ -23,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.check.v3.domain.Department;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.service.DepartmentService;
-import com.check.v3.service.exception.DepartmentNameDuplicateException;
 import com.check.v3.web.form.Message;
 
 @Controller
@@ -109,13 +108,8 @@ public class DepartmentsContoller {
 			return url;
 		}
 		try{
-			logger.info("The Department is: "+department.getId()+"|"+department.getName());
 			departmentService.save(department);
-			System.err.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 		}catch (DataIntegrityViolationException ex){
-			ex.printStackTrace();
-			System.err.println(ex.getClass());
-			System.err.println(ex.getMessage());
 			model.addAttribute("message",new Message("error", messageSource.getMessage("department_create_fail", new Object[] {}, locale)));
 			model.addAttribute("department", department);
 			bindingResult.rejectValue("name","department_name_duplicate");

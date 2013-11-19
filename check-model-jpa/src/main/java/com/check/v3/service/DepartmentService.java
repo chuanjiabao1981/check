@@ -11,6 +11,7 @@ public interface DepartmentService {
 	public void delete(Long id);
 	public Department findByName(String name);
 	public Department findById(Long id);
+	public Department findByIdWithUsers(Long id);
 	public List<Department> findAll();
 
 }
