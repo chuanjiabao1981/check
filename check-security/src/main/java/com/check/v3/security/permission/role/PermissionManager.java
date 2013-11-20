@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.check.v3.domain.User;
 import com.check.v3.security.ControllerActionInstanceLoader;
 import com.check.v3.security.SecurityConstant;
+import com.check.v3.security.permission.PermissionPolicy;
+import com.check.v3.security.permission.PermissionSet;
 import com.check.v3.service.InstanceLoaderService;
 
 @Service("permissionManager")
@@ -31,23 +33,30 @@ public class PermissionManager {
 	public boolean isAllowed(HttpServletRequest httpServletRequest,String controller,String action,Long instanceId)
 	{
 		Subject 					subject 		= SecurityUtils.getSubject();
-		Object				current_instance		= getCurrentInstance(controller,action,instanceId);
+		Object				current_instance		= null;//getCurrentInstance(controller,action,instanceId);
 		User				current_user			= null;
+		
+		if (subject == null || subject.getPrincipal() == null){
+			logger.trace("current user is Guest");
+		}else{
+			current_user = (User) subject.getPrincipal();
+		}
+		PermissionSet 		ps 					= rolePermissionManager.getPermissionSet(current_user);
+		PermissionPolicy	pp 					= ps.getPermissionFilter(controller, action);
+		if (pp == null)
+			return false;
+		current_instance  						= pp.getInstance(instanceId);
+		
 		if (httpServletRequest != null){
 			httpServletRequest.setAttribute(SecurityConstant.CurrentInstance, current_instance);
 		}else{
 			logger.trace("httpServletRequest is null");
 		}
-		//1. Guest权限判断
-		if (subject == null || subject.getPrincipal() == null){
-			logger.trace("current user is Guest");
-			return rolePermissionManager.isAllowed(null,controller, action, current_instance);
-		}
-		current_user = (User) subject.getPrincipal();
-		return rolePermissionManager.isAllowed(current_user, controller, action, current_instance);
+		
+		return pp.filter(current_user, current_instance);
 	}
 	
-	public Object getCurrentInstance(String controller,String action,Long instanceId)
+	private Object getCurrentInstance(String controller,String action,Long instanceId)
 	{
 		InstanceLoaderService load_instance	 		= controllerActionInstanceLoader.getInstanceLoaderService(controller, action);
 		Object				  current_instance		= null;

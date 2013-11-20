@@ -34,7 +34,13 @@
         			</form:form>
 				
 				</td>
-				<td><a href="${urlEditDepartment}">Edit</a></td>
+				<td>
+					<form:form  action="${urlEditDepartment}" method="GET">
+						 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+            				<span class="ui-button-text">Edit</span>
+        				</button> 
+        			</form:form>
+				</td>
 			 </tr>
 		</c:forEach>
 	</tbody>

@@ -23,7 +23,7 @@ public class RolePermissionManager {
 		rolePermissionSet.put(role,permissionSet);
 	}
 	
-	public  boolean isAllowed(User user,String controller,String action,Object instance )
+	public  PermissionSet getPermissionSet(User user)
 	{
 		PermissionSet pSet = null;
 		if (user == null){
@@ -34,9 +34,9 @@ public class RolePermissionManager {
 		logger.trace("Current's Role is ["+ ((user == null)? Role.GUEST:user.getRole())+"]");
 		if (pSet == null){
 			logger.warn("no ["+user.getRole()+"] permission is found");
-			return false;
+			return null;
 		}
-		return pSet.isAllowed(user, controller, action, instance);
+		return pSet;
 	}
 
 }

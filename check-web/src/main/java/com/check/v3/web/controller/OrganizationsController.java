@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.check.v3.domain.Department;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationType;
-import com.check.v3.domain.Role;
-import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.OrganizationService;
@@ -32,6 +29,7 @@ public class OrganizationsController {
 	
 	public final static String VIEW_LIST = "organizations/index";
 	public final static String VIEW_NEW	 = "organizations/new";
+	public final static String VIEW_EDIT = "organizations/edit";
 	
 	@RequestMapping(value="/organizations",method=RequestMethod.GET)
 	public String index(Model model)
@@ -59,6 +57,25 @@ public class OrganizationsController {
 		
 		return "redirect:/organizations";
 	}
+	@RequestMapping(value="/organizations/{id}",method=RequestMethod.GET)
+	public String edit(@InstanceId @PathVariable Long id,Model model)
+	{
+		Organization organization = organizationService.findById(id);
+		model.addAttribute("organization", organization);
+		return VIEW_EDIT;
+	}
+	@RequestMapping(value="/organizations/{id}",method=RequestMethod.POST)
+	public String update(@InstanceId @PathVariable Long id,
+					     @ModelAttribute("organization") @Validated Organization organization,
+					     BindingResult bindingResult,
+					     Model model)
+	{
+		if (bindingResult.hasErrors()){
+			return VIEW_EDIT;
+		}
+		organizationService.save(organization);
+		return "redirect:/organizations";
+	}
 	@RequestMapping(value="/organizations/{id}",method=RequestMethod.DELETE)
 	public String destroy(@InstanceId @PathVariable Long id)
 	{
@@ -80,6 +97,5 @@ public class OrganizationsController {
 		return o;
 	}
  
-	
 
 }
