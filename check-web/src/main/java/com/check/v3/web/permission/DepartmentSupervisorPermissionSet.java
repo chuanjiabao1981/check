@@ -20,5 +20,6 @@ public class DepartmentSupervisorPermissionSet extends DepartmentUserSharePermis
 	@PostConstruct
 	public void register() {
 		this.rolepermissionManager.register(Role.DEPARTMENT_SUPERVISOR, this);
+		super.sharePermissionSet();
 	}
 }

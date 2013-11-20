@@ -4,6 +4,6 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 	<definition extends="default" name="users/*"> 
-	    <put-attribute name="body" value="/WEB-INF/views/users/{1}.jspx" /> 
+	    <put-attribute name="body" value="/WEB-INF/views/users/{1}.jsp" /> 
 	</definition>
 </tiles-definitions>

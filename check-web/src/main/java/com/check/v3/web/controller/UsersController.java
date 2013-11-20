@@ -1,9 +1,10 @@
 package com.check.v3.web.controller;
 
 
+import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -20,9 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.check.v3.ControllerActionConstant;
+import com.check.v3.domain.Department;
 import com.check.v3.domain.User;
-import com.check.v3.security.ControllerActionInstanceLoader;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.UserService;
@@ -31,18 +31,26 @@ import com.check.v3.web.form.Message;
 
 
 @Controller
-public class UserController {
+public class UsersController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
+	public final static String VIEW_LIST = "users/index";
 
 
-	@Autowired
+	@Resource
 	UserService userService;
 	@Autowired
 	MessageSource messageSource;
-	@Autowired
-	ControllerActionInstanceLoader controllerActionInstanceLoader;
 
+	@RequestMapping(value="/users",method=RequestMethod.GET)
+	public String index(Model model)
+	{
+		Department 	  department 				= SecurityTools.getCurrentDepartment();
+		List<User>	  users 					= userService.findAllByDepartmentId(department.getId());
+		model.addAttribute("users",users);
+		return VIEW_LIST;
+	}
+	
 	@RequestMapping(value="/users/new",method=RequestMethod.GET)
 	public String newUser(Model model)
 	{
@@ -88,13 +96,14 @@ public class UserController {
 		uiModel.addAttribute("user", user);
         return "users/show";
     }
-	@RequestMapping(value = "/users/{id}", params = "edit", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/{id}/edit", method = RequestMethod.GET)
     public String edit(@InstanceId @PathVariable("id") Long id, Model uiModel,HttpServletRequest httpServletRequest) {
         uiModel.addAttribute("user", userService.findById(id));
         return "users/edit";
 	}	
-	@RequestMapping(value = "/users/{id}", params = "edit", method = RequestMethod.POST)
-    public String update(@ModelAttribute @Valid User user,
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.POST)
+    public String update(@InstanceId @PathVariable("id") Long id,
+    		@ModelAttribute @Valid User user,
 			BindingResult bindingResult, 
 			Model model,
 			RedirectAttributes redirectAttributes,
@@ -117,16 +126,4 @@ public class UserController {
         return "redirect:/users/" + + user.getId();
     }	
 	
-	
-	/*
-	 * 构造函数中不能调用registerInstanceLoaderService，因为
-	 * 构造函数运行的时候userService还未被Injected!
-	 */
-	@PostConstruct 
-	public void init()
-	{
-		controllerActionInstanceLoader.registerInstanceLoaderService(this.getClass().getName(),ControllerActionConstant.EDIT,userService);
-		controllerActionInstanceLoader.registerInstanceLoaderService(this.getClass().getName(),ControllerActionConstant.UPDATE,userService);
-
-	}
 }

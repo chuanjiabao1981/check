@@ -1,6 +1,13 @@
 package com.check.v3.service.jpa;
 
+import java.util.List;
+
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.check.v3.domain.Department;
+import com.check.v3.domain.Organization;
 import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.repository.DepartmentRepository;
@@ -26,6 +34,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@PersistenceContext 
+	private EntityManager em;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -72,6 +83,15 @@ public class UserServiceImpl implements UserService {
 		user.setDepartment(d);
 		user.setRole(Role.DEPARTMENT_ADMIN);
 		return userRepository.save(user);
+	}
+
+	@Override
+	public List<User> findAllByDepartmentId(Long departmentId) {
+		CriteriaBuilder cb 					= em.getCriteriaBuilder();
+		CriteriaQuery<User> c 				= cb.createQuery(User.class);
+		Root<User> emp 						= c.from(User.class);
+		c.select(emp).where(cb.equal(emp.get("department").get("id"), departmentId));
+		return em.createQuery(c).getResultList();
 	}
 
 }

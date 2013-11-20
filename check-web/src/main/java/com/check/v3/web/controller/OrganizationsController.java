@@ -35,7 +35,6 @@ public class OrganizationsController {
 	public String index(Model model)
 	{
 		Department department 				= SecurityTools.getCurrentDepartment();
-		System.err.println(department.getId());
 		List<Organization>	  organizations = organizationService.findAllByDepartmentId(department.getId());
 		model.addAttribute("organizations",organizations);
 		return VIEW_LIST;

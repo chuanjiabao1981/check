@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.check.v3.ControllerActionConstant;
 import com.check.v3.domain.User;
 import com.check.v3.web.controller.HomeController;
-import com.check.v3.web.controller.UserController;
+import com.check.v3.web.controller.UsersController;
 import com.check.v3.web.permission.DepartmentMemberPermissionSet;
 
 
@@ -41,10 +41,10 @@ public class TestOrganizationMemberPermission
 	@Test
 	public void testIsAllowedUser()
 	{
-		assertTrue(organizationMemberPermission.isAllowed(current_user, UserController.class.getSimpleName(),  ControllerActionConstant.EDIT, current_user));
-		assertFalse(organizationMemberPermission.isAllowed(current_user, UserController.class.getSimpleName(), ControllerActionConstant.EDIT, other_user));
-		assertTrue(organizationMemberPermission.isAllowed(current_user, UserController.class.getSimpleName(),  ControllerActionConstant.UPDATE,current_user));
-		assertFalse(organizationMemberPermission.isAllowed(current_user, UserController.class.getSimpleName(), ControllerActionConstant.UPDATE,other_user));
+		assertTrue(organizationMemberPermission.isAllowed(current_user, UsersController.class.getSimpleName(),  ControllerActionConstant.EDIT, current_user));
+		assertFalse(organizationMemberPermission.isAllowed(current_user, UsersController.class.getSimpleName(), ControllerActionConstant.EDIT, other_user));
+		assertTrue(organizationMemberPermission.isAllowed(current_user, UsersController.class.getSimpleName(),  ControllerActionConstant.UPDATE,current_user));
+		assertFalse(organizationMemberPermission.isAllowed(current_user, UsersController.class.getSimpleName(), ControllerActionConstant.UPDATE,other_user));
 	}
 	@Test
 	public void testIsAllowedHome()
