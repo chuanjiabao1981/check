@@ -2,6 +2,8 @@ package com.check.v3.domain;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -21,8 +23,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="discriminator",discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="unit")
-public class Unit {
+public class Unit implements Serializable{
 	
+	private static final long serialVersionUID = 1538046195130155882L;
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY) 
     @Column(name = "id")

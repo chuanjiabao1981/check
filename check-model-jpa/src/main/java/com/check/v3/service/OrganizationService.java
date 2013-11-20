@@ -9,5 +9,6 @@ public interface OrganizationService extends InstanceLoaderService{
 	public Organization 			findByName(String name);
 	public Organization 			save(Organization organization);
 	public List<Organization> 		findAllByDepartmentId(Long departmentId);
-	public void delete(Organization organization);
+	public void 					delete(Organization organization);
+	public void 					delete(Long id);
 }

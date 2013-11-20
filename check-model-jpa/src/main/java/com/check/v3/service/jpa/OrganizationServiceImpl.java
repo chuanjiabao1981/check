@@ -71,4 +71,9 @@ public class OrganizationServiceImpl implements OrganizationService{
 		return em.createQuery(c).getResultList();
 	}
 
+	@Override
+	public void delete(Long id) {
+		organizationRepository.delete(id);
+	}
+
 }

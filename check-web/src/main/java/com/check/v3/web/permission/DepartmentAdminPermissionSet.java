@@ -16,6 +16,8 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 	{
 		super();
 		this.allow(OrganizationsController.class.getSimpleName(), ControllerActionConstant.INDEX);
+		this.allow(OrganizationsController.class.getSimpleName(), ControllerActionConstant.NEW);
+		this.allow(OrganizationsController.class.getSimpleName(), ControllerActionConstant.CREATE);
 	}
 
 
