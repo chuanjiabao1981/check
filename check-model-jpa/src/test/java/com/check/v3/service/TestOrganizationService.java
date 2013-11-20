@@ -136,6 +136,19 @@ public class TestOrganizationService {
 		
 	}
 	
+	@Test
+	public void testFindByDepartmentId()
+	{
+		assertEquals(organizationService.findAllByDepartmentId(department.getId()).size(),0);
+		setDepartment();
+		organizationService.save(o1);
+		organizationService.save(o2);
+		organizationService.save(o3);
+		organizationService.save(o4);
+		assertEquals(organizationService.findAllByDepartmentId(department.getId()).size(),4);
+
+	}
+	
 	private void setDepartment()
 	{
 		o1.setDepartment(department);

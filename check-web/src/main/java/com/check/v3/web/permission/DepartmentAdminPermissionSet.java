@@ -4,7 +4,9 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
+import com.check.v3.ControllerActionConstant;
 import com.check.v3.domain.Role;
+import com.check.v3.web.controller.OrganizationsController;
 
 
 @Service("departmentAdminPermissionSet")
@@ -13,6 +15,7 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 	public DepartmentAdminPermissionSet()
 	{
 		super();
+		this.allow(OrganizationsController.class.getSimpleName(), ControllerActionConstant.INDEX);
 	}
 
 

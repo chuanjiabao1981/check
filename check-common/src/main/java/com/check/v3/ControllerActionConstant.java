@@ -5,7 +5,7 @@ public class ControllerActionConstant {
 	public final static String UPDATE		= "update";
 	public final static String NEW			= "newForm";
 	public final static String CREATE		= "create";
-	
+	public final static String INDEX		= "index";
 	
 	public final static String NEW_LOGIN 		= "newLogin";
 	public final static String FAIL_LOGIN		= "failLogin";

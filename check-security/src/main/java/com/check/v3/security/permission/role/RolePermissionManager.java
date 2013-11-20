@@ -31,6 +31,7 @@ public class RolePermissionManager {
 		}else{
 			pSet = rolePermissionSet.get(user.getRole());
 		}
+		logger.trace("Current's Role is ["+ ((user == null)? Role.GUEST:user.getRole())+"]");
 		if (pSet == null){
 			logger.warn("no ["+user.getRole()+"] permission is found");
 			return false;

@@ -11,6 +11,9 @@ import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.check.v3.domain.Department;
+import com.check.v3.domain.User;
+
 
 
 public class SecurityTools {
@@ -32,5 +35,10 @@ public class SecurityTools {
 		PasswordMatcher	 passwordMatcher = (PasswordMatcher) realm.getCredentialsMatcher();
 		return passwordMatcher.getPasswordService().encryptPassword(password);
 				
+	}
+	public static Department getCurrentDepartment()
+	{
+		User user = (User) SecurityUtils.getSubject().getPrincipal();
+		return user.getDepartment();
 	}
 }

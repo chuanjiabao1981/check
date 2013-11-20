@@ -1,7 +1,12 @@
 package com.check.v3.service.jpa;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -54,6 +59,16 @@ public class OrganizationServiceImpl implements OrganizationService{
 	@Transactional(readOnly=true)
 	public Organization findByName(String name) {
 		return organizationRepository.findByName(name);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public List<Organization> findAllByDepartmentId(Long departmentId) {
+		CriteriaBuilder cb 					= em.getCriteriaBuilder();
+		CriteriaQuery<Organization> c 		= cb.createQuery(Organization.class);
+		Root<Organization> emp 				= c.from(Organization.class);
+		c.select(emp).where(cb.equal(emp.get("department").get("id"), departmentId));
+		return em.createQuery(c).getResultList();
 	}
 
 }
