@@ -31,6 +31,7 @@ import com.check.v3.domain.Department;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
+import com.check.v3.security.SecurityConstant;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.OrganizationService;
@@ -50,7 +51,7 @@ public class UsersController {
 
 	@Resource
 	UserService userService;
-	@Autowired
+	@Resource
 	OrganizationService organizationService;
 	@Autowired
 	MessageSource messageSource;
@@ -68,13 +69,6 @@ public class UsersController {
 	public String newForm(Model model)
 	{
 		model.addAttribute("user", new User());
-		List<Organization> oo = organizationService.findAllByDepartmentId(SecurityTools.getCurrentDepartment().getId());
-		HashMap<String,String> organizations = new HashMap<String,String>();
-		for(Organization o : oo){
-			organizations.put(o.getId().toString(), o.getName());
-		}
-		model.addAttribute("organizations",oo);
-		
 		return VIEW_NEW;
 	}
 	@RequestMapping(value="/users",method = RequestMethod.POST)
@@ -87,7 +81,6 @@ public class UsersController {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("message",
 					new Message("error", messageSource.getMessage("user_create_fail", new Object[] {}, locale)));
-			model.addAttribute("user", user);
 			return "users/new";
 		}
 		user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
@@ -99,7 +92,6 @@ public class UsersController {
 			bindingResult.rejectValue("account","user_account_duplicate",
 					messageSource.getMessage("user_account_duplicate", new Object[] {}, locale));
 
-			model.addAttribute("user", user);
 			return "users/new";
 		}
 		//注意这句只能在redirect的时候使用
@@ -126,6 +118,7 @@ public class UsersController {
 			BindingResult bindingResult, 
 			Model model,
 			RedirectAttributes redirectAttributes,
+			HttpServletRequest httpServletRequest,
 			Locale locale
     		) {
 		if (bindingResult.hasErrors()) {
@@ -134,6 +127,13 @@ public class UsersController {
 			model.addAttribute("user", user);
 			return VIEW_NEW;
 		}
+		User u = (User) httpServletRequest.getAttribute(SecurityConstant.CurrentInstance);
+		if (u!= null && user.getPassword() != null && user.getPassword().length()>0){
+			user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
+		}else{
+			user.setPassword_cryp(u.getPassword_cryp());
+		}
+		//TODO::密码改动session失效
         try {
 			userService.save(user);
 		} catch (DataIntegrityViolationException e) {
@@ -153,6 +153,13 @@ public class UsersController {
 		userService.delete(id);
 		return "redirect:/users";
 	}
+	
+	
+	
+	
+	
+	
+	
 	@ModelAttribute("roles")
 	private Map<String,String> populateRole()
 	{
@@ -162,26 +169,24 @@ public class UsersController {
 		return s;
 	}
 	@ModelAttribute("user")
-	private User populateUser()
+	public User populateUser()
 	{
 		User user = new User();
 		user.setDepartment(SecurityTools.getCurrentDepartment());
 		return user;
 	}
-	
-//	@ModelAttribute("organizations")
-//	private List<Organization> populateOrganizations()
-//	{
-//		System.err.println("---------------------------------");
-//		System.err.println(SecurityTools.getCurrentDepartment().getId());
-//		System.err.println(organizationService);
-//		return organizations;
-//	}
+	@ModelAttribute("organizations")
+	public List<Organization> populateOrganizations()
+	{
+		List<Organization> oo = organizationService.findAllByDepartmentId(SecurityTools.getCurrentDepartment().getId());
+		return oo;
+	}
 	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, WebDataBinder binder) 
 	{
 		binder.registerCustomEditor(Role.class, new RoleEditor());
+		binder.registerCustomEditor(Organization.class, new OrganizationEditor());
 	}
 	
 	public class RoleEditor extends PropertyEditorSupport 
@@ -189,10 +194,18 @@ public class UsersController {
 		public void setAsText(String text)
 		{
 			Role r = Role.valueOf(text);
+			System.err.println(r);
 			if (r != Role.DEPARTMENT_MEMEBER || r != Role.DEPARTMENT_SUPERVISOR){
 				r = Role.DEPARTMENT_MEMEBER;
 			}
 			setValue(r);
+		}
+	}
+	public class OrganizationEditor extends PropertyEditorSupport
+	{
+		public void setAsText(String text)
+		{
+			setValue(organizationService.findById(Long.valueOf(text)));
 		}
 	}
 }

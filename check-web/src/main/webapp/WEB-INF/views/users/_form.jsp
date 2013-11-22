@@ -3,11 +3,12 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 
 
-<spring:message code="label_user_edit" 		var="labelUserEdit" />
-<spring:message code="label_user_name" 		var="labelUserName" />
-<spring:message code="label_user_account" 	var="labelUserAccount" />
-<spring:message code="label_user_password"  var="labelUserPassword" />
-<spring:message code="label_user_role"		var="labelUserRole" />
+<spring:message code="label_user_edit" 				var="labelUserEdit" />
+<spring:message code="label_user_name" 				var="labelUserName" />
+<spring:message code="label_user_account" 			var="labelUserAccount" />
+<spring:message code="label_user_password"  		var="labelUserPassword" />
+<spring:message code="label_user_role"				var="labelUserRole" />
+<spring:message code="label_user_organizations"		var="labelUserOrganizations"/>
 
 <spring:message code="button_save" 			var="buttonSave"/>
 
@@ -30,9 +31,6 @@
         <div>
             <form:errors path="name" cssClass="error" />
         </div>
-
-        
-        
 	    <form:label path="password">${labelUserPassword }*</form:label>
 	    <form:password path="password" />
 	    <div>
@@ -42,9 +40,11 @@
 	    <form:select path="role">
 	         <form:options items="${roles}" />
 	    </form:select>
-	    
-	    <form:label path="organizations">sssss</form:label>
-	    <form:checkboxes items="${organizations}" path="organizations" id="organizations" itemLabel="name" itemValue="id" name="organizations[]"/>
+	    <div>
+            <form:errors path="role" cssClass="error" />
+        </div>
+	    <form:label path="organizations">${labelUserOrganizations}</form:label>
+	    <form:checkboxes items="${organizations}" path="organizations" id="organizations" itemLabel="name" itemValue="id" />
 	    
         <form:hidden path="version" />
         <div></div>

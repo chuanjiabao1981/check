@@ -44,7 +44,7 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		@Override
 		public boolean filter(User current_user,Object current_instance) {
 			User user = (User) current_instance;
-			if (current_user.getDepartment().equals(user.getDepartment())){
+			if (current_user != null && current_user.getDepartment().equals(user.getDepartment())){
 				return true;
 			}
 			return false;

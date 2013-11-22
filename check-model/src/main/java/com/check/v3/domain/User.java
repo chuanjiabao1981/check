@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name = "users")
+@NamedQuery(name="User.findByDepartmentId",query="select distinct u from User u where u.department.id = :id and u.role in :roles")
 public class User implements Serializable {
 	
 	private static final Logger logger = LoggerFactory.getLogger(User.class);
@@ -48,10 +50,6 @@ public class User implements Serializable {
 	
     
 	private Department				department;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    @NotNull
     private Role					role;
     
     
@@ -148,7 +146,8 @@ public class User implements Serializable {
 		return this.department;
 	}
 
-	
+
+    @Enumerated(EnumType.STRING)
 	public Role getRole() {
 		return role;
 	}
@@ -182,6 +181,14 @@ public class User implements Serializable {
 	}
 	public void setOrganizations(List<Organization> organizations) {
 		this.organizations = organizations;
+	}
+	@Transient
+	public boolean isDpartmentAdmin()
+	{
+		if (role == Role.DEPARTMENT_ADMIN){
+			return true;
+		}
+		return false;
 	}
 	public boolean equals(Object object)
 	{
