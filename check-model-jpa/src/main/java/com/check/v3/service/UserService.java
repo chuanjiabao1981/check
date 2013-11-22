@@ -12,6 +12,7 @@ public interface UserService extends InstanceLoaderService{
 	public List<User>	findAllByDepartmentId(Long departmentId);
 	public User 		save(User user) throws UserAccountDuplicateException;
 	public User 		createDepartmentAdmin(User user,Long department_id);
-	public void delete(User user);
+	public void 		delete(User user);
+	public void 		delete(Long id);
 
 }

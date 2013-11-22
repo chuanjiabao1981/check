@@ -6,7 +6,8 @@
 <spring:message code="label_user_edit" 		var="labelUserEdit" />
 <spring:message code="label_user_name" 		var="labelUserName" />
 <spring:message code="label_user_account" 	var="labelUserAccount" />
-<spring:message code="label_user_password" var="labelUserPassword" />
+<spring:message code="label_user_password"  var="labelUserPassword" />
+<spring:message code="label_user_role"		var="labelUserRole" />
 
 <spring:message code="button_save" 			var="buttonSave"/>
 
@@ -34,6 +35,17 @@
         
 	    <form:label path="password">${labelUserPassword }*</form:label>
 	    <form:password path="password" />
+	    <div>
+            <form:errors path="password" cssClass="error" />
+        </div>
+	    <form:label path="role">${labelUserRole}*</form:label>
+	    <form:select path="role">
+	         <form:options items="${roles}" />
+	    </form:select>
+	    
+	    <form:label path="organizations">sssss</form:label>
+	    <form:checkboxes items="${organizations}" path="organizations" id="organizations" itemLabel="name" itemValue="id" name="organizations[]"/>
+	    
         <form:hidden path="version" />
         <div></div>
         

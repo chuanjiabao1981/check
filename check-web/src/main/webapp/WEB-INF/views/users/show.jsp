@@ -1,12 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:jsp="http://java.sun.com/JSP/Page" 
-     xmlns:c="http://java.sun.com/jsp/jstl/core"  
-     xmlns:spring="http://www.springframework.org/tags"
-     xmlns:form="http://www.springframework.org/tags/form"
-     xmlns:joda="http://www.joda.org/joda/time/tags"
-     version="2.0">
-    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
-    <jsp:output omit-xml-declaration="yes"/>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
+<jsp:directive.page contentType="text/html;charset=UTF-8" /> 
     
 	<spring:message code="label_user_info" var="labelUserInfo" />
 	<spring:message code="label_user_name" var="labelUserName" />
@@ -33,8 +28,7 @@
                                                                           
         </table>         
        
-        <a href="${editUserUrl}/${user.id}?edit">Edit user info</a>     
+        <a href="${editUserUrl}/${user.id}/edit">Edit user info</a>     
                       
     </div>
 
-</div>

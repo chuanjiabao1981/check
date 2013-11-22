@@ -29,6 +29,8 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		allow(HomeController.class.getSimpleName(),ControllerActionConstant.HOME);
 		allow(UsersController.class.getSimpleName(),ControllerActionConstant.INDEX);
 		allow(UsersController.class.getSimpleName(),ControllerActionConstant.EDIT,userpermissionPolicy);
+		allow(UsersController.class.getSimpleName(), ControllerActionConstant.SHOW,userpermissionPolicy);
+
 	}
 	
 	public class UserPermissionPolicy implements PermissionPolicy
@@ -41,7 +43,8 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		}
 		@Override
 		public boolean filter(User current_user,Object current_instance) {
-			if (current_user.equals(current_instance)){
+			User user = (User) current_instance;
+			if (current_user.getDepartment().equals(user.getDepartment())){
 				return true;
 			}
 			return false;

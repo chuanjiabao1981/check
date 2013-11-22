@@ -47,6 +47,10 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 		this.allow(OrganizationsController.class.getSimpleName(), ControllerActionConstant.UPDATE,organizationPermissionPolicy);
 		this.allow(UsersController.class.getSimpleName(), ControllerActionConstant.EDIT,userPermissionPolicy);
 		this.allow(UsersController.class.getSimpleName(), ControllerActionConstant.UPDATE,userPermissionPolicy);
+		this.allow(UsersController.class.getSimpleName(), ControllerActionConstant.NEW);
+		this.allow(UsersController.class.getSimpleName(), ControllerActionConstant.CREATE);
+		this.allow(UsersController.class.getSimpleName(), ControllerActionConstant.DESTORY,userPermissionPolicy);
+
 	}
 	
 	public class OrganizationPermissionPolicy implements  PermissionPolicy

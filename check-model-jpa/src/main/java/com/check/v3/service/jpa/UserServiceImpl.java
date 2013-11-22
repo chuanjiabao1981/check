@@ -94,4 +94,9 @@ public class UserServiceImpl implements UserService {
 		return em.createQuery(c).getResultList();
 	}
 
+	@Override
+	public void delete(Long id) {
+		userRepository.delete(id);
+	}
+
 }

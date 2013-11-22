@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.security.ControllerActionInstanceLoader;
 import com.check.v3.security.SecurityConstant;
@@ -40,6 +41,9 @@ public class PermissionManager {
 			logger.trace("current user is Guest");
 		}else{
 			current_user = (User) subject.getPrincipal();
+			if (current_user.getRole() == Role.SYS_ADMIN){
+				return true;
+			}
 		}
 		PermissionSet 		ps 					= rolePermissionManager.getPermissionSet(current_user);
 		PermissionPolicy	pp 					= ps.getPermissionFilter(controller, action);
