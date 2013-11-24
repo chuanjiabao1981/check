@@ -86,7 +86,6 @@ public class TestRolePermissionManager {
 		permissionManager = new PermissionManager();
 	}
 
-	@Test
 	public void testGetUserRoleFromOganizations()
 	{
 

@@ -20,7 +20,6 @@ public class TestWebBasePermission {
 
 //	@Autowired
 //	private WebBasePermission webBasePermission;
-		@Test
 	public void test()
 	{
 		if (userService == null){
