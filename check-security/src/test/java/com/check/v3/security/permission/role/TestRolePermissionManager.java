@@ -16,10 +16,10 @@ import com.check.v3.domain.User;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.UserService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-web-security-context.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-web-security-context.xml"})
+//@Transactional
+//@TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
 public class TestRolePermissionManager {
 	
 	
@@ -58,7 +58,6 @@ public class TestRolePermissionManager {
 	 *    user_o5 在o5 上
 	 * 
 	 */
-	@Before
 	public void init()
 	{
 		o1 = new Organization("o1",OrganizationType.NON_LEAF_NODE);

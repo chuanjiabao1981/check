@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.check.v3.service.UserService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-security-context.xml"})
-@Transactional
-@TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-security-context.xml"})
+//@Transactional
+//@TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
 public class TestWebBasePermission {
 	@Autowired
 	private UserService userService;
