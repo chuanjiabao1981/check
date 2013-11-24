@@ -11,8 +11,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,7 +41,6 @@ import com.check.v3.web.form.Message;
 @Controller
 public class UsersController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 	
 	private final static String VIEW_LIST = "users/index";
 	private final static String VIEW_NEW  = "users/new";

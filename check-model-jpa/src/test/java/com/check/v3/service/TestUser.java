@@ -105,7 +105,23 @@ public class TestUser {
 		assertEquals(l.getOrganizations().size(),0);
 		assertEquals(userService.findByAccount(user_account).getOrganizations().size(),0);
 	}
-	
+
+	@Test
+	public void testUserWithOrganizations()
+	{
+		String user_account 		= "aaaaaaaaaaa";
+		String organization_name	= "ddddddd";
+		
+		userService.save(buildUser(user_account,department));
+		organizationService.save(buildOrganization(organization_name,department));
+		
+		User 			user = userService.findByAccount(user_account);
+		Organization	org  = organizationService.findByName(organization_name);
+		
+		user.addOrganization(org);
+		userService.save(user);
+		assertEquals(1,userService.findByIdWithOrganizations(user.getId()).getOrganizations().size());
+	}
 	
 	private User buildUser(String user_account,Department department)
 	{

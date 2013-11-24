@@ -26,9 +26,10 @@ public class Session {
 		restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
 		restTemplate.setErrorHandler(new CustomResponseErrorHandler());
 		UserPasswordDTO userPasswordDTO = new UserPasswordDTO();
-		userPasswordDTO.setName("test_test");
+		userPasswordDTO.setName("ceshi_002");
 		userPasswordDTO.setPassword("12345");
 		try{
+			System.err.println(SESSION_CREATE);
 			SessionDTO s = restTemplate.postForObject(SESSION_CREATE, userPasswordDTO, SessionDTO.class);
 			System.err.println(s.toString());
 		}catch(ResourceAccessException ex){

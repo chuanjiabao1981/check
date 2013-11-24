@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+						http://www.springframework.org/schema/util 
+						http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
 	<import resource="classpath:_application-security-context.xml" />
     
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 	    <property name="securityManager" ref="securityManager"/>
+	    <property name="filters">
+        	<util:map>
+            	<entry key="userRest" value-ref="userRest"/>
+        	</util:map>
+    	</property>
     	<property name="filterChainDefinitions">
     	    <!-- authc 是shiro默认支持的filter，其他参见 http://shiro.apache.org/web.html#Web-DefaultFilters -->
         	<value>
         	    /api/v1/sessions/** = anon
-            	/** = user
+            	/** = userRest
         	</value>
     	</property>
     </bean>
+    <bean id="userRest" class="com.check.v3.security.filter.UserRestFilter"/>
 </beans>

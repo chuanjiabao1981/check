@@ -97,4 +97,9 @@ public class UserServiceImpl implements UserService {
 		userRepository.delete(id);
 	}
 
+	@Override
+	public User findByIdWithOrganizations(Long id) {
+		return em.createNamedQuery("User.findByIdWithOrganizations", User.class).setParameter("id", id).getSingleResult();
+	}
+
 }

@@ -53,14 +53,4 @@ public class Unit implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getTest()
-	{
-		return test;
-	}
-	public void setTest(String t)
-	{
-		
-		System.err.println("lkklkllkkk");
-		this.test = t;
-	}
 }

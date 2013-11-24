@@ -114,6 +114,16 @@
 			<artifactId>mockito-all</artifactId>
 			<version>${org.mockito-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-lgpl</artifactId>
+			<version>${org.codehaus.jackson-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-lgpl</artifactId>
+			<version>${org.codehaus.jackson-version}</version>
+		</dependency>
 	</dependencies>
     <build>
         <plugins>

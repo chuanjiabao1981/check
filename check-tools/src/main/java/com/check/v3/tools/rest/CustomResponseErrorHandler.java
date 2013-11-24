@@ -21,6 +21,7 @@ public class CustomResponseErrorHandler implements ResponseErrorHandler{
 	@Override
 	public void handleError(ClientHttpResponse response) throws IOException {
 	    String theString = IOUtils.toString(response.getBody());
+	    System.err.println(theString);
 	    ObjectMapper mapper = new ObjectMapper();
 	    ErrorsDTO eDTO = mapper.readValue(theString, ErrorsDTO.class);
 	    System.err.println(theString);

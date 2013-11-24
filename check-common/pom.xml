@@ -13,17 +13,6 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>${org.hibernate-validator-version}</version>
 		</dependency>
-          
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>${org.codehaus.jackson-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-lgpl</artifactId>
-			<version>${org.codehaus.jackson-version}</version>
-		</dependency>
 	  </dependencies>
 		
 </project>

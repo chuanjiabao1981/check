@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,25 +40,30 @@ public class Organization extends Unit implements Serializable{
 	
 	
 	@OneToMany(mappedBy = "parentOrganization",cascade={ CascadeType.ALL},fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Organization> subOrganizations		= new LinkedList<Organization>();
 	
 	@ManyToOne
     @JoinColumn(name="parent_organization_id")
+	@JsonIgnore
 	private Organization parentOrganization;
 	
     @Enumerated(EnumType.STRING)
     @Column(name = "organization_type")
+    @JsonIgnore
 	private OrganizationType type 					= OrganizationType.NON_LEAF_NODE;
     
     @ManyToOne
     @JoinColumn(name="department_id")
     @NotNull
+    @JsonIgnore
     private Department department;
     //(cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @ManyToMany
     @JoinTable(name="user_organizations", 
                 joinColumns={@JoinColumn(name="organization_id")}, 
                 inverseJoinColumns={@JoinColumn(name="user_id")})
+    @JsonIgnore
     private List<User> users = new ArrayList<User>();
     
     

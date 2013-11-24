@@ -16,7 +16,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -29,7 +31,13 @@ import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name = "users")
-@NamedQuery(name="User.findByDepartmentId",query="select distinct u from User u where u.department.id = :id and u.role in :roles")
+@NamedQueries({
+	@NamedQuery(name="User.findByDepartmentId",query="select distinct u from User u where u.department.id = :id and u.role in :roles"),
+	@NamedQuery(name="User.findByIdWithOrganizations",query="select u from User u " +
+															"left join fetch u.organizations o " +
+														    "left join fetch o.users " +
+															"where u.id = :id")
+})
 public class User implements Serializable {
 	
 	private static final Logger logger = LoggerFactory.getLogger(User.class);
@@ -51,7 +59,6 @@ public class User implements Serializable {
     
 	private Department				department;
     private Role					role;
-    
     
     private List<Organization>		organizations	= new ArrayList<Organization>();
     
@@ -176,6 +183,7 @@ public class User implements Serializable {
     @JoinTable(name="user_organizations", 
                 joinColumns={@JoinColumn(name="user_id")}, 
                 inverseJoinColumns={@JoinColumn(name="organization_id")})
+	@OrderColumn(name="organization_order")
 	public List<Organization> getOrganizations() {
 		return organizations;
 	}
