@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.check.v3.domain.User;
 import com.check.v3.dto.SessionDTO;
 import com.check.v3.dto.UserPasswordDTO;
 
@@ -27,7 +28,7 @@ public class SessionsRestController {
 		
 		currentUser.login(token);
 		currentUser.getSession().getId();
-		return new SessionDTO(currentUser.getSession().getId().toString());
+		return new SessionDTO(currentUser.getSession().getId().toString(),(User) currentUser.getPrincipal());
 	}
 	
 }

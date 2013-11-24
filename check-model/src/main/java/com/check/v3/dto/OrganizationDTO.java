@@ -16,14 +16,14 @@ public class OrganizationDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = -5740797606343858500L;
 	private String name;
-	private String id;
+	private Long id;
 	private List<UserDTO> users = new ArrayList<UserDTO>();
 	public OrganizationDTO()
 	{}
 	public OrganizationDTO(Organization  organization)
 	{
 		name 	= organization.getName();
-		id 		= organization.getId().toString();
+		id 		= organization.getId();
 		users 	= Lists.transform(organization.getUsers(), new Function<User, UserDTO>(){
 			public UserDTO apply(User user){
 				return new UserDTO(user);
@@ -33,13 +33,13 @@ public class OrganizationDTO implements Serializable{
 	public String getName() {
 		return name;
 	}
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public List<UserDTO> getUsers() {

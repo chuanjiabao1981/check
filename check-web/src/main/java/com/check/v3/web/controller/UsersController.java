@@ -124,6 +124,8 @@ public class UsersController {
 			model.addAttribute("user", user);
 			return VIEW_NEW;
 		}
+		System.err.println(user.getRole());
+
 		User u = (User) httpServletRequest.getAttribute(SecurityConstant.CurrentInstance);
 		if (u!= null && user.getPassword() != null && user.getPassword().length()>0){
 			user.setPassword_cryp(SecurityTools.getEncryptPassword(user.getPassword()));
@@ -191,8 +193,7 @@ public class UsersController {
 		public void setAsText(String text)
 		{
 			Role r = Role.valueOf(text);
-			System.err.println(r);
-			if (r != Role.DEPARTMENT_MEMEBER || r != Role.DEPARTMENT_SUPERVISOR){
+			if (r != Role.DEPARTMENT_MEMEBER && r != Role.DEPARTMENT_SUPERVISOR){
 				r = Role.DEPARTMENT_MEMEBER;
 			}
 			setValue(r);

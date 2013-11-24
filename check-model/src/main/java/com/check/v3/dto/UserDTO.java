@@ -13,13 +13,14 @@ public class UserDTO implements Serializable{
 	private static final long serialVersionUID = -4432399009496676485L;
 	
 	
+	private Long id;
 	private String name;
 	private String account;
 	private Role   role;
 	
 	public UserDTO(){}
 	public UserDTO(User u){
-		
+		id			= u.getId();
 		name 		= u.getName();
 		account 	= u.getAccount();
 		role		= u.getRole();
@@ -42,5 +43,12 @@ public class UserDTO implements Serializable{
 	public void setRole(Role role) {
 		this.role = role;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	
 }
