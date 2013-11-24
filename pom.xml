@@ -36,6 +36,8 @@
 		<org.apache.httpcomponents-version>4.2.5</org.apache.httpcomponents-version>
 		<org.apache.tiles-version>3.0.1</org.apache.tiles-version>
 		<ro.isdc.wro4j-version>1.7.0</ro.isdc.wro4j-version>
+		<joda-time-version>2.2</joda-time-version>
+		<org.jadira.usertype-version>3.1.0.CR7</org.jadira.usertype-version><!-- 这个是joda从hibernate中发序列化用到的 -->
 	</properties>
 	<dependencies>
 	   

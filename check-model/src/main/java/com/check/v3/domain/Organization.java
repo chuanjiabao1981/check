@@ -40,12 +40,10 @@ public class Organization extends Unit implements Serializable{
 	
 	
 	@OneToMany(mappedBy = "parentOrganization",cascade={ CascadeType.ALL},fetch = FetchType.EAGER)
-	@JsonIgnore
 	private List<Organization> subOrganizations		= new LinkedList<Organization>();
 	
 	@ManyToOne
     @JoinColumn(name="parent_organization_id")
-	@JsonIgnore
 	private Organization parentOrganization;
 	
     @Enumerated(EnumType.STRING)
@@ -56,14 +54,12 @@ public class Organization extends Unit implements Serializable{
     @ManyToOne
     @JoinColumn(name="department_id")
     @NotNull
-    @JsonIgnore
     private Department department;
     //(cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @ManyToMany
     @JoinTable(name="user_organizations", 
                 joinColumns={@JoinColumn(name="organization_id")}, 
                 inverseJoinColumns={@JoinColumn(name="user_id")})
-    @JsonIgnore
     private List<User> users = new ArrayList<User>();
     
     

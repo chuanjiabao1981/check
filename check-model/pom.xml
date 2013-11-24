@@ -18,5 +18,21 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>${org.hibernate-validator-version}</version>
 		</dependency>
+	<dependency>
+		<groupId>org.jadira.usertype</groupId>
+		<artifactId>usertype.core</artifactId>
+		<version>${org.jadira.usertype-version}</version>
+	</dependency>
+	<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda-time-version}</version>
+		</dependency>
+
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>${org.springframework-version}</version>
+	</dependency>
   </dependencies>
 </project>
