@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -51,7 +52,6 @@ public class QuickReport extends BaseEntity {
     @Column(name = "level")
     @NotNull
     private QuickReportLevel 	level = QuickReportLevel.HIGH;
-	
 	private String				description;
 	
     @Enumerated(EnumType.STRING)
@@ -88,7 +88,7 @@ public class QuickReport extends BaseEntity {
 		return level;
 	}
     @Column(name="description")
-	@NotNull
+	@NotEmpty
 	public String getDescription() {
 		return description;
 	}
