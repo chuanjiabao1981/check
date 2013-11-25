@@ -76,4 +76,10 @@ public class OrganizationServiceImpl implements OrganizationService{
 		organizationRepository.delete(id);
 	}
 
+	@Override
+	@Transactional(readOnly=true)
+	public Organization findByIdWithUsers(Long id) {
+		return organizationRepository.findWithUsers(id);
+	}
+
 }

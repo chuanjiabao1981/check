@@ -35,7 +35,7 @@ public class QuickReport extends BaseEntity {
 	
 	@ManyToOne
     @JoinColumn(name="responsible_person_id")
-	private User				responsiblePerson;
+	private User				responsiblePerson = null;
 	
 	@ManyToOne
     @JoinColumn(name="organization_id")
@@ -47,11 +47,16 @@ public class QuickReport extends BaseEntity {
 	@DateTimeFormat(iso=ISO.DATE)
 	private DateTime 		 	deadline;
 	
-	private QuickReportLevel 	level = QuickReportLevel.HIGH;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "level")
+    @NotNull
+    private QuickReportLevel 	level = QuickReportLevel.HIGH;
 	
 	private String				description;
 	
-	
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    @NotNull
 	private QuickReportState    state  = QuickReportState.OPENED;
 	
 	
@@ -78,9 +83,7 @@ public class QuickReport extends BaseEntity {
 		return deadline;
 	}
 	
-    @Enumerated(EnumType.STRING)
-    @Column(name = "level")
-    @NotNull
+
 	public QuickReportLevel getLevel() {
 		return level;
 	}
@@ -91,7 +94,6 @@ public class QuickReport extends BaseEntity {
 	}
 	
 	@Enumerated(EnumType.STRING)
-    @Column(name = "state")
 	@NotNull
 	public QuickReportState getState() {
 		return state;

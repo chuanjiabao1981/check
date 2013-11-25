@@ -8,14 +8,14 @@
 <spring:message code="label_quick_report_responsible_person" var="labelQuickReportPerson" />
 <spring:message code="label_quick_report_dead_line" 		 var="labelQuickReportDeadLine" />
 <spring:message code="label_quick_report_description"        var="labelQuickReportDescription"/>
-
+<spring:message code="label_please_select"					 var="labelPleaseSelect"/>
 
 <form:form modelAttribute="quick_report"  id="quick_report" name="quick_report" method="post" action="${param.post_url}">
 		<form:label path="level">
-			${labelQuickReportLevel}*
+			${labelQuickReportLevel}
 		</form:label>
 		<form:select path="level">
-	         <form:options items="${level.text}"  />
+	         <form:options items="${levels}"  />
 	    </form:select>
 		<div>
             <form:errors path="level" cssClass="error" />
@@ -24,6 +24,7 @@
 			${labelQuickReportPerson}
 		</form:label>
 		<form:select path="responsiblePerson">
+		   <form:option value="" label="${labelPleaseSelect}"/>
 			<form:options items="${responsiblePersons}" />
 		</form:select>
 		<div>
@@ -43,6 +44,8 @@
 		<div>
             <form:errors path="description" cssClass="error" />
 		</div>
+		<form:hidden path="organization" value="${organization_id}" />
+		
 		
         <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
             <span class="ui-button-text">${buttonSave}</span>

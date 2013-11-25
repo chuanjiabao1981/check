@@ -7,6 +7,7 @@ import com.check.v3.domain.Organization;
 public interface OrganizationService extends InstanceLoaderService{
 	public Organization 			findById(Long id);
 	public Organization 			findByName(String name);
+	public Organization				findByIdWithUsers(Long id);
 	public Organization 			save(Organization organization);
 	public List<Organization> 		findAllByDepartmentId(Long departmentId);
 	public void 					delete(Organization organization);

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.annotation.Resource;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +21,13 @@ import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationType;
 import com.check.v3.domain.User;
 import com.check.v3.domain.exception.OrganizationRingException;
+import com.check.v3.domain.test.util.DepartmentBuilder;
+import com.check.v3.domain.test.util.OrganizationBuilder;
 import com.check.v3.domain.test.util.UserBuilder;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="classpath:application-context.xml")
+@ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-test-jpa.xml"})
 @Transactional
 @TransactionConfiguration(defaultRollback=true,transactionManager="transactionManager") 
 public class TestOrganizationService {
@@ -40,7 +44,13 @@ public class TestOrganizationService {
 	private Organization o2;
 	private Organization o3;
 	private Organization o4;
-	private Department   department			 = null;
+	private Department   department			 	= null;
+	@Resource
+	private DepartmentBuilder departmentBuiler;	
+	@Resource
+	private OrganizationBuilder organizationBuilder;
+	@Resource
+	private UserBuilder userBuilder;
 	@Before
 	public void init()
 	{
@@ -136,6 +146,18 @@ public class TestOrganizationService {
 		
 	}
 	
+	@Test 
+	public void testFindOrganizationWithUsers()
+	{
+		Department department 		= this.departmentBuiler.create("ttttttxxx");
+		User user			  		= this.userBuilder.create(department, "koko");
+		Organization organization	= this.organizationBuilder.create(department);
+		organization.addUser(user);
+		organizationService.save(organization);
+		
+		assertNotNull(organizationService.findByIdWithUsers(organization.getId()));
+		assertTrue(organizationService.findByIdWithUsers(organization.getId()).getUsers().size()== 1);
+	}
 	@Test
 	public void testFindByDepartmentId()
 	{

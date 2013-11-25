@@ -39,7 +39,7 @@
 				
 				</td>
 				<td>
-					<form:form  action="${urlEditQuickReport}" method="EDIT">
+					<form:form  action="${urlEditQuickReport}" method="POST">
 						 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
             				<span class="ui-button-text">${buttonEdit}</span>
         				</button> 
