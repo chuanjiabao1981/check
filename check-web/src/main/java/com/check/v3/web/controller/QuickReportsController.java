@@ -42,6 +42,8 @@ public class QuickReportsController {
 	@RequestMapping(value="/organizations/{organization_id}/quick_reports/new",method=RequestMethod.GET)
 	public String newForm(@InstanceId @PathVariable("organization_id") Long organizationId,HttpServletRequest httpServletRequest,Model model)
 	{
+		model.addAttribute("quick_report", new QuickReport());
+//		model.addAttribute("organization_id",organizationId);
 		return VIEW_NEW;
 	}
 
