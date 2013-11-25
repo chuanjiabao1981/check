@@ -7,17 +7,22 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import com.check.v3.ControllerActionConstant;
+import com.check.v3.domain.Organization;
 import com.check.v3.domain.User;
 import com.check.v3.security.permission.PermissionPolicy;
 import com.check.v3.security.permission.PermissionSet;
+import com.check.v3.service.OrganizationService;
 import com.check.v3.service.UserService;
 import com.check.v3.web.controller.HomeController;
+import com.check.v3.web.controller.QuickReportsController;
 import com.check.v3.web.controller.UsersController;
 @Component
 public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 	
 	@Resource
 	UserService userService;
+	@Resource
+	OrganizationService organizationService;
 	public DepartmentUserSharePermissionSet()
 	{
 		super();
@@ -25,11 +30,13 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 	
 	public void sharePermissionSet()
 	{
-		UserPermissionPolicy userpermissionPolicy = new UserPermissionPolicy(userService);
+		UserPermissionPolicy 			userpermissionPolicy 			= new UserPermissionPolicy(userService);
+		QuickReportPermissionPolicy		quickReportPermissionPolicy		= new QuickReportPermissionPolicy();
 		allow(HomeController.class.getSimpleName(),ControllerActionConstant.HOME);
 		allow(UsersController.class.getSimpleName(),ControllerActionConstant.INDEX);
 		allow(UsersController.class.getSimpleName(),ControllerActionConstant.EDIT,userpermissionPolicy);
 		allow(UsersController.class.getSimpleName(), ControllerActionConstant.SHOW,userpermissionPolicy);
+		allow(QuickReportsController.class.getSimpleName(),ControllerActionConstant.INDEX,quickReportPermissionPolicy);
 
 	}
 	
@@ -53,6 +60,24 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		@Override
 		public Object getInstance(Long id) {
 			return userService.findById(id);
+		}
+		
+	}
+	public class QuickReportPermissionPolicy implements PermissionPolicy
+	{
+
+		@Override
+		public boolean filter(User user, Object instance) {
+			Organization o = (Organization) instance;
+			if (o != null && o.getDepartment().equals(user.getDepartment())){
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public Object getInstance(Long id) {
+			return organizationService.findById(id);
 		}
 		
 	}

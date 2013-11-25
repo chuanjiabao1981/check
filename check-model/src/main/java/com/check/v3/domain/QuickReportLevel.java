@@ -11,7 +11,7 @@ public enum QuickReportLevel {
 	{
 		this.text = text;
 	}
-	private String getText()
+	public String getText()
 	{
 		return text;
 	}

@@ -63,10 +63,17 @@ public class Organization extends Unit implements Serializable{
     private List<User> users = new ArrayList<User>();
     
     
+    @OneToMany(mappedBy = "organization", cascade={CascadeType.REMOVE,CascadeType.MERGE})
+    private List<QuickReport> quickReports = new ArrayList<QuickReport>();
+    
     
     
 	public Organization()
 	{
+	}
+	public Organization(Long id)
+	{
+		this.setId(id);
 	}
 	public Organization(Department department)
 	{
@@ -206,6 +213,13 @@ public class Organization extends Unit implements Serializable{
 	}
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}
+	
+	public List<QuickReport> getQuickReports() {
+		return quickReports;
+	}
+	public void setQuickReports(List<QuickReport> quickReports) {
+		this.quickReports = quickReports;
 	}
 	public boolean equals(Object object)
 	{

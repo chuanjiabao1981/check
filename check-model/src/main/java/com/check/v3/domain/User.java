@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -61,6 +63,12 @@ public class User implements Serializable {
     private Role					role;
     
     private List<Organization>		organizations	= new ArrayList<Organization>();
+    
+	@OneToMany(mappedBy = "submitter", cascade={CascadeType.REMOVE,CascadeType.MERGE})
+    private List<QuickReport>		submittedQuickReport 	= new ArrayList<QuickReport>();
+	
+	@OneToMany(mappedBy = "responsiblePerson", cascade={CascadeType.REMOVE,CascadeType.MERGE})
+    private List<QuickReport>	    responsibleQuickReport	 = new ArrayList<QuickReport>();
     
     
 	public User()
@@ -190,6 +198,7 @@ public class User implements Serializable {
 	public void setOrganizations(List<Organization> organizations) {
 		this.organizations = organizations;
 	}
+	
 	@Transient
 	public boolean isDpartmentAdmin()
 	{

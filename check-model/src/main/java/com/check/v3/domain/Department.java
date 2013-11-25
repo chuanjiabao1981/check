@@ -34,6 +34,8 @@ public class Department extends Unit implements Serializable{
 	private List<Organization> organizations   = new ArrayList<Organization>();
 	@OneToMany(mappedBy = "department", cascade={CascadeType.REMOVE,CascadeType.MERGE})
 	private List<User> users 					= new ArrayList<User>();
+	@OneToMany(mappedBy = "department", cascade={CascadeType.REMOVE,CascadeType.MERGE})
+	private List<QuickReport> quickReports		= new ArrayList<QuickReport>();
 	public Department()
 	{}
 	public Department(String name)
