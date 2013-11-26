@@ -28,7 +28,7 @@ public class Session {
 		restTemplate.setErrorHandler(new CustomResponseErrorHandler());
 		UserPasswordDTO userPasswordDTO = new UserPasswordDTO();
 		userPasswordDTO.setName("ceshi_002");
-		userPasswordDTO.setPassword("123451");
+		userPasswordDTO.setPassword("1234");
 		try{
 			System.err.println(SESSION_CREATE);
 			SessionDTO s = restTemplate.postForObject(SESSION_CREATE, userPasswordDTO, SessionDTO.class);
