@@ -29,7 +29,7 @@
 	
 	<beans:bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" 
 	    		id="messageSource" 
-	    		p:basename="classpath*:common_messages"
+	    		p:basename="classpath:common_messages"
 	    		p:fallbackToSystemLocale="false"/>
 	
 	
