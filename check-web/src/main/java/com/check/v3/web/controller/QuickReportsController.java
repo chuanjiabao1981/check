@@ -139,10 +139,8 @@ public class QuickReportsController {
 	{
 		public void setAsText(String text)
 		{
-			System.err.println(text);
 			setValue(QuickReportLevel.valueOf(text));
 		}
-
 	}
 
  

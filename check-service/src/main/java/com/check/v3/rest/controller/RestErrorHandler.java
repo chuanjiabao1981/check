@@ -3,6 +3,8 @@ package com.check.v3.rest.controller;
 import java.util.List;
 import java.util.Locale;
 
+import javax.validation.ConstraintViolationException;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.slf4j.Logger;
@@ -39,6 +41,16 @@ public class RestErrorHandler {
         List<FieldError> fieldErrors  	 = result.getFieldErrors();
         return processFieldErrors(fieldErrors);
     }
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ResponseBody
+//    public ErrorsDTO processValidationError(ConstraintViolationException ex) 
+//    {
+//        BindingResult result			 = ex.g;
+//        List<FieldError> fieldErrors  	 = result.getFieldErrors();
+//
+//    }
+    
     
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

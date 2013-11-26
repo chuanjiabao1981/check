@@ -20,15 +20,17 @@ public class OrganizationDTO implements Serializable{
 	private List<UserDTO> users = new ArrayList<UserDTO>();
 	public OrganizationDTO()
 	{}
-	public OrganizationDTO(Organization  organization)
+	public OrganizationDTO(Organization  organization,boolean containUser)
 	{
 		name 	= organization.getName();
 		id 		= organization.getId();
-		users 	= Lists.transform(organization.getUsers(), new Function<User, UserDTO>(){
-			public UserDTO apply(User user){
-				return new UserDTO(user);
-			}
-		});
+		if (containUser){
+			users 	= Lists.transform(organization.getUsers(), new Function<User, UserDTO>(){
+				public UserDTO apply(User user){
+					return new UserDTO(user);
+				}
+			});
+		}
 	}
 	public String getName() {
 		return name;
