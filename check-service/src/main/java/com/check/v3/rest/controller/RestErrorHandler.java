@@ -3,15 +3,16 @@ package com.check.v3.rest.controller;
 import java.util.List;
 import java.util.Locale;
 
-import javax.validation.ConstraintViolationException;
 
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,21 +42,30 @@ public class RestErrorHandler {
         List<FieldError> fieldErrors  	 = result.getFieldErrors();
         return processFieldErrors(fieldErrors);
     }
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ResponseBody
-//    public ErrorsDTO processValidationError(ConstraintViolationException ex) 
-//    {
-//        BindingResult result			 = ex.g;
-//        List<FieldError> fieldErrors  	 = result.getFieldErrors();
-//
-//    }
-    
+    @ExceptionHandler(org.springframework.validation.BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorsDTO processValidationError(BindException ex) 
+    {
+        BindingResult result			 = ex.getBindingResult();
+        List<FieldError> fieldErrors  	 = result.getFieldErrors();
+        return processFieldErrors(fieldErrors);
+    }
     
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorsDTO processAuthenticationError(AuthenticationException ex,Locale locale)
+    {
+        ErrorsDTO dto = new ErrorsDTO();
+        dto.addFieldError(ApplicationConstant.AuthenticationField, messageSource.getMessage(ApplicationConstant.AuthenticationFailCode, null,locale));
+        return dto;
+    }
+
+    @ExceptionHandler(IncorrectCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorsDTO processAuthenticationError(IncorrectCredentialsException ex,Locale locale)
     {
         ErrorsDTO dto = new ErrorsDTO();
         dto.addFieldError(ApplicationConstant.AuthenticationField, messageSource.getMessage(ApplicationConstant.AuthenticationFailCode, null,locale));

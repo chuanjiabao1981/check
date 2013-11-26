@@ -3,6 +3,7 @@ package com.check.v3.rest.controller;
 import javax.validation.Valid;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
@@ -25,8 +26,7 @@ public class SessionsRestController {
 	{
 		UsernamePasswordToken token = new UsernamePasswordToken(userPassword.getName(), userPassword.getPassword());
 		Subject currentUser = SecurityUtils.getSubject();
-		
-		currentUser.login(token);
+			currentUser.login(token);
 		currentUser.getSession().getId();
 		return new SessionDTO(currentUser.getSession().getId().toString(),(User) currentUser.getPrincipal());
 	}
