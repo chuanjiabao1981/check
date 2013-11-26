@@ -54,13 +54,13 @@
 		<beans:property name="defaultLocale" value="zh_CN"/>
 	</beans:bean>
 	<!-- 
-		1. 共享的message放在了 check-common module中的com.check.v3.i18n pacakge中
+		1. 共享的message放在了 check-common module中的META-INF中
 		2. 这些message会被check-service和check-web所共享
 		3. 如果有共享的message则都放在check-common下
 	-->
 	<beans:bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" 
 	    		id="messageSource" 
-	    		p:basenames="classpath:com/check/v3/i18n/common_messages,WEB-INF/i18n/application,WEB-INF/i18n/validation_messages"
+	    		p:basenames="classpath:common_messages,WEB-INF/i18n/application,WEB-INF/i18n/validation_messages"
 	    		p:fallbackToSystemLocale="false"/>
 		
 </beans:beans>
