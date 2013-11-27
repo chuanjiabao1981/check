@@ -52,6 +52,7 @@ public class QuickReport extends BaseEntity {
     @Column(name = "level")
     @NotNull
     private QuickReportLevel 	level = QuickReportLevel.HIGH;
+    
 	private String				description;
 	
     @Enumerated(EnumType.STRING)

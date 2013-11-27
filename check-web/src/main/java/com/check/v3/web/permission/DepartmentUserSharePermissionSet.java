@@ -14,8 +14,9 @@ import com.check.v3.security.permission.PermissionSet;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.UserService;
 import com.check.v3.web.controller.HomeController;
-import com.check.v3.web.controller.QuickReportsController;
 import com.check.v3.web.controller.UsersController;
+import com.check.v3.web.controller.quickreport.QuickReportsCreateController;
+import com.check.v3.web.controller.quickreport.QuickReportsIndexController;
 @Component
 public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 	
@@ -36,9 +37,9 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		allow(UsersController.class.getSimpleName(),ControllerActionConstant.INDEX);
 		allow(UsersController.class.getSimpleName(),ControllerActionConstant.EDIT,userpermissionPolicy);
 		allow(UsersController.class.getSimpleName(), ControllerActionConstant.SHOW,userpermissionPolicy);
-		allow(QuickReportsController.class.getSimpleName(),ControllerActionConstant.INDEX,quickReportPermissionPolicy);
-		allow(QuickReportsController.class.getSimpleName(),ControllerActionConstant.NEW,quickReportPermissionPolicy);
-		allow(QuickReportsController.class.getSimpleName(),ControllerActionConstant.CREATE,quickReportPermissionPolicy);
+		allow(QuickReportsIndexController.class.getSimpleName(),ControllerActionConstant.INDEX,quickReportPermissionPolicy);
+		allow(QuickReportsCreateController.class.getSimpleName(),ControllerActionConstant.NEW,quickReportPermissionPolicy);
+		allow(QuickReportsCreateController.class.getSimpleName(),ControllerActionConstant.CREATE,quickReportPermissionPolicy);
 
 
 	}
