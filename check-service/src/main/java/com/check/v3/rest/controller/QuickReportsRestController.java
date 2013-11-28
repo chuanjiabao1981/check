@@ -8,26 +8,35 @@ import javax.validation.Valid;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.User;
-import com.check.v3.dto.IdDTO;
+import com.check.v3.dto.QuickReportDTO;
+import com.check.v3.dto.QuickReportPageDTO;
 import com.check.v3.dto.QuickReportRequestDTO;
+import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.QuickReportService;
 import com.check.v3.service.UserService;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 @Controller
 public class QuickReportsRestController {
@@ -42,7 +51,7 @@ public class QuickReportsRestController {
 	
 	@RequestMapping(value="/api/v1/organizations/{organization_id}/quick_reports",method=RequestMethod.POST)
 	@ResponseBody
-	public IdDTO create(@Valid @RequestBody QuickReportRequestDTO quickReportRequestDTO,
+	public QuickReportDTO create(@Valid @RequestBody QuickReportRequestDTO quickReportRequestDTO,
 						HttpServletRequest httpServletRequest,Model model)
 	{
 		QuickReport q = new QuickReport();
@@ -51,18 +60,35 @@ public class QuickReportsRestController {
 		q.setDepartment(user.getDepartment());
 		BeanUtils.copyProperties(quickReportRequestDTO, q);
 
-//		q.setDeadline(quickReportRequestDTO.getDeadLine());
-//		q.setDescription(quickReportRequestDTO.getDescription());
-//		q.setLevel(quickReportRequestDTO.getLevel());
-//		if (quickReportRequestDTO.getResponsiblePerson() != null){
-//			q.setResponsiblePerson(quickReportRequestDTO.getResponsiblePerson());
-//		}
-//		if (quickReportRequestDTO.getOrganizationId() != null){
-//			q.setOrganization(quickReportRequestDTO.getOrganization());
-//		}
 		q = quickReportService.save(q);
-		System.err.println(q.getOrganization().getName());
-		return new IdDTO(q.getId());
+		return new QuickReportDTO(q);
+	}
+	@RequestMapping(value="/api/v1/organizations/{organization_id}/quick_reports",method=RequestMethod.GET)
+	@ResponseBody
+	public QuickReportPageDTO index(@InstanceId @PathVariable("organization_id") Long organizationId,
+									HttpServletRequest httpServletRequest,
+									@RequestParam(value = "page", required = false) Integer page)
+	{
+		int rows  			= 10;
+		Sort sort = new Sort(Sort.Direction.DESC, "createdAt");
+		if (page == null)
+			page = 1;
+		PageRequest pageRequest = new PageRequest(page-1,rows,sort);
+		Page<QuickReport> quickReports = quickReportService.findByOrganization(new Organization(organizationId), pageRequest);
+		QuickReportPageDTO	quickReportPageDTO	= new QuickReportPageDTO();
+		quickReportPageDTO.setCurrentPage(quickReports.getNumber());
+		quickReportPageDTO.setTotalPages(quickReports.getTotalPages());
+		quickReportPageDTO.setTotalRecords(quickReports.getTotalElements());
+		quickReportPageDTO.setQuickReports(Lists.transform(quickReports.getContent(), 
+					new Function<QuickReport,QuickReportDTO>(){
+						public QuickReportDTO apply(QuickReport q)
+						{
+							return new QuickReportDTO(q);
+						}
+					}
+			));
+		return quickReportPageDTO;
+
 	}
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, WebDataBinder binder) 

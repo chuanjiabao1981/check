@@ -27,6 +27,7 @@ public class QuickReportsController {
 	
 	public final static String VIEW_LIST = "quick_reports/index";
 	public final static String VIEW_NEW	 = "quick_reports/new";
+	public final static String VIEW_EDIT = "quick_reports/edit";
 	
 	@ModelAttribute("levels")
 	public Map<String,String> populateLevels()

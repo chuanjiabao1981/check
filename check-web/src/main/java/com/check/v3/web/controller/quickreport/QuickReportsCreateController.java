@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.shiro.SecurityUtils;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +19,7 @@ import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
 
+@Controller
 public class QuickReportsCreateController extends QuickReportsController{
 	
 	@RequestMapping(value="/organizations/{organization_id}/quick_reports/new",method=RequestMethod.GET)

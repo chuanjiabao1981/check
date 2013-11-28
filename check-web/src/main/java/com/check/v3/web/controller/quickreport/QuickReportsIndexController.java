@@ -29,4 +29,6 @@ public class QuickReportsIndexController extends QuickReportsController{
 		model.addAttribute("quick_reports", quickReports.getContent());
 		return VIEW_LIST;
 	}
+	
+	
 }
