@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -69,6 +70,15 @@ public class RestErrorHandler {
     {
         ErrorsDTO dto = new ErrorsDTO();
         dto.addFieldError(ApplicationConstant.AuthenticationField, messageSource.getMessage(ApplicationConstant.AuthenticationFailCode, null,locale));
+        return dto;
+    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorsDTO proccessHttpMessageNotReadableError(HttpMessageNotReadableException ex,Locale locale)
+    {
+        ErrorsDTO dto = new ErrorsDTO();
+        dto.addFieldError(ApplicationConstant.Base, messageSource.getMessage(ApplicationConstant.RequestFormatErrorCode, null,locale));
         return dto;
     }
     @ExceptionHandler(UnauthenticatedException.class)
