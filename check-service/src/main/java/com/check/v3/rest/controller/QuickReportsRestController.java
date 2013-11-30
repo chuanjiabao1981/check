@@ -63,6 +63,17 @@ public class QuickReportsRestController {
 		q = quickReportService.save(q);
 		return new QuickReportDTO(q);
 	}
+	@RequestMapping(value="/api/v1/quick_reports/{id}",method=RequestMethod.POST)
+	@ResponseBody
+	public QuickReportDTO update(@InstanceId @PathVariable("id") Long id,
+								 @Valid @RequestBody QuickReportRequestDTO quickReportRequestDTO,
+								 HttpServletRequest httpServletRequest)
+	{
+		QuickReport q = quickReportService.findById(id);
+		quickReportRequestDTO.setId(q.getId());
+		BeanUtils.copyProperties(quickReportRequestDTO, q);
+		return new QuickReportDTO(q);
+	}
 	@RequestMapping(value="/api/v1/organizations/{organization_id}/quick_reports",method=RequestMethod.GET)
 	@ResponseBody
 	public QuickReportPageDTO index(@InstanceId @PathVariable("organization_id") Long organizationId,
