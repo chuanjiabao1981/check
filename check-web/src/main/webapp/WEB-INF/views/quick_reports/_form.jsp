@@ -24,8 +24,8 @@
 			${labelQuickReportPerson}
 		</form:label>
 		<form:select path="responsiblePerson">
-		   <form:option value="" label="${labelPleaseSelect}"/>
-			<form:options items="${responsiblePersons}" />
+		    <form:option value="" label="${labelPleaseSelect}"/>
+			<form:options items="${responsiblePersons}" itemValue="id" itemLabel="name"/>
 		</form:select>
 		<div>
             <form:errors path="level" cssClass="error" />
@@ -44,7 +44,7 @@
 		<div>
             <form:errors path="description" cssClass="error" />
 		</div>
-		<form:hidden path="organization" value="${organization_id}" />
+		<form:hidden path="organization" value="${quick_report.organization.id}" />
 		
 		
         <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">

@@ -2,6 +2,7 @@ package com.check.v3.web.controller.quickreport;
 
 import java.beans.PropertyEditorSupport;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -79,14 +80,10 @@ public class QuickReportsController {
 		}
 	}
 	
-	protected Map<Long,String> getResponsiblePersons(Long id)
+	protected List<User> getResponsiblePersons(Long id)
 	{
 		Organization o 	= organizationService.findByIdWithUsers(id);
-		Map<Long,String> s = new HashMap<Long,String>();
-		for(User user:o.getUsers()){
-			s.put(user.getId(), user.getName());
-		}
-		return s;
+		return o.getUsers();
 	}
 
 

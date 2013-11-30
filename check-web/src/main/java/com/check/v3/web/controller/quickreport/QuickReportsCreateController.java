@@ -1,6 +1,6 @@
 package com.check.v3.web.controller.quickreport;
 
-import java.util.Map;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
@@ -25,7 +26,9 @@ public class QuickReportsCreateController extends QuickReportsController{
 	@RequestMapping(value="/organizations/{organization_id}/quick_reports/new",method=RequestMethod.GET)
 	public String newForm(@InstanceId @PathVariable("organization_id") Long organizationId,HttpServletRequest httpServletRequest,Model model)
 	{
-		model.addAttribute("quick_report", new QuickReport());
+		QuickReport q = new QuickReport();
+		q.setOrganization(new Organization(organizationId));	
+		model.addAttribute("quick_report", q);
 		return VIEW_NEW;
 	}
 	@RequestMapping(value="/organizations/{organization_id}/quick_reports",method=RequestMethod.POST)
@@ -51,7 +54,7 @@ public class QuickReportsCreateController extends QuickReportsController{
 		return q;
 	}
 	@ModelAttribute("responsiblePersons")
-	public Map<Long,String> populateResponsiblePersons(@PathVariable("organization_id") Long organizationId)
+	public List<User> populateResponsiblePersons(@PathVariable("organization_id") Long organizationId)
 	{
 		return this.getResponsiblePersons(organizationId);
 	}
