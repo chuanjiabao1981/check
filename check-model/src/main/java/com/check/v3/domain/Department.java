@@ -65,6 +65,7 @@ public class Department extends Unit implements Serializable{
 	}
 	public void removeOrganization(Organization organization)
 	{
+		/*把下属节点都删除*/
 		for(Organization t: organization.getSubOrganizations()){
 			this.removeOrganization(t);
 		}

@@ -62,5 +62,8 @@
 	    		id="messageSource" 
 	    		p:basenames="classpath:common_messages,WEB-INF/i18n/application,WEB-INF/i18n/validation_messages"
 	    		p:fallbackToSystemLocale="false"/>
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+	</beans:bean>
+	
 		
 </beans:beans>

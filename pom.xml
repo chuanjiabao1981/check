@@ -38,6 +38,7 @@
 		<ro.isdc.wro4j-version>1.7.0</ro.isdc.wro4j-version>
 		<joda-time-version>2.2</joda-time-version>
 		<org.jadira.usertype-version>3.1.0.CR7</org.jadira.usertype-version><!-- 这个是joda从hibernate中发序列化用到的 -->
+		<commons-io-version>2.4</commons-io-version>
 	</properties>
 	<dependencies>
 	   

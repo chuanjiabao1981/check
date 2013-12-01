@@ -10,7 +10,10 @@
 <spring:message code="label_quick_report_description"        var="labelQuickReportDescription"/>
 <spring:message code="label_please_select"					 var="labelPleaseSelect"/>
 
-<form:form modelAttribute="quick_report"  id="quick_report" name="quick_report" method="post" action="${param.post_url}">
+<form:form modelAttribute="quick_report"  
+ 		  id="quick_report" 
+ 		  name="quick_report" 
+ 		  method="post" enctype="multipart/form-data" action="${param.post_url}">
 		<form:label path="level">
 			${labelQuickReportLevel}
 		</form:label>
@@ -44,9 +47,14 @@
 		<div>
             <form:errors path="description" cssClass="error" />
 		</div>
+		
+		<c:forEach items="${quick_report.images}" varStatus="i">
+		  	<form:label path="images[${i.index}].file">tupian</form:label>
+            <form:input path="images[${i.index}].file" type="file"/>
+    	</c:forEach>
+		
 		<form:hidden path="organization" value="${quick_report.organization.id}" />
-		
-		
+			
         <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
             <span class="ui-button-text">${buttonSave}</span>
         </button> 

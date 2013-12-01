@@ -1,6 +1,10 @@
 package com.check.v3.domain;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,12 +13,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -24,6 +31,8 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 	@NamedQuery(name="QuickReport.findAllByOrganizationId",query="select distinct u from User u where u.department.id = :id and u.role in :roles")
 })
 public class QuickReport extends BaseEntity {
+
+	private static final Logger logger = LoggerFactory.getLogger(QuickReport.class);
 
 	/**
 	 * 
@@ -58,20 +67,12 @@ public class QuickReport extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
     @NotNull
-	private QuickReportState    state  = QuickReportState.OPENED;
+	private QuickReportState    state  		= QuickReportState.OPENED;
+    
+	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
+    private List<QuickReportImage> images 	= new ArrayList<QuickReportImage>();
 	
 	
-//	@ManyToOne
-//    @JoinColumn(name="department_id")
-//	@NotNull
-//	private Department		department;
-//	
-//	public Department getDepartment() {
-//		return department;
-//	}
-//	public void setDepartment(Department department) {
-//		this.department = department;
-//	}
 
 	public User getSubmitter() {
 		return submitter;
@@ -123,6 +124,41 @@ public class QuickReport extends BaseEntity {
 	public void setDescription(String d)
 	{
 		this.description = d;
+	}
+	
+	public List<QuickReportImage> getImages() {
+		return images;
+	}
+	public void setImages(List<QuickReportImage> images) {
+		this.images = images;
+	}
+	public QuickReportImage addImage(QuickReportImage image)
+	{
+		return addImage(image,true);
+	}
+	public QuickReportImage addImage(QuickReportImage image,boolean set)
+	{
+		if (image == null){
+			logger.trace("add null image to quick report");
+			return image;
+		}
+		
+		if (this.getImages().contains(image)){
+			this.getImages().set(this.getImages().indexOf(image), image);
+		}else{
+			this.getImages().add(image);
+		}
+		if (set){
+			image.setQuickReport(this,false);
+		}
+
+		return image;
+	}
+	
+	public void removeImage(QuickReportImage image)
+	{
+		this.getImages().remove(image);
+		image.setQuickReport(null);
 	}
 	public boolean equals(Object object)
 	{

@@ -12,5 +12,7 @@ public class ApplicationConstant {
 	public final static String ObjectNotExsits				= "object_not_exsits";
 	
 	public final static String  ROOT_DEPARTMENT_NAME			= "root";
+	
+	public final static Integer	CHECK_IMAGES_NUM			=	4;
 
 }

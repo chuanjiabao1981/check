@@ -81,6 +81,11 @@
 			<artifactId>wro4j-core</artifactId>
 			<version>${ro.isdc.wro4j-version}</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io-version}</version>
+		</dependency>
     </dependencies>
 </project>
