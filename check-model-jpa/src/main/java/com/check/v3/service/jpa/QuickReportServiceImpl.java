@@ -1,16 +1,23 @@
 package com.check.v3.service.jpa;
 
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+
 import javax.annotation.Resource;
 
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
+import com.check.v3.domain.QuickReportImage;
 import com.check.v3.repository.QuickReportRepository;
 import com.check.v3.service.QuickReportService;
 
@@ -30,6 +37,28 @@ public class QuickReportServiceImpl implements QuickReportService{
 
 	@Override
 	public QuickReport save(QuickReport quickReport) {
+		
+		List<QuickReportImage>  needRemoved = new LinkedList<QuickReportImage>();
+		for(QuickReportImage image:quickReport.getImages()){
+			if (image.getFile() == null || image.getFile().isEmpty()){
+				needRemoved.add(image);
+				continue;
+			}
+			if (image.getFile().getContentType() == null || image.getFile().getContentType().equals("image/jpeg")){
+				//throw exception
+			}
+		}
+		
+		//remove empty image
+		for(QuickReportImage i : needRemoved){
+			quickReport.removeImage(i);
+		}
+		for(QuickReportImage image:quickReport.getImages()){
+			if (image.getName() == null){
+				image.setName(BuildImageName(image));
+			}
+		}
+		
 		return quickReportRepository.save(quickReport);
 	}
 
@@ -51,5 +80,10 @@ public class QuickReportServiceImpl implements QuickReportService{
 	}
 
 	
-	
+	private String BuildImageName(CheckImage i)
+	{
+		DateTime s = new DateTime();
+		return s.toString("yyyy-MM-dd")+"/"+i.getClass().getSimpleName()+"/"+UUID.randomUUID();
+	}
+
 }

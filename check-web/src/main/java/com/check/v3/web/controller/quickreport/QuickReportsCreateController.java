@@ -53,7 +53,6 @@ public class QuickReportsCreateController extends QuickReportsController{
 				System.err.println(getUniqueFileName(i));
 				try {
 					IOUtils.toByteArray(i.getFile().getInputStream());
-					//
 					// small_thumbnail_mobile
 					// thumbnail_mobile
 					// normal_mobile

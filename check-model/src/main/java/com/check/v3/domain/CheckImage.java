@@ -1,8 +1,11 @@
 package com.check.v3.domain;
 
 import java.awt.image.BufferedImage;
-import java.util.UUID;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -10,11 +13,13 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.joda.time.DateTime;
 import org.springframework.web.multipart.MultipartFile;
+import static org.imgscalr.Scalr.*;
+
 
 
 @Entity
@@ -24,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 @DiscriminatorValue(value="check_image")
 public class CheckImage extends BaseEntity{
 
+	@Transient
+	private String IMAGE_PATH_PREFIX = "";
 	private enum CheckImageType
 	{
 		little_thumbnail(32,32,"little-thumbnail"),
@@ -36,6 +43,7 @@ public class CheckImage extends BaseEntity{
 		{
 			this.width 		= width;
 			this.height		= height;
+			this.text		= text;
 		}
 		
 		public int getWidth()
@@ -87,10 +95,22 @@ public class CheckImage extends BaseEntity{
 	{
 		return this.name+"-"+type.getText();
 	}
-	public static String BuildImageName(CheckImage i)
+	@PrePersist
+	public  void onPrePersist() throws IOException
 	{
-		DateTime s = new DateTime();
-		return s.toString("yyyy-MM-dd")+"/"+i.getClass().getSimpleName()+"/"+UUID.randomUUID();
+		if (name != null && file != null && !file.isEmpty()){
+			 BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+//			 for(CheckImageType type:CheckImageType.values()){
+//				 BufferedImage r = resize(src,Mode.AUTOMATIC,type.getWidth(),type.getHeigth());
+//				 File f = new File(IMAGE_PATH_PREFIX+getImageName(type));
+//				 if (!f.getParentFile().exists())
+//				     f.getParentFile().mkdirs();
+////				 if (!f.exists())
+////				     f.createNewFile();
+//				 System.err.println(f.getAbsolutePath());
+////				 ImageIO.write(r, "jpg", f);
+//			 }
+		}
 	}
-
+	
 }

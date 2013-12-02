@@ -39,5 +39,10 @@
 		<artifactId>spring-web</artifactId>
 		<version>${org.springframework-version}</version>
 	</dependency>
+	<dependency>
+			<groupId>org.imgscalr</groupId>
+			<artifactId>imgscalr-lib</artifactId>
+			<version>${org.imgscalr-version}</version>
+	</dependency>
   </dependencies>
 </project>
