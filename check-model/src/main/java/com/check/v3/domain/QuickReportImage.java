@@ -21,7 +21,8 @@ public class QuickReportImage extends CheckImage{
 	 */
 	private static final long serialVersionUID = 7799486339748915395L;
 
-	public QuickReport getQuickReport() {
+	public QuickReport getQuickReport() 
+	{
 		return quickReport;
 	}
 
