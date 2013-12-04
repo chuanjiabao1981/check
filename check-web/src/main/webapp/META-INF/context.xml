@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<context aliases="/check_data=/var/check_v3_data/"/>
+<context aliases="/check-data=/var/check_v3_data/"/>

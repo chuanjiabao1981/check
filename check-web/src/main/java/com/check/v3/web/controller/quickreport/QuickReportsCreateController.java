@@ -45,27 +45,9 @@ public class QuickReportsCreateController extends QuickReportsController{
 		if (bindingResult.hasErrors()){
 			return VIEW_NEW;
 		}
-		for(QuickReportImage i:quickReport.getImages()){
-			if (i.getFile() != null){
-				
-				System.err.println(i.getFile().isEmpty());
-				System.err.println(i.getFile().getOriginalFilename());
-				System.err.println(getUniqueFileName(i));
-				try {
-					IOUtils.toByteArray(i.getFile().getInputStream());
-					// small_thumbnail_mobile
-					// thumbnail_mobile
-					// normal_mobile
-					// small_thumbnail
-					// thumbnail
-					// normal
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 		quickReportService.save((QuickReport)quickReport);
-		return "redirect:/organizations/"+organizationId+"/quick_reports";
+		return "redirect:/quick_reports/"+quickReport.getId();
+
 	}
 	
 	@ModelAttribute("quick_report")

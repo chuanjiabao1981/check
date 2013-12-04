@@ -39,6 +39,7 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		UserPermissionPolicy 			userpermissionPolicy 			= new UserPermissionPolicy(userService);
 		QuickReportPermissionPolicy		quickReportPermissionPolicy		= new QuickReportPermissionPolicy();
 		OwnQuickReportPermissionPolicy  ownQuickReportPermissionPolicy	= new OwnQuickReportPermissionPolicy();
+		QuickReportPermissionPolicy2	quickReportPermissionPolicy2	= new QuickReportPermissionPolicy2();
 		allow(HomeController.class.getSimpleName(),ControllerActionConstant.HOME);
 		allow(UsersController.class.getSimpleName(),ControllerActionConstant.INDEX);
 		allow(UsersController.class.getSimpleName(),ControllerActionConstant.EDIT,userpermissionPolicy);
@@ -48,6 +49,7 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		allow(QuickReportsCreateController.class.getSimpleName(),ControllerActionConstant.CREATE,quickReportPermissionPolicy);
 		allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.EDIT,ownQuickReportPermissionPolicy);
 		allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.UPDATE,ownQuickReportPermissionPolicy);
+		allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.SHOW,quickReportPermissionPolicy2);
 
 
 	}
@@ -90,6 +92,23 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		@Override
 		public Object getInstance(Long id) {
 			return organizationService.findById(id);
+		}
+	}
+	public class QuickReportPermissionPolicy2 implements PermissionPolicy
+	{
+
+		@Override
+		public boolean filter(User user, Object instance) {
+			QuickReport q = (QuickReport) instance;
+			if (q!=null && q.getDepartment().equals(user.getDepartment())){
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public Object getInstance(Long id) {
+			return quickReportService.findById(id);
 		}
 		
 	}

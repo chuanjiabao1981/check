@@ -43,13 +43,18 @@ public class QuickReportsEditController extends QuickReportsController{
 			return VIEW_EDIT;
 		}
 		quickReportService.save(quickReport);
-		return "redirect:/organizations/"+quickReport.getOrganization().getId()+"/quick_reports";
+		return "redirect:/quick_reports/"+quickReport.getId();
+	}
+	@RequestMapping(value="/quick_reports/{quick_report_id}",method=RequestMethod.GET)
+	public String show(@InstanceId @PathVariable("quick_report_id") Long id,
+		    HttpServletRequest httpServletRequest)
+	{
+		return VIEW_SHOW;
 	}
 	@RequestMapping(value="/quick_reports/{quick_report_id}",method=RequestMethod.DELETE)
 	public String destroy(@InstanceId @PathVariable("quick_report_id") Long id,
 						  @ModelAttribute("quick_report") @Valid QuickReport quickReport)
 	{
-		System.err.println("*************");
 		this.quickReportService.deleteById(id);
 		return "redirect:/organizations/"+quickReport.getOrganization().getId()+"/quick_reports";
 	}

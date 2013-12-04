@@ -4,10 +4,10 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<spring:message code="button_add" 			var="buttonAdd"/>
-<spring:message code="button_save"			var="buttonSave"/>
-<spring:message code="button_destroy"		var="buttonDestroy"/>
-<spring:message code="button_edit" 			var="buttonEdit"/>
+
+
+<%@include file="_message.jsp" %>
+
 <spring:url    value="/organizations/${organization_id}/quick_reports/new" var="urlNewQuickReports"></spring:url>
 
 <jsp:directive.page contentType="text/html;charset=UTF-8" />

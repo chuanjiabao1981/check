@@ -2,13 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 
-<spring:message code="button_save" 			var="buttonSave"/>
+<%@include file="_message.jsp" %>
 
-<spring:message code="label_quick_report_level" 			 var="labelQuickReportLevel" />
-<spring:message code="label_quick_report_responsible_person" var="labelQuickReportPerson" />
-<spring:message code="label_quick_report_dead_line" 		 var="labelQuickReportDeadLine" />
-<spring:message code="label_quick_report_description"        var="labelQuickReportDescription"/>
-<spring:message code="label_please_select"					 var="labelPleaseSelect"/>
+
 
 <form:form modelAttribute="quick_report"  
  		  id="quick_report" 
