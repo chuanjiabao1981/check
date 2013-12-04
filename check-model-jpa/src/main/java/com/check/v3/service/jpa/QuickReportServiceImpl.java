@@ -20,6 +20,7 @@ import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportImage;
 import com.check.v3.repository.QuickReportRepository;
 import com.check.v3.service.QuickReportService;
+import com.check.v3.service.exception.ImageTypeWrongException;
 
 @Service("quickReportService")
 @Repository
@@ -36,16 +37,19 @@ public class QuickReportServiceImpl implements QuickReportService{
 	}
 
 	@Override
-	public QuickReport save(QuickReport quickReport) {
+	public QuickReport save(QuickReport quickReport) throws ImageTypeWrongException {
 		
 		List<QuickReportImage>  needRemoved = new LinkedList<QuickReportImage>();
+		int idx = 0;
 		for(QuickReportImage image:quickReport.getImages()){
+			idx++;
 			if (image.getFile() == null || image.getFile().isEmpty()){
 				needRemoved.add(image);
 				continue;
 			}
-			if (image.getFile().getContentType() == null || image.getFile().getContentType().equals("image/jpeg")){
-				//throw exception
+			if (image.getFile().getContentType() == null || !image.getFile().getContentType().equals("image/jpeg")){
+				System.err.println(image.getFile().getContentType());
+				throw new ImageTypeWrongException(idx-1);
 			}
 		}
 		

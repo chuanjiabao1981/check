@@ -26,6 +26,7 @@ import com.check.v3.domain.test.util.DepartmentBuilder;
 import com.check.v3.domain.test.util.OrganizationBuilder;
 import com.check.v3.domain.test.util.QuickReportBuilder;
 import com.check.v3.domain.test.util.UserBuilder;
+import com.check.v3.service.exception.ImageTypeWrongException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:application-context.xml","classpath:application-test-jpa.xml"})
@@ -57,7 +58,7 @@ public class TestQuickReportService {
 		user 				= userBuilder.create(department, "kkkkkk");
 	}
 	@Test
-	public void testSave()
+	public void testSave() throws ImageTypeWrongException
 	{
 		QuickReport quickReport = quickReportBuilder.build(user, organization, "desc");
 		assertNull(quickReport.getCreatedAt());
@@ -71,7 +72,7 @@ public class TestQuickReportService {
 		assertNotNull(quickReport2.getDepartment());
 	}
 	@Test
-	public void testPage()
+	public void testPage() throws ImageTypeWrongException
 	{
 		int page 	= 2;
 		int rows  	= 10;

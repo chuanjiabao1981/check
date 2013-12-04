@@ -35,6 +35,7 @@ import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.QuickReportService;
 import com.check.v3.service.UserService;
+import com.check.v3.service.exception.ImageTypeWrongException;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
@@ -60,7 +61,11 @@ public class QuickReportsRestController {
 		q.setDepartment(user.getDepartment());
 		BeanUtils.copyProperties(quickReportRequestDTO, q);
 
-		q = quickReportService.save(q);
+		try {
+			q = quickReportService.save(q);
+		} catch (ImageTypeWrongException e) {
+			e.printStackTrace();
+		}
 		return new QuickReportDTO(q);
 	}
 	@RequestMapping(value="/api/v1/quick_reports/{id}",method=RequestMethod.POST)

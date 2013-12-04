@@ -8,6 +8,7 @@ import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.User;
 import com.check.v3.service.QuickReportService;
+import com.check.v3.service.exception.ImageTypeWrongException;
 
 @Service("quickReportBuilderServiceTest")
 public class QuickReportBuilder {
@@ -25,7 +26,7 @@ public class QuickReportBuilder {
 		return quickReport;
 	}
 	
-	public QuickReport create(User user,Organization org,String desc)
+	public QuickReport create(User user,Organization org,String desc) throws ImageTypeWrongException
 	{
 		return quickReportService.save(build(user,org,desc));
 	}

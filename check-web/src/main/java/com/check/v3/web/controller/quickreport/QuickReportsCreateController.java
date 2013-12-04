@@ -1,13 +1,11 @@
 package com.check.v3.web.controller.quickreport;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.shiro.SecurityUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
@@ -27,6 +25,7 @@ import com.check.v3.domain.QuickReportImage;
 import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
+import com.check.v3.service.exception.ImageTypeWrongException;
 
 @Controller
 public class QuickReportsCreateController extends QuickReportsController{
@@ -45,7 +44,13 @@ public class QuickReportsCreateController extends QuickReportsController{
 		if (bindingResult.hasErrors()){
 			return VIEW_NEW;
 		}
-		quickReportService.save((QuickReport)quickReport);
+		try {
+			quickReportService.save((QuickReport)quickReport);
+		} catch (ImageTypeWrongException e) {
+			System.err.println("-----");
+			bindingResult.rejectValue("images["+e.getIdx()+"].file", "xxxxx","xxxxxx");
+			return VIEW_NEW;
+		}
 		return "redirect:/quick_reports/"+quickReport.getId();
 
 	}

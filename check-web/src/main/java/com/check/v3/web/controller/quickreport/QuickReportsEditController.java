@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.security.SecurityConstant;
 import com.check.v3.security.annotation.InstanceId;
+import com.check.v3.service.exception.ImageTypeWrongException;
 
 @Controller
 public class QuickReportsEditController extends QuickReportsController{
@@ -42,7 +43,12 @@ public class QuickReportsEditController extends QuickReportsController{
 			 model.addAttribute("responsiblePersons", getResponsiblePersons(quickReport.getOrganization().getId()));
 			return VIEW_EDIT;
 		}
-		quickReportService.save(quickReport);
+		try {
+			quickReportService.save(quickReport);
+		} catch (ImageTypeWrongException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "redirect:/quick_reports/"+quickReport.getId();
 	}
 	@RequestMapping(value="/quick_reports/{quick_report_id}",method=RequestMethod.GET)

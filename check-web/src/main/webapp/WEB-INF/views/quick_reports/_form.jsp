@@ -47,6 +47,10 @@
 		<c:forEach items="${quick_report.images}" varStatus="i">
 		  	<form:label path="images[${i.index}].file">tupian</form:label>
             <form:input path="images[${i.index}].file" type="file"/>
+            <div>
+            	<form:errors path="images[${i.index}].file" cssClass="error" />
+			</div>
+            
     	</c:forEach>
 		
 		<form:hidden path="organization" value="${quick_report.organization.id}" />
