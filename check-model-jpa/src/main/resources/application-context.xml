@@ -13,7 +13,6 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<context:annotation-config/>
 	<context:component-scan base-package="com.check.v3.service.jpa" />
-	
 	<import resource="classpath:application-datasource-jpa-context.xml" />
 	
 </beans>

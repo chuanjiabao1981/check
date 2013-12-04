@@ -30,7 +30,8 @@ import static org.imgscalr.Scalr.*;
 public class CheckImage extends BaseEntity{
 
 	@Transient
-	private String IMAGE_PATH_PREFIX = "";
+	private String IMAGE_PATH_PREFIX = "/var/check_v3_data/";
+	
 	private enum CheckImageType
 	{
 		little_thumbnail(32,32,"little-thumbnail"),
@@ -100,16 +101,16 @@ public class CheckImage extends BaseEntity{
 	{
 		if (name != null && file != null && !file.isEmpty()){
 			 BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
-//			 for(CheckImageType type:CheckImageType.values()){
-//				 BufferedImage r = resize(src,Mode.AUTOMATIC,type.getWidth(),type.getHeigth());
-//				 File f = new File(IMAGE_PATH_PREFIX+getImageName(type));
-//				 if (!f.getParentFile().exists())
-//				     f.getParentFile().mkdirs();
-////				 if (!f.exists())
-////				     f.createNewFile();
-//				 System.err.println(f.getAbsolutePath());
-////				 ImageIO.write(r, "jpg", f);
-//			 }
+			 for(CheckImageType type:CheckImageType.values()){
+				 BufferedImage r = resize(src,Mode.AUTOMATIC,type.getWidth(),type.getHeigth());
+				 File f = new File(IMAGE_PATH_PREFIX+getImageName(type));
+				 if (!f.getParentFile().exists())
+				     f.getParentFile().mkdirs();
+				 if (!f.exists())
+				     f.createNewFile();
+				 System.err.println(f.getAbsolutePath());
+				 ImageIO.write(r, "jpg", f);
+			 }
 		}
 	}
 	

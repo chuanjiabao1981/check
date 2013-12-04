@@ -44,5 +44,13 @@
 			<artifactId>imgscalr-lib</artifactId>
 			<version>${org.imgscalr-version}</version>
 	</dependency>
+	<dependency> 
+     		<groupId>org.springframework</groupId> 
+     		<artifactId>spring-aspects</artifactId> 
+     		<version>${org.springframework-version}</version>
+     </dependency>
+     
   </dependencies>
+  
+
 </project>
