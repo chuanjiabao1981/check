@@ -1,5 +1,7 @@
 package com.check.v3.web.controller.quickreport;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.CheckImage;
@@ -26,6 +30,8 @@ import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.exception.ImageTypeWrongException;
+import com.check.v3.web.tools.FileAlignmentMedia;
+import com.check.v3.web.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
 @Controller
 public class QuickReportsCreateController extends QuickReportsController{
@@ -39,22 +45,31 @@ public class QuickReportsCreateController extends QuickReportsController{
 	public String create(@InstanceId @PathVariable("organization_id") Long organizationId,
 			 			@ModelAttribute("quick_report") @Valid QuickReport quickReport,
 			 			BindingResult bindingResult, 
-						HttpServletRequest httpServletRequest,Model model)
+						HttpServletRequest httpServletRequest,
+						Model model,
+						@RequestParam(value="image_files[]") List<MultipartFile> imageFiles
+						)
 	{
+
 		if (bindingResult.hasErrors()){
 			return VIEW_NEW;
 		}
+		FileAlignmentMediaResult result = null;
 		try {
-			quickReportService.save((QuickReport)quickReport);
+			result = FileAlignmentMedia.getResult(imageFiles, quickReport.getImages().iterator());
 		} catch (ImageTypeWrongException e) {
-			System.err.println("-----");
-			bindingResult.rejectValue("images["+e.getIdx()+"].file", "xxxxx","xxxxxx");
-			return VIEW_NEW;
+			bindingResult.rejectValue("images["+e.getIdx()+"].name", "validation.checkImage.type.message");
+			return VIEW_EDIT;
 		}
+		for(CheckImage checkImage : result.getEmptyCheckImages()){
+			quickReport.removeImage((QuickReportImage) checkImage);
+		}
+
+		quickReportService.save(quickReport);
+		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
 		return "redirect:/quick_reports/"+quickReport.getId();
 
 	}
-	
 	@ModelAttribute("quick_report")
 	public QuickReport populateQuickReport(@PathVariable("organization_id") Long organizationId)
 	{
@@ -67,6 +82,7 @@ public class QuickReportsCreateController extends QuickReportsController{
 			QuickReportImage image = new QuickReportImage();
 			image.setDepartment(department);
 			q.addImage(image);
+			q.setSubmitter(user);
 		}
 		q.setOrganization(new Organization(organizationId));
 		return q;
@@ -75,13 +91,6 @@ public class QuickReportsCreateController extends QuickReportsController{
 	public List<User> populateResponsiblePersons(@PathVariable("organization_id") Long organizationId)
 	{
 		return this.getResponsiblePersons(organizationId);
-	}
-
-	
-	public String getUniqueFileName(CheckImage i)
-	{
-		DateTime s = new DateTime();
-		return s.toString("yyyy-MM-dd")+"/"+i.getClass().getSimpleName()+"/"+UUID.randomUUID();
 	}
 
 }

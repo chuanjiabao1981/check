@@ -27,7 +27,7 @@
 			<form:options items="${responsiblePersons}" itemValue="id" itemLabel="name"/>
 		</form:select>
 		<div>
-            <form:errors path="level" cssClass="error" />
+            <form:errors path="responsiblePerson" cssClass="error" />
 		</div>
 		<form:label path="deadline">
 			${labelQuickReportDeadLine}
@@ -43,17 +43,20 @@
 		<div>
             <form:errors path="description" cssClass="error" />
 		</div>
+		<c:if test="${empty quick_report.id}">
+			<form:hidden path="organization" value="${organization_id}" />
+		</c:if>
 		
 		<c:forEach items="${quick_report.images}" varStatus="i">
-		  	<form:label path="images[${i.index}].file">tupian</form:label>
-            <form:input path="images[${i.index}].file" type="file"/>
+            <label for="image_files[]">tupian</label>
+            <input name="image_files[]" type="file"/>
             <div>
-            	<form:errors path="images[${i.index}].file" cssClass="error" />
-			</div>
+            	 <form:errors path="images[${i.index}].name" cssClass="error" />
+            </div>
             
-    	</c:forEach>
+        </c:forEach>
+
 		
-		<form:hidden path="organization" value="${quick_report.organization.id}" />
 			
         <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
             <span class="ui-button-text">${buttonSave}</span>

@@ -20,6 +20,7 @@ import com.check.v3.web.controller.UsersController;
 import com.check.v3.web.controller.quickreport.QuickReportsCreateController;
 import com.check.v3.web.controller.quickreport.QuickReportsEditController;
 import com.check.v3.web.controller.quickreport.QuickReportsIndexController;
+import com.check.v3.web.controller.quickreport.QuickReportsShowController;
 @Component
 public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 	
@@ -49,7 +50,7 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		allow(QuickReportsCreateController.class.getSimpleName(),ControllerActionConstant.CREATE,quickReportPermissionPolicy);
 		allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.EDIT,ownQuickReportPermissionPolicy);
 		allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.UPDATE,ownQuickReportPermissionPolicy);
-		allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.SHOW,quickReportPermissionPolicy2);
+		allow(QuickReportsShowController.class.getSimpleName(),ControllerActionConstant.SHOW,quickReportPermissionPolicy2);
 
 
 	}

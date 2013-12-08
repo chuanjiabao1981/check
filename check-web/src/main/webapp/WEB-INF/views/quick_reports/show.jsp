@@ -40,7 +40,7 @@
 		</td>
 	</tr>
 	<c:forEach items="${quick_report.images}" var="image">
-		<spring:url    value="${image.getImageUri('normal')}" var="urlImage"></spring:url>
+		<spring:url    value="/check-data/${image.getName('normal')}.jpg" var="urlImage"></spring:url>
 	
 		<tr>
 			<td>

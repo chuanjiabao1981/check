@@ -1,12 +1,15 @@
 package com.check.v3.service.exception;
 
-public class ImageTypeWrongException extends Exception{
+import org.springframework.dao.NonTransientDataAccessException;
+
+public class ImageTypeWrongException extends NonTransientDataAccessException{
 
 	private int idx;
 	
 	
 	public ImageTypeWrongException(int x)
 	{
+		super("image error");
 		this.idx =x ;
 	}
 	

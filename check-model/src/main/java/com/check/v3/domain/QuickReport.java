@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -68,8 +69,9 @@ public class QuickReport extends BaseEntity {
     @Column(name = "state")
     @NotNull
 	private QuickReportState    state  		= QuickReportState.OPENED;
-    
-	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST})
+    //{CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}
+	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL)
+	@OrderBy("id asc")
     private List<QuickReportImage> images 	= new ArrayList<QuickReportImage>();
 	
 	
@@ -142,8 +144,9 @@ public class QuickReport extends BaseEntity {
 			logger.trace("add null image to quick report");
 			return image;
 		}
-		
+		image.setSubmitter(this.getSubmitter());
 		if (this.getImages().contains(image)){
+			System.err.println("kkkkkk");
 			this.getImages().set(this.getImages().indexOf(image), image);
 		}else{
 			this.getImages().add(image);
