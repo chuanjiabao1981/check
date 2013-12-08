@@ -30,8 +30,8 @@ import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.exception.ImageTypeWrongException;
-import com.check.v3.web.tools.FileAlignmentMedia;
-import com.check.v3.web.tools.FileAlignmentMedia.FileAlignmentMediaResult;
+import com.check.v3.service.tools.FileAlignmentMedia;
+import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
 @Controller
 public class QuickReportsCreateController extends QuickReportsController{
@@ -81,8 +81,8 @@ public class QuickReportsCreateController extends QuickReportsController{
 		for(int i =0;i<ApplicationConstant.CHECK_IMAGES_NUM;i++){
 			QuickReportImage image = new QuickReportImage();
 			image.setDepartment(department);
+			image.setSubmitter(user);
 			q.addImage(image);
-			q.setSubmitter(user);
 		}
 		q.setOrganization(new Organization(organizationId));
 		return q;

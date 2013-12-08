@@ -31,6 +31,8 @@
 	    		id="messageSource" 
 	    		p:basename="classpath:common_messages"
 	    		p:fallbackToSystemLocale="false"/>
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+	</beans:bean>
 	
 	
 </beans:beans>

@@ -23,8 +23,8 @@ import com.check.v3.domain.QuickReportImage;
 import com.check.v3.security.SecurityConstant;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.service.exception.ImageTypeWrongException;
-import com.check.v3.web.tools.FileAlignmentMedia;
-import com.check.v3.web.tools.FileAlignmentMedia.FileAlignmentMediaResult;
+import com.check.v3.service.tools.FileAlignmentMedia;
+import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
 @Controller
 public class QuickReportsEditController extends QuickReportsController{
