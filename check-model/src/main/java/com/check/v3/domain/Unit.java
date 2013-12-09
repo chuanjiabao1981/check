@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -36,9 +35,6 @@ public class Unit implements Serializable{
     @NotEmpty
 	private String name;
     
-    @Transient
-    private String test;
-
 	public Long getId() {
 		return id;
 	}

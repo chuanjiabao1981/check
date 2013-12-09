@@ -69,12 +69,13 @@ public class QuickReport extends BaseEntity {
     @Column(name = "state")
     @NotNull
 	private QuickReportState    state  		= QuickReportState.OPENED;
-    //{CascadeType.REMOVE,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}
+    
 	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL)
 	@OrderBy("id asc")
     private List<QuickReportImage> images 	= new ArrayList<QuickReportImage>();
-	
-	
+	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL)
+	@OrderBy("id asc")
+	private List<QuickReportResolve> resolves = new ArrayList<QuickReportResolve>();
 
 	public User getSubmitter() {
 		return submitter;
@@ -128,6 +129,12 @@ public class QuickReport extends BaseEntity {
 		this.description = d;
 	}
 	
+	public List<QuickReportResolve> getResolves() {
+		return resolves;
+	}
+	public void setResolves(List<QuickReportResolve> resolves) {
+		this.resolves = resolves;
+	}
 	public List<QuickReportImage> getImages() {
 		return images;
 	}
@@ -146,7 +153,6 @@ public class QuickReport extends BaseEntity {
 		}
 		image.setSubmitter(this.getSubmitter());
 		if (this.getImages().contains(image)){
-			System.err.println("kkkkkk");
 			this.getImages().set(this.getImages().indexOf(image), image);
 		}else{
 			this.getImages().add(image);
@@ -162,6 +168,35 @@ public class QuickReport extends BaseEntity {
 	{
 		this.getImages().remove(image);
 		image.setQuickReport(null);
+	}
+	
+	public QuickReportResolve addResolve(QuickReportResolve resolve)
+	{
+		return addResolve(resolve,true);
+	}
+	public QuickReportResolve addResolve(QuickReportResolve resolve,boolean set)
+	{
+		if (resolve == null){
+			logger.trace("add null resolve to quick report");
+			return resolve;
+		}
+		resolve.setSubmitter(this.getSubmitter());
+		if (this.getResolves().contains(resolve)){
+			this.getResolves().set(this.getResolves().indexOf(resolve), resolve);
+		}else{
+			this.getResolves().add(resolve);
+		}
+		if (set){
+			resolve.setQuickReport(this,false);
+		}
+
+		return resolve;
+	}
+	
+	public void removeResolve(QuickReportResolve resolve)
+	{
+		this.getResolves().remove(resolve);
+		resolve.setQuickReport(null);
 	}
 	public boolean equals(Object object)
 	{
