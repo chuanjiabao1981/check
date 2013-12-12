@@ -15,6 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -73,8 +74,9 @@ public class QuickReport extends BaseEntity {
 	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL)
 	@OrderBy("id asc")
     private List<QuickReportImage> images 	= new ArrayList<QuickReportImage>();
-	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE})
 	@OrderBy("id asc")
+	@OrderColumn(name="id")
 	private List<QuickReportResolve> resolves = new ArrayList<QuickReportResolve>();
 
 	public User getSubmitter() {

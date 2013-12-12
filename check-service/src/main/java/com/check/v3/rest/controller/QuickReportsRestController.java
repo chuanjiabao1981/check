@@ -42,7 +42,6 @@ import com.check.v3.service.CheckImageFileService;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.QuickReportService;
 import com.check.v3.service.UserService;
-import com.check.v3.service.exception.ImageTypeWrongException;
 import com.check.v3.service.tools.FileAlignmentMedia;
 import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 import com.google.common.base.Function;
@@ -109,7 +108,7 @@ public class QuickReportsRestController {
 		if (page == null)
 			page = 1;
 		PageRequest pageRequest = new PageRequest(page-1,rows,sort);
-		Page<QuickReport> quickReports = quickReportService.findByOrganization(new Organization(organizationId), pageRequest);
+		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationWithMedia(organizationId, pageRequest);
 		QuickReportPageDTO	quickReportPageDTO	= new QuickReportPageDTO();
 		quickReportPageDTO.setCurrentPage(quickReports.getNumber());
 		quickReportPageDTO.setTotalPages(quickReports.getTotalPages());

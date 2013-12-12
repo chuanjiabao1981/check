@@ -24,7 +24,7 @@ public class QuickReportsShowController extends QuickReportsController{
 	@ModelAttribute("quick_report")
 	public QuickReport populateQuickReport(@PathVariable("quick_report_id") Long id)
 	{
-		QuickReport q =  this.quickReportService.findByIdWithMedia(id);
+		QuickReport q =  this.quickReportService.findByIdWithMediaAndResolve(id);
 		return q;
 	}
 

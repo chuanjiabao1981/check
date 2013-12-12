@@ -4,17 +4,14 @@ import java.beans.PropertyEditorSupport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import org.joda.time.DateTime;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReportLevel;
 import com.check.v3.domain.User;

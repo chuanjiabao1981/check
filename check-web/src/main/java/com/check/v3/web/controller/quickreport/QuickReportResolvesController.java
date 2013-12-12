@@ -2,6 +2,7 @@ package com.check.v3.web.controller.quickreport;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -19,27 +20,40 @@ import org.springframework.web.multipart.MultipartFile;
 import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.Department;
-import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
-import com.check.v3.domain.QuickReportImage;
+import com.check.v3.domain.QuickReportResolve;
+import com.check.v3.domain.ResolveImage;
 import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
+import com.check.v3.service.CheckImageFileService;
+import com.check.v3.service.QuickReportResolveService;
+import com.check.v3.service.QuickReportService;
 import com.check.v3.service.exception.ImageTypeWrongException;
 import com.check.v3.service.tools.FileAlignmentMedia;
 import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
 @Controller
-public class QuickReportsCreateController extends QuickReportsController{
+public class QuickReportResolvesController {
 	
-	@RequestMapping(value="/organizations/{organization_id}/quick_reports/new",method=RequestMethod.GET)
-	public String newForm(@InstanceId @PathVariable("organization_id") Long organizationId,HttpServletRequest httpServletRequest,Model model)
+	
+	@Resource
+	QuickReportService quickReportService;
+	@Resource
+	CheckImageFileService checkImageFileService;
+	@Resource
+	QuickReportResolveService quickReportResolveService;
+
+	private static final String VIEW_NEW = "quick_report_resolves/new";
+	@RequestMapping(value="/quick_report/{quick_report_id}/quick_report_resolves/new",method=RequestMethod.GET)
+	public String newForm()
 	{
 		return VIEW_NEW;
 	}
-	@RequestMapping(value="/organizations/{organization_id}/quick_reports",method=RequestMethod.POST)
-	public String create(@InstanceId @PathVariable("organization_id") Long organizationId,
-			 			@ModelAttribute("quick_report") @Valid QuickReport quickReport,
+	
+	@RequestMapping(value="/quick_report/{quick_report_id}/quick_report_resolves",method=RequestMethod.POST)
+	public String create(@InstanceId @PathVariable("quick_report_id") Long quickReportId,
+			 			@ModelAttribute("quick_report_resolve") @Valid QuickReportResolve quickReportResolve,
 			 			BindingResult bindingResult, 
 						HttpServletRequest httpServletRequest,
 						Model model,
@@ -52,41 +66,36 @@ public class QuickReportsCreateController extends QuickReportsController{
 		}
 		FileAlignmentMediaResult result = null;
 		try {
-			result = FileAlignmentMedia.getResult(imageFiles, quickReport.getImages().iterator());
+			result = FileAlignmentMedia.getResult(imageFiles, quickReportResolve.getImages().iterator());
 		} catch (ImageTypeWrongException e) {
 			bindingResult.rejectValue("images["+e.getIdx()+"].name", "validation.checkImage.type.message");
-			return VIEW_EDIT;
+			return VIEW_NEW;
 		}
 		for(CheckImage checkImage : result.getEmptyCheckImages()){
-			quickReport.removeImage((QuickReportImage) checkImage);
+			quickReportResolve.removeImage((ResolveImage) checkImage);
 		}
-
-		quickReportService.save(quickReport);
+		quickReportResolveService.save(quickReportResolve);
 		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
-		return "redirect:/quick_reports/"+quickReport.getId();
+		return "redirect:/quick_reports/"+quickReportResolve.getQuickReport().getId();
 
 	}
 	@ModelAttribute("quick_report")
-	public QuickReport populateQuickReport(@PathVariable("organization_id") Long organizationId)
+	public QuickReportResolve populateResolve(@PathVariable("quick_report_id") Long quickReportId)
 	{
-		QuickReport q 						= new QuickReport();
+		QuickReportResolve r 				= new QuickReportResolve();
 		Department	department				= SecurityTools.getCurrentDepartment();
-		q.setDepartment(department);
-		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		q.setSubmitter(user);
+		User user 							= (User) SecurityUtils.getSubject().getPrincipal();
+
+		r.setDepartment(department);
+		r.setSubmitter(user);
 		for(int i =0;i<ApplicationConstant.CHECK_IMAGES_NUM;i++){
-			QuickReportImage image = new QuickReportImage();
+			ResolveImage image = new ResolveImage();
 			image.setDepartment(department);
 			image.setSubmitter(user);
-			q.addImage(image);
+			r.addImage(image);
 		}
-		q.setOrganization(new Organization(organizationId));
-		return q;
+		QuickReport q = quickReportService.findById(quickReportId);
+		q.addResolve(r);
+		return r;
 	}
-	@ModelAttribute("responsiblePersons")
-	public List<User> populateResponsiblePersons(@PathVariable("organization_id") Long organizationId)
-	{
-		return this.getResponsiblePersons(organizationId);
-	}
-
 }

@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -39,6 +40,7 @@ public class Resolve extends BaseEntity{
 	
 	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL)
 	@OrderBy("id asc")
+	@OrderColumn(name="id")
     private List<ResolveImage> images 	= new ArrayList<ResolveImage>();
 
 	
