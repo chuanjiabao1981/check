@@ -32,7 +32,7 @@ public class CheckImageFileServiceImpl implements CheckImageFileService{
 
 	private static final String IMAGE_TYPE="jpg";
 	private static final String IMAGE_SUFFIX="."+IMAGE_TYPE;
-	private static final String IMAGE_PATH_PREFIX = "/var/check_v3_data/check_data";
+	private static final String IMAGE_PATH_PREFIX = "/var/check_v3_data/check_data/";
 	
 	@Override
 	public void save(List<MultipartFile> imageFiles,List<CheckImage> checkImages) 
