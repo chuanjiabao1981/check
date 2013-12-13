@@ -18,6 +18,7 @@ public interface QuickReportService {
 	public QuickReport			findByIdWithMediaAndResolve(Long id);
 	public QuickReport 			save(QuickReport quickReport) throws ImageTypeWrongException;
 	public QuickReport			save(QuickReport quickReport,List<MultipartFile> imageFiles) throws ImageTypeWrongException;
+	public QuickReport			save(QuickReport quickReport,List<MultipartFile> newImageFiles,List<Long> needDeletedCheckImageIds);
 	public Page<QuickReport>	findByOrganization(Organization organization,Pageable pageable);
 	public Page<QuickReport>	findAllByOrganizationIdWithMedia(Long organizationId,Pageable pageable);
 	public void 	   			deleteById(Long id);

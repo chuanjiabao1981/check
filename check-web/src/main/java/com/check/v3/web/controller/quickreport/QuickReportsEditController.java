@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.ApplicationConstant;
-import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportImage;
 import com.check.v3.security.SecurityConstant;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.service.exception.ImageTypeWrongException;
-import com.check.v3.service.tools.FileAlignmentMedia;
-import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
 @Controller
 public class QuickReportsEditController extends QuickReportsController{
@@ -68,7 +65,7 @@ public class QuickReportsEditController extends QuickReportsController{
 						  @ModelAttribute("quick_report") @Valid QuickReport quickReport)
 	{
 		this.quickReportService.deleteById(id);
-		this.checkImageFileService.delete(quickReport.getImages().iterator());
+		this.checkImageFileService.delete(quickReport.getImages());
 		return "redirect:/organizations/"+quickReport.getOrganization().getId()+"/quick_reports";
 	}
 	

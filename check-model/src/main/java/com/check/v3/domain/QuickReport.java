@@ -71,7 +71,7 @@ public class QuickReport extends BaseEntity {
     @NotNull
 	private QuickReportState    state  		= QuickReportState.OPENED;
     
-	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL,orphanRemoval=true)
 	@OrderBy("id asc")
     private List<QuickReportImage> images 	= new ArrayList<QuickReportImage>();
 	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE})

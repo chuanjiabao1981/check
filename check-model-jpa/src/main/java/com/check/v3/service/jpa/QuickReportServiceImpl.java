@@ -2,6 +2,7 @@ package com.check.v3.service.jpa;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,7 +22,6 @@ import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportImage;
 import com.check.v3.repository.QuickReportRepository;
 import com.check.v3.service.CheckImageFileService;
-import com.check.v3.service.QuickReportImageService;
 import com.check.v3.service.QuickReportService;
 import com.check.v3.service.exception.ImageTypeWrongException;
 import com.check.v3.service.tools.FileAlignmentMedia;
@@ -43,9 +43,6 @@ public class QuickReportServiceImpl implements QuickReportService{
 	@Resource
 	CheckImageFileService checkImageFileService;
 	
-	@Resource
-	QuickReportImageService quickReportImageService;
-
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -96,27 +93,58 @@ public class QuickReportServiceImpl implements QuickReportService{
 			Long organizationId, Pageable pageable) {
 		return this.quickReportRepository.getAllByOrganizationIdWithMedia(organizationId, pageable);
 	}
-
+	
+	//* 这个假设imageFiles.size  和 quickReport.checkImages.size是相同的和最大image个数相同，这个只有web的时候使用
 	@Override
 	public QuickReport save(QuickReport quickReport,List<MultipartFile> imageFiles) throws ImageTypeWrongException 
 	{
 		
 		FileAlignmentMediaResult result = null;
 		result = FileAlignmentMedia.getResult(imageFiles, quickReport.getImages());
-		
-		for(CheckImage checkImage : result.getEmptyCheckImages()){
-			quickReport.removeImage((QuickReportImage) checkImage);
-		}
-		for(CheckImage checkImage : result.getNeededDeleteCheckImages()){
-			quickReport.removeImage((QuickReportImage) checkImage);
-		}
-
+		quickReport.getImages().removeAll(result.getEmptyCheckImages());
+		quickReport.getImages().removeAll(result.getNeededDeleteCheckImages());
 		QuickReport q = save(quickReport);
-		for(CheckImage checkImage : result.getNeededDeleteCheckImages()){
-			quickReportImageService.delete((QuickReportImage) checkImage);
-		}
 		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
-		checkImageFileService.delete(result.getNeededDeleteCheckImages().iterator());
+		checkImageFileService.delete(result.getNeededDeleteCheckImages());
+		return q;
+	}
+
+	@Override
+	public QuickReport save(QuickReport quickReport,List<MultipartFile> newImageFiles,List<Long> needDeletedCheckImageIds) {
+		List<CheckImage> 		neededStoreCheckImages 	= new ArrayList<CheckImage>();
+		List<MultipartFile>		emptyFiles			   	= new ArrayList<MultipartFile>();
+		List<CheckImage>		neededDeleteCheckImages = new ArrayList<CheckImage>();
+		
+		//需要被删除的image
+		if (quickReport.getImages() != null && needDeletedCheckImageIds != null){
+			for(Long id : needDeletedCheckImageIds){
+				for(QuickReportImage quickReportImage:quickReport.getImages()){
+					if (quickReportImage.getId().equals(id)){
+						neededDeleteCheckImages.add(quickReportImage);
+					}
+				}
+			}
+			quickReport.getImages().removeAll(neededDeleteCheckImages);
+		}
+		//新增加的image
+		if (newImageFiles != null && newImageFiles.size() !=0){
+			for(MultipartFile f  : newImageFiles){
+				if (!f.isEmpty()){
+					QuickReportImage quickReportImage = new QuickReportImage();
+					quickReportImage.setSubmitter(quickReport.getSubmitter());
+					quickReportImage.setDepartment(quickReport.getDepartment());
+					quickReportImage.setName(FileAlignmentMedia.BuildImageName(quickReportImage));
+					quickReport.addImage(quickReportImage);
+					neededStoreCheckImages.add(quickReportImage);
+				}else{
+					emptyFiles.add(f);
+				}
+			}
+			newImageFiles.removeAll(emptyFiles);
+		}
+		QuickReport q = save(quickReport);
+		checkImageFileService.save(newImageFiles, neededStoreCheckImages);
+		checkImageFileService.delete(neededDeleteCheckImages);
 		return q;
 	}
 

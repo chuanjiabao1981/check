@@ -7,8 +7,6 @@ import java.util.Locale;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.UnauthenticatedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,7 @@ import com.check.v3.dto.ErrorsDTO;
 @ControllerAdvice
 public class RestErrorHandler {
 	
-	private static final Logger logger = LoggerFactory.getLogger(RestErrorHandler.class);
+//	private static final Logger logger = LoggerFactory.getLogger(RestErrorHandler.class);
 	
 	@Autowired
     private MessageSource messageSource;

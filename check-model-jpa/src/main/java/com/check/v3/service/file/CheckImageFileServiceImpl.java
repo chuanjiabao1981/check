@@ -69,9 +69,11 @@ public class CheckImageFileServiceImpl implements CheckImageFileService{
 	}
 
 	@Override
-	public void delete(Iterator checkImages) 
+	public void delete(List<? extends CheckImage> checkImages) 
 	{
-		Iterator i = checkImages;
+		if (checkImages == null)
+			return;
+		Iterator i = checkImages.iterator();
 		while(i.hasNext()){
 			CheckImage checkImage = (CheckImage) i.next();
 			for(CheckImageType type:CheckImageType.values()){

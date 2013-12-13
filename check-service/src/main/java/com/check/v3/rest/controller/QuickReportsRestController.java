@@ -1,7 +1,6 @@
 package com.check.v3.rest.controller;
 
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -29,10 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.ApplicationConstant;
-import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
-import com.check.v3.domain.QuickReportImage;
 import com.check.v3.domain.User;
 import com.check.v3.dto.QuickReportDTO;
 import com.check.v3.dto.QuickReportPageDTO;
@@ -42,8 +39,6 @@ import com.check.v3.service.CheckImageFileService;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.QuickReportService;
 import com.check.v3.service.UserService;
-import com.check.v3.service.tools.FileAlignmentMedia;
-import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
@@ -64,53 +59,31 @@ public class QuickReportsRestController {
 	@ResponseBody
 	public QuickReportDTO create(@Valid @RequestPart("quickReportJson") QuickReportRequestDTO quickReportRequestDTO,
 						HttpServletRequest httpServletRequest,Model model,
-						@RequestPart("quickReportImages") List<MultipartFile> imageFiles)
+						@RequestPart("quickReportImages") List<MultipartFile> newImageFiles)
 	{
-		QuickReport q = new QuickReport();
+		QuickReport quickReport = new QuickReport();
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
-		q.setSubmitter(user);
-		q.setDepartment(user.getDepartment());
-		BeanUtils.copyProperties(quickReportRequestDTO, q);
-		for(MultipartFile s:imageFiles){
-			QuickReportImage quickReportImage = new QuickReportImage();
-			quickReportImage.setSubmitter(user);
-			quickReportImage.setDepartment(user.getDepartment());
-			q.addImage(quickReportImage);
-		}
-		FileAlignmentMediaResult result = FileAlignmentMedia.getResult(imageFiles, q.getImages());
-		for(CheckImage checkImage : result.getEmptyCheckImages()){
-			q.removeImage((QuickReportImage) checkImage);
-		}
-
-		q = quickReportService.save(q);
-		checkImageFileService.save(imageFiles,result.getNeededStoreCheckImages());
-		return new QuickReportDTO(q);
+		quickReport.setSubmitter(user);
+		quickReport.setDepartment(user.getDepartment());
+		BeanUtils.copyProperties(quickReportRequestDTO, quickReport);
+		quickReport = quickReportService.save(quickReport, newImageFiles, null);
+		return new QuickReportDTO(quickReport);
 	}
 	@RequestMapping(value="/api/v1/quick_reports/{id}",method=RequestMethod.POST)
 	@ResponseBody
 	public QuickReportDTO update(@InstanceId @PathVariable("id") Long id,
 								 @Valid @RequestPart("quickReportJson")  QuickReportRequestDTO quickReportRequestDTO,
 								 HttpServletRequest httpServletRequest,
-								 @RequestPart("quickReportImages") List<MultipartFile> imageFiles)
+								 @RequestPart("quickReportImages") List<MultipartFile> newImageFiles)
 	{
-		QuickReport q = quickReportService.findByIdWithMedia(id);
-		System.err.println(quickReportRequestDTO.getNeededdeleteImagesId());
-		quickReportRequestDTO.setId(q.getId());
-		BeanUtils.copyProperties(quickReportRequestDTO, q);
-		if ( quickReportRequestDTO.getNeededdeleteImagesId() != null){
-			for(Long imageId: quickReportRequestDTO.getNeededdeleteImagesId()){
-				Iterator i  =  q.getImages().iterator();
-				while(i.hasNext()){
-					CheckImage ci = (CheckImage) i.next();
-					if (imageId.equals(ci.getId())){
-						ci.setDel(true);
-						System.err.println("Same"+ci.getId());
-					}
-				}
-			}
-		}
-		quickReportService.save(q,imageFiles);
-		return new QuickReportDTO(q);
+		QuickReport quickReport = quickReportService.findByIdWithMedia(id);
+		quickReportRequestDTO.setId(quickReport.getId());
+		BeanUtils.copyProperties(quickReportRequestDTO, quickReport);
+		
+		quickReport = quickReportService.save(quickReport, newImageFiles, quickReportRequestDTO.getNeededdeleteImagesId());
+
+		quickReportService.save(quickReport,newImageFiles);
+		return new QuickReportDTO(quickReport);
 	}
 	@RequestMapping(value="/api/v1/organizations/{organization_id}/quick_reports",method=RequestMethod.GET)
 	@ResponseBody
