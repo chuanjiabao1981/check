@@ -2,6 +2,10 @@ package com.check.v3.service.jpa;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportResolve;
@@ -10,6 +14,9 @@ import com.check.v3.repository.QuickReportRepository;
 import com.check.v3.repository.QuickReportResolveRepository;
 import com.check.v3.service.QuickReportResolveService;
 
+@Service("quickReportResolveServiceImpl")
+@Repository
+@Transactional
 public class QuickReportResolveServiceImpl implements QuickReportResolveService{
 
 	@Resource

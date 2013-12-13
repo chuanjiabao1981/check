@@ -91,4 +91,22 @@ public class TestQuickReportService {
 		assertTrue(quickReports.getContent().get(rows-1).getDescription().equals("0"));
 
 	}
+	@Test
+	public void testQuickReportsWithImages()
+	{
+		int page 	= 2;
+		int rows  	= 10;
+		for(Integer i = 0; i< 20;i++)
+		{
+			quickReportBuilder.create(user, organization, i.toString());
+		}
+		
+		Sort sort = new Sort(Sort.Direction.DESC, "createdAt");
+		PageRequest pageRequest = new PageRequest(page-1,rows,sort);
+		Organization t 			= new Organization();
+		t.setId(organization.getId());
+		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationIdWithMedia(t.getId(), pageRequest);
+		assertEquals(10,quickReports.getSize());
+		assertTrue(quickReports.getContent().get(rows-1).getDescription().equals("0"));
+	}
 }

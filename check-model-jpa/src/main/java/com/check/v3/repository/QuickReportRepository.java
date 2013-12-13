@@ -23,8 +23,12 @@ public interface QuickReportRepository extends CrudRepository<QuickReport,Long>{
 	public final static String FIND_ALL_BY_ORGANIZATION_WITH_MEDIA = "select q from QuickReport q " +
 																	 "left join fetch q.images " +
 																	 "where q.organization.id = :organizationId";
-	@Query(FIND_ALL_BY_ORGANIZATION_WITH_MEDIA)
-	Page<QuickReport> findAllByOrganizationWithMedia(@Param("organizationId") Long organizationId,Pageable pageable);
+	
+	public final static String FIND_ALL_BY_ORGANIZATION_COUNT 	   = "select count(q) from QuickReport q " +
+																	 "where q.organization.id = :organizationId";
+	@Query(value=FIND_ALL_BY_ORGANIZATION_WITH_MEDIA,countQuery=FIND_ALL_BY_ORGANIZATION_COUNT)
+	Page<QuickReport> getAllByOrganizationIdWithMedia(@Param("organizationId") Long organizationId,Pageable pageable);
+	
 	Page<QuickReport> findByOrganization(Organization organization,Pageable pageable);
 	@Query(FIND_WITH_MEDIA)
 	QuickReport findByIdWithMedia(@Param("id")Long id);

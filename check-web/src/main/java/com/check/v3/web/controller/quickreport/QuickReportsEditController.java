@@ -54,20 +54,13 @@ public class QuickReportsEditController extends QuickReportsController{
 			 model.addAttribute("responsiblePersons", getResponsiblePersons(quickReport.getOrganization().getId()));
 			return VIEW_EDIT;
 		}
-		FileAlignmentMediaResult result = null;
-		
-		try {
-			result = FileAlignmentMedia.getResult(imageFiles, quickReport.getImages().iterator());
-		} catch (ImageTypeWrongException e) {
+		try{
+			quickReportService.save(quickReport, imageFiles);
+		}catch( ImageTypeWrongException e){
 			bindingResult.rejectValue("images["+e.getIdx()+"].name", "validation.checkImage.type.message");
 			return VIEW_EDIT;
 		}
-		for(CheckImage checkImage : result.getEmptyCheckImages()){
-			quickReport.removeImage((QuickReportImage) checkImage);
-		}
-		quickReportService.save(quickReport);
-		
-		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
+
 		return "redirect:/quick_reports/"+quickReport.getId();
 	}
 	@RequestMapping(value="/quick_reports/{quick_report_id}",method=RequestMethod.DELETE)
@@ -89,9 +82,6 @@ public class QuickReportsEditController extends QuickReportsController{
 			image.setDepartment(q.getDepartment());
 			image.setSubmitter(q.getSubmitter());
 			q.addImage(image);
-		}
-		for(CheckImage i:q.getImages()){
-			System.err.println(i.getId());
 		}
 		return q;
 	}

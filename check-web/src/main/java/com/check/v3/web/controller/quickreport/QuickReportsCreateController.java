@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.ApplicationConstant;
-import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.Department;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
@@ -26,8 +25,6 @@ import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
 import com.check.v3.service.exception.ImageTypeWrongException;
-import com.check.v3.service.tools.FileAlignmentMedia;
-import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
 @Controller
 public class QuickReportsCreateController extends QuickReportsController{
@@ -50,19 +47,12 @@ public class QuickReportsCreateController extends QuickReportsController{
 		if (bindingResult.hasErrors()){
 			return VIEW_NEW;
 		}
-		FileAlignmentMediaResult result = null;
-		try {
-			result = FileAlignmentMedia.getResult(imageFiles, quickReport.getImages().iterator());
-		} catch (ImageTypeWrongException e) {
+		try{
+			quickReportService.save(quickReport, imageFiles);
+		}catch( ImageTypeWrongException e){
 			bindingResult.rejectValue("images["+e.getIdx()+"].name", "validation.checkImage.type.message");
-			return VIEW_EDIT;
+			return VIEW_NEW;
 		}
-		for(CheckImage checkImage : result.getEmptyCheckImages()){
-			quickReport.removeImage((QuickReportImage) checkImage);
-		}
-
-		quickReportService.save(quickReport);
-		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
 		return "redirect:/quick_reports/"+quickReport.getId();
 
 	}

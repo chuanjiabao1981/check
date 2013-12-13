@@ -58,11 +58,13 @@ public class QuickReportDTO {
 		}
 		this.setOrganizationId(quickReport.getOrganization().getId());
 		this.setOrganizationName(quickReport.getOrganization().getName());
-		for(QuickReportImage image:quickReport.getImages()){
-			CheckImageInfo c = new CheckImageInfo();
-			c.setId(image.getId());
-			c.setPath(image.getName());
-			images.add(c);
+		if (quickReport.getImages() != null){
+			for(QuickReportImage image:quickReport.getImages()){
+				CheckImageInfo c = new CheckImageInfo();
+				c.setId(image.getId());
+				c.setPath(image.getName());
+				images.add(c);
+			}
 		}
 	}
 

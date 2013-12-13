@@ -1,5 +1,7 @@
 package com.check.v3.dto;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -33,6 +35,8 @@ public class QuickReportRequestDTO {
 	private Organization			organization;
     @JsonIgnore
     private User					responsiblePerson;
+    
+    private List<Long>				neededdeleteImagesId;
 	
 	public Long getId() {
 		return id;
@@ -83,5 +87,12 @@ public class QuickReportRequestDTO {
 	public void setDeadline(DateTime deadline) {
 		this.deadline = deadline;
 	}
+	public List<Long> getNeededdeleteImagesId() {
+		return neededdeleteImagesId;
+	}
+	public void setNeededdeleteImagesId(List<Long> neededdeleteImagesId) {
+		this.neededdeleteImagesId = neededdeleteImagesId;
+	}
+	
 	
 }

@@ -2,6 +2,8 @@ package com.check.v3.service.jpa;
 
 
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,12 +13,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
+import com.check.v3.domain.QuickReportImage;
 import com.check.v3.repository.QuickReportRepository;
+import com.check.v3.service.CheckImageFileService;
+import com.check.v3.service.QuickReportImageService;
 import com.check.v3.service.QuickReportService;
 import com.check.v3.service.exception.ImageTypeWrongException;
+import com.check.v3.service.tools.FileAlignmentMedia;
+import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
 @Service("quickReportService")
 @Repository
@@ -29,6 +38,14 @@ public class QuickReportServiceImpl implements QuickReportService{
 
 	@Resource
 	private QuickReportRepository quickReportRepository;
+	
+	
+	@Resource
+	CheckImageFileService checkImageFileService;
+	
+	@Resource
+	QuickReportImageService quickReportImageService;
+
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -75,9 +92,32 @@ public class QuickReportServiceImpl implements QuickReportService{
 	}
 
 	@Override
-	public Page<QuickReport> findAllByOrganizationWithMedia(
+	public Page<QuickReport> findAllByOrganizationIdWithMedia(
 			Long organizationId, Pageable pageable) {
-		return this.quickReportRepository.findAllByOrganizationWithMedia(organizationId, pageable);
+		return this.quickReportRepository.getAllByOrganizationIdWithMedia(organizationId, pageable);
+	}
+
+	@Override
+	public QuickReport save(QuickReport quickReport,List<MultipartFile> imageFiles) throws ImageTypeWrongException 
+	{
+		
+		FileAlignmentMediaResult result = null;
+		result = FileAlignmentMedia.getResult(imageFiles, quickReport.getImages());
+		
+		for(CheckImage checkImage : result.getEmptyCheckImages()){
+			quickReport.removeImage((QuickReportImage) checkImage);
+		}
+		for(CheckImage checkImage : result.getNeededDeleteCheckImages()){
+			quickReport.removeImage((QuickReportImage) checkImage);
+		}
+
+		QuickReport q = save(quickReport);
+		for(CheckImage checkImage : result.getNeededDeleteCheckImages()){
+			quickReportImageService.delete((QuickReportImage) checkImage);
+		}
+		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
+		checkImageFileService.delete(result.getNeededDeleteCheckImages().iterator());
+		return q;
 	}
 
 }

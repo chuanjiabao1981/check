@@ -11,6 +11,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 @Entity
@@ -33,6 +34,9 @@ public class CheckImage extends BaseEntity{
 	@ManyToOne
     @JoinColumn(name="submitter_id")
 	private User submitter;
+	
+	@Transient
+	private boolean del = false;
 	
 	public String getName(CheckImageType type)
 	{
@@ -58,4 +62,11 @@ public class CheckImage extends BaseEntity{
 	public void setSubmitter(User submitter) {
 		this.submitter = submitter;
 	}
+	public boolean isDel() {
+		return del;
+	}
+	public void setDel(boolean del) {
+		this.del = del;
+	}
+	
 }

@@ -1,8 +1,11 @@
 package com.check.v3.service;
 
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
@@ -14,8 +17,9 @@ public interface QuickReportService {
 	public QuickReport			findByIdWithMedia(Long id);
 	public QuickReport			findByIdWithMediaAndResolve(Long id);
 	public QuickReport 			save(QuickReport quickReport) throws ImageTypeWrongException;
+	public QuickReport			save(QuickReport quickReport,List<MultipartFile> imageFiles) throws ImageTypeWrongException;
 	public Page<QuickReport>	findByOrganization(Organization organization,Pageable pageable);
-	public Page<QuickReport>	findAllByOrganizationWithMedia(Long organizationId,Pageable pageable);
+	public Page<QuickReport>	findAllByOrganizationIdWithMedia(Long organizationId,Pageable pageable);
 	public void 	   			deleteById(Long id);
 	public void 	   			delete(QuickReport quickReport);	
 }

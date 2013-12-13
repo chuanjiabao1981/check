@@ -22,6 +22,7 @@ public class FileAlignmentMedia {
 		List<MultipartFile> 		emptyFiles;
 		List<CheckImage>			emptyCheckImages;
 		List<CheckImage>			neededStoreCheckImages;
+		List<CheckImage>			neededDeleteCheckImages;
 		
 		
 		public List<MultipartFile> getEmptyFiles() {
@@ -42,13 +43,21 @@ public class FileAlignmentMedia {
 		public void setNeededStoreCheckImages(List<CheckImage> neededStoreCheckImages) {
 			this.neededStoreCheckImages = neededStoreCheckImages;
 		}
+		public List<CheckImage> getNeededDeleteCheckImages() {
+			return neededDeleteCheckImages;
+		}
+		public void setNeededDeleteCheckImages(List<CheckImage> neededDeleteCheckImages) {
+			this.neededDeleteCheckImages = neededDeleteCheckImages;
+		}
+		
+		
 		
 	}
 	/*
 	 * 1. imageFiles 全部的上传文件（有的可能为空）
 	 * 2. iterator 	 全部的多媒体对象
 	 */
-	public  static FileAlignmentMediaResult getResult(List<MultipartFile> imageFiles,Iterator iterator)
+	public  static FileAlignmentMediaResult getResult(List<MultipartFile> imageFiles, List<? extends CheckImage> checkImages)
 	{
 		int idx = 0;
 		for(MultipartFile f:imageFiles){
@@ -66,10 +75,14 @@ public class FileAlignmentMedia {
 		List<MultipartFile> 		emptyFiles 						= new ArrayList<MultipartFile>();
 		//无上传文件的CheckImage对象
 		List<CheckImage>			emptyCheckImages				= new ArrayList<CheckImage>();
+		//用户指定删除的CheckImage对象
+		List<CheckImage>			neededDeleteCheckImages 		= new ArrayList<CheckImage>();
 		//有上传文件的CheckImage（可能是更新或者是新创建）
 		List<CheckImage>			neededStoreCheckImages			= new ArrayList<CheckImage>();
+		
+		Iterator iterator = checkImages.iterator();
 		for(MultipartFile  f : imageFiles){
-			CheckImage q = (CheckImage) iterator.next();
+			CheckImage q =  (CheckImage) iterator.next();
 			if (!f.isEmpty()){//上传了一个图片文件
 				if (q.getName() == null || q.getName().isEmpty()){//以前没有图片
 					q.setName(BuildImageName(q));
@@ -86,6 +99,16 @@ public class FileAlignmentMedia {
 		//删除不必要保存的文件
 		imageFiles.removeAll(emptyFiles);
 		
+		iterator = checkImages.iterator();
+		while(iterator.hasNext()){
+			CheckImage q = (CheckImage) iterator.next();
+			//被用户删除
+			if (q.isDel()){
+				neededDeleteCheckImages.add(q);
+				System.err.println("delete ..........."+q.getId() );
+			}
+		}
+		
 		if (imageFiles.size() != neededStoreCheckImages.size()){
 			throw new RuntimeException("上传文件和需要存储的checkImage个数不匹配"+imageFiles.size() + "|"+neededStoreCheckImages.size()+"|"+emptyCheckImages.size());
 		}
@@ -93,6 +116,7 @@ public class FileAlignmentMedia {
 		r.setEmptyFiles(emptyFiles);
 		r.setEmptyCheckImages(emptyCheckImages);
 		r.setNeededStoreCheckImages(neededStoreCheckImages);
+		r.setNeededDeleteCheckImages(neededDeleteCheckImages);
 		return r;
 	}
 	protected static String BuildImageName(CheckImage i)

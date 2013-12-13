@@ -40,12 +40,14 @@ public class QuickReportResolvesController {
 	@Resource
 	QuickReportService quickReportService;
 	@Resource
-	CheckImageFileService checkImageFileService;
-	@Resource
 	QuickReportResolveService quickReportResolveService;
 
+	
+	@Resource
+	CheckImageFileService checkImageFileService;
+
 	private static final String VIEW_NEW = "quick_report_resolves/new";
-	@RequestMapping(value="/quick_report/{quick_report_id}/quick_report_resolves/new",method=RequestMethod.GET)
+	@RequestMapping(value="/quick_reports/{quick_report_id}/quick_report_resolves/new",method=RequestMethod.GET)
 	public String newForm()
 	{
 		return VIEW_NEW;
@@ -66,7 +68,7 @@ public class QuickReportResolvesController {
 		}
 		FileAlignmentMediaResult result = null;
 		try {
-			result = FileAlignmentMedia.getResult(imageFiles, quickReportResolve.getImages().iterator());
+			result = FileAlignmentMedia.getResult(imageFiles, quickReportResolve.getImages());
 		} catch (ImageTypeWrongException e) {
 			bindingResult.rejectValue("images["+e.getIdx()+"].name", "validation.checkImage.type.message");
 			return VIEW_NEW;

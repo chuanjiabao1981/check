@@ -1,6 +1,7 @@
 package com.check.v3.rest.controller;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -20,7 +21,6 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,7 +77,7 @@ public class QuickReportsRestController {
 			quickReportImage.setDepartment(user.getDepartment());
 			q.addImage(quickReportImage);
 		}
-		FileAlignmentMediaResult result = FileAlignmentMedia.getResult(imageFiles, q.getImages().iterator());
+		FileAlignmentMediaResult result = FileAlignmentMedia.getResult(imageFiles, q.getImages());
 		for(CheckImage checkImage : result.getEmptyCheckImages()){
 			q.removeImage((QuickReportImage) checkImage);
 		}
@@ -89,12 +89,27 @@ public class QuickReportsRestController {
 	@RequestMapping(value="/api/v1/quick_reports/{id}",method=RequestMethod.POST)
 	@ResponseBody
 	public QuickReportDTO update(@InstanceId @PathVariable("id") Long id,
-								 @Valid @RequestBody QuickReportRequestDTO quickReportRequestDTO,
-								 HttpServletRequest httpServletRequest)
+								 @Valid @RequestPart("quickReportJson")  QuickReportRequestDTO quickReportRequestDTO,
+								 HttpServletRequest httpServletRequest,
+								 @RequestPart("quickReportImages") List<MultipartFile> imageFiles)
 	{
-		QuickReport q = quickReportService.findById(id);
+		QuickReport q = quickReportService.findByIdWithMedia(id);
+		System.err.println(quickReportRequestDTO.getNeededdeleteImagesId());
 		quickReportRequestDTO.setId(q.getId());
 		BeanUtils.copyProperties(quickReportRequestDTO, q);
+		if ( quickReportRequestDTO.getNeededdeleteImagesId() != null){
+			for(Long imageId: quickReportRequestDTO.getNeededdeleteImagesId()){
+				Iterator i  =  q.getImages().iterator();
+				while(i.hasNext()){
+					CheckImage ci = (CheckImage) i.next();
+					if (imageId.equals(ci.getId())){
+						ci.setDel(true);
+						System.err.println("Same"+ci.getId());
+					}
+				}
+			}
+		}
+		quickReportService.save(q,imageFiles);
 		return new QuickReportDTO(q);
 	}
 	@RequestMapping(value="/api/v1/organizations/{organization_id}/quick_reports",method=RequestMethod.GET)
@@ -108,7 +123,7 @@ public class QuickReportsRestController {
 		if (page == null)
 			page = 1;
 		PageRequest pageRequest = new PageRequest(page-1,rows,sort);
-		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationWithMedia(organizationId, pageRequest);
+		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationIdWithMedia(organizationId, pageRequest);
 		QuickReportPageDTO	quickReportPageDTO	= new QuickReportPageDTO();
 		quickReportPageDTO.setCurrentPage(quickReports.getNumber());
 		quickReportPageDTO.setTotalPages(quickReports.getTotalPages());

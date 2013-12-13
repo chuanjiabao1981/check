@@ -19,6 +19,7 @@ import com.check.v3.service.CheckImageFileService;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.QuickReportService;
 
+
 public class QuickReportsController {
 	
 	@Resource
