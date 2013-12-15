@@ -63,6 +63,7 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		allow(QuickReportResolvesCreateController.class.getSimpleName(),ControllerActionConstant.CREATE,quickReportResolveNewPermission);
 		allow(QuickReportResolvesEditController.class.getSimpleName(),ControllerActionConstant.EDIT,quickReportResolveEditPermission);
 		allow(QuickReportResolvesEditController.class.getSimpleName(),ControllerActionConstant.UPDATE,quickReportResolveEditPermission);
+		allow(QuickReportResolvesEditController.class.getSimpleName(),ControllerActionConstant.DESTORY,quickReportResolveEditPermission);
 
 	}
 	

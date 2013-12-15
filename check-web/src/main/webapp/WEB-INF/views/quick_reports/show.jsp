@@ -60,12 +60,17 @@
 <table>
 	<c:forEach items="${quick_report.resolves}" var="resolve">
 		<spring:url value="/quick_report_resolves/${resolve.id}/edit" var="urlEditQuickReportResolve"/>
+		<spring:url value="/quick_report_resolves/${resolve.id}"      var="urlDestroyQuickReportResolve"/>
 		<form:form  action="${urlEditQuickReportResolve}" method="GET">
 			<button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
      			<span class="ui-button-text">${buttonEdit}</span>
     		</button> 
 		</form:form>
-	
+		<form:form  action="${urlDestroyQuickReportResolve}" method="DELETE">
+			<button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+     			<span class="ui-button-text">${buttonDestroy}</span>
+    		</button> 
+		</form:form>
 		<tr>
 			<td>${labelQuickReportResolveDescription}</td>
 			<td>${resolve.description}</td>

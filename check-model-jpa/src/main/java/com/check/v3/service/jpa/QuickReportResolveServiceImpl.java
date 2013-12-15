@@ -74,5 +74,12 @@ public class QuickReportResolveServiceImpl implements QuickReportResolveService{
 		return this.quickReportResolveRepository.findByIdWithMedia(id);
 	}
 
+	@Override
+	@Transactional
+	public void delete(QuickReportResolve quickReportResolve) {
+		quickReportResolveRepository.delete(quickReportResolve);
+		checkImageFileService.delete(quickReportResolve.getImages());
+	}
+
 
 }

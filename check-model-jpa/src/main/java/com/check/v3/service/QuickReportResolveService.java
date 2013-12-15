@@ -12,5 +12,6 @@ public interface QuickReportResolveService {
 	public QuickReportResolve findByIdWithMedia(Long id);
 	public QuickReportResolve save(QuickReportResolve quickReportResolve); 
 	public QuickReportResolve save(QuickReportResolve quickReportResolve,List<MultipartFile> imageFiles) throws ImageTypeWrongException;
+	public void delete(QuickReportResolve quickReportResolve);
 
 }

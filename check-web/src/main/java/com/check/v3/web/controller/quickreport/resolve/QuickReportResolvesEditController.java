@@ -52,6 +52,15 @@ public class QuickReportResolvesEditController extends QuickReportResolvesContro
 		 return "redirect:/quick_reports/"+quickReportResolve.getQuickReport().getId();
 
 	}
+	@RequestMapping(value="/quick_report_resolves/{quick_report_resolve_id}",method=RequestMethod.DELETE)
+	public String destroy(@InstanceId @PathVariable("quick_report_resolve_id") Long quickReportResolveId,
+						  @ModelAttribute("quick_report_resolve") @Valid QuickReportResolve quickReportResolve,
+						  HttpServletRequest httpServletRequest
+			 			 )
+	{
+		quickReportResolveService.delete(quickReportResolve);
+		return "redirect:/quick_reports/"+quickReportResolve.getQuickReport().getId();
+	}
 	
 	@ModelAttribute("quick_report_resolve")
 	public QuickReportResolve populateResolve(@PathVariable("quick_report_resolve_id") Long quickReportResolveId)
