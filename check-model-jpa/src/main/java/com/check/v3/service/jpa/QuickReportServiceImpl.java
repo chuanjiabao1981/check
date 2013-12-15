@@ -20,6 +20,7 @@ import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportImage;
+import com.check.v3.domain.QuickReportResolve;
 import com.check.v3.repository.QuickReportRepository;
 import com.check.v3.service.CheckImageFileService;
 import com.check.v3.service.QuickReportService;
@@ -58,14 +59,16 @@ public class QuickReportServiceImpl implements QuickReportService{
 
 	@Override
 	@Transactional
-	public void deleteById(Long id) {
-		quickReportRepository.delete(id);
-	}
-
-	@Override
-	@Transactional
 	public void delete(QuickReport quickReport) {
 		quickReportRepository.delete(quickReport);
+		checkImageFileService.delete(quickReport.getImages());
+		if (quickReport.getResolves()!=null){
+			for(QuickReportResolve r : quickReport.getResolves()){
+				if (r.getImages()!=null){
+					checkImageFileService.delete(r.getImages());
+				}
+			}
+		}
 	}
 
 	@Override
@@ -109,6 +112,7 @@ public class QuickReportServiceImpl implements QuickReportService{
 		return q;
 	}
 
+	//这个是用于api服务
 	@Override
 	public QuickReport save(QuickReport quickReport,List<MultipartFile> newImageFiles,List<Long> needDeletedCheckImageIds) {
 		List<CheckImage> 		neededStoreCheckImages 	= new ArrayList<CheckImage>();

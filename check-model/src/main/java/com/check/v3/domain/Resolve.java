@@ -1,5 +1,6 @@
 package com.check.v3.domain;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,6 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name = "resolves")
@@ -29,50 +28,34 @@ import org.slf4j.LoggerFactory;
 @DiscriminatorValue(value="resolve")
 public class Resolve extends BaseEntity{
 	
-	private static final Logger logger = LoggerFactory.getLogger(Resolve.class);
-
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7264315979569436753L;
 	
-	
-	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL)
-	@OrderBy("id asc")
-	@OrderColumn(name="id")
-    private List<ResolveImage> images 	= new ArrayList<ResolveImage>();
-
-	
 	@ManyToOne
     @JoinColumn(name="submitter_id")
 	private User 				submitter;
 	
+	@Column(name="description")
+	@NotEmpty
 	private String				description;
-
-
-	public List<ResolveImage> getImages() {
-		return images;
-	}
-
-
-	public void setImages(List<ResolveImage> images) {
-		this.images = images;
-	}
 	
 	
+	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL)
+	@OrderBy("id asc")
+	@OrderColumn(name="image_order")
+    private List<ResolveImage> images 	= new ArrayList<ResolveImage>();
 	
 	public User getSubmitter() {
 		return submitter;
 	}
 
-
 	public void setSubmitter(User submitter) {
 		this.submitter = submitter;
 	}
 
-	@Column(name="description")
-	@NotEmpty
 	public String getDescription() {
 		return description;
 	}
@@ -82,7 +65,14 @@ public class Resolve extends BaseEntity{
 		this.description = description;
 	}
 
+	public List<ResolveImage> getImages() {
+		return images;
+	}
 
+
+	public void setImages(List<ResolveImage> images) {
+		this.images = images;
+	}
 	public ResolveImage addImage(ResolveImage image)
 	{
 		return addImage(image,true);
@@ -90,7 +80,6 @@ public class Resolve extends BaseEntity{
 	public ResolveImage addImage(ResolveImage image,boolean set)
 	{
 		if (image == null){
-			logger.trace("add null image to quick report");
 			return image;
 		}
 		image.setSubmitter(this.getSubmitter());
@@ -110,8 +99,6 @@ public class Resolve extends BaseEntity{
 		this.getImages().remove(image);
 		image.setResolve(null);
 	}
-
-	
 	public boolean equals(Object object)
 	{
 		if (object == this){

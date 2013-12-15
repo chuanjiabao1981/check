@@ -1,8 +1,7 @@
-package com.check.v3.web.controller.quickreport;
+package com.check.v3.web.controller.quickreport.resolve;
 
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.ApplicationConstant;
-import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.Department;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportResolve;
@@ -26,29 +24,15 @@ import com.check.v3.domain.ResolveImage;
 import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
-import com.check.v3.service.CheckImageFileService;
-import com.check.v3.service.QuickReportResolveService;
-import com.check.v3.service.QuickReportService;
 import com.check.v3.service.exception.ImageTypeWrongException;
-import com.check.v3.service.tools.FileAlignmentMedia;
-import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
 @Controller
-public class QuickReportResolvesController {
+public class QuickReportResolvesCreateController  extends QuickReportResolvesController{
 	
 	
-	@Resource
-	QuickReportService quickReportService;
-	@Resource
-	QuickReportResolveService quickReportResolveService;
-
-	
-	@Resource
-	CheckImageFileService checkImageFileService;
-
-	private static final String VIEW_NEW = "quick_report_resolves/new";
+		
 	@RequestMapping(value="/quick_reports/{quick_report_id}/quick_report_resolves/new",method=RequestMethod.GET)
-	public String newForm()
+	public String newForm(@InstanceId @PathVariable("quick_report_id") Long quickReportId,HttpServletRequest httpServletRequest)
 	{
 		return VIEW_NEW;
 	}
@@ -66,22 +50,16 @@ public class QuickReportResolvesController {
 		if (bindingResult.hasErrors()){
 			return VIEW_NEW;
 		}
-		FileAlignmentMediaResult result = null;
-		try {
-			result = FileAlignmentMedia.getResult(imageFiles, quickReportResolve.getImages());
-		} catch (ImageTypeWrongException e) {
+		try{
+			quickReportResolveService.save(quickReportResolve,imageFiles);
+		}catch( ImageTypeWrongException e){
 			bindingResult.rejectValue("images["+e.getIdx()+"].name", "validation.checkImage.type.message");
 			return VIEW_NEW;
 		}
-		for(CheckImage checkImage : result.getEmptyCheckImages()){
-			quickReportResolve.removeImage((ResolveImage) checkImage);
-		}
-		quickReportResolveService.save(quickReportResolve);
-		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
 		return "redirect:/quick_reports/"+quickReportResolve.getQuickReport().getId();
 
 	}
-	@ModelAttribute("quick_report")
+	@ModelAttribute("quick_report_resolve")
 	public QuickReportResolve populateResolve(@PathVariable("quick_report_id") Long quickReportId)
 	{
 		QuickReportResolve r 				= new QuickReportResolve();
@@ -97,7 +75,7 @@ public class QuickReportResolvesController {
 			r.addImage(image);
 		}
 		QuickReport q = quickReportService.findById(quickReportId);
-		q.addResolve(r);
+		r.setQuickReport(q);
 		return r;
 	}
 }

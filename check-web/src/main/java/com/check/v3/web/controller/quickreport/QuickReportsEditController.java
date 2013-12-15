@@ -64,8 +64,8 @@ public class QuickReportsEditController extends QuickReportsController{
 	public String destroy(@InstanceId @PathVariable("quick_report_id") Long id,
 						  @ModelAttribute("quick_report") @Valid QuickReport quickReport)
 	{
-		this.quickReportService.deleteById(id);
-		this.checkImageFileService.delete(quickReport.getImages());
+		QuickReport q =  this.quickReportService.findByIdWithMediaAndResolve(id);
+		quickReportService.delete(q);
 		return "redirect:/organizations/"+quickReport.getOrganization().getId()+"/quick_reports";
 	}
 	

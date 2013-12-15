@@ -15,3 +15,7 @@
 <spring:message code="label_quick_report_submitter"			 var="labelQuickReportSubmiiter"/>
 <spring:message code="label_quick_report_created_at"		 var="labelQuickReportCreatedAt"/>
 <spring:message code="label_quick_report_image"				 var="labelQuickReportImage"/>
+
+<spring:message code="label_quick_report_resolve_description"		var="labelQuickReportResolveDescription"/>
+<spring:message code="label_quick_report_resolve_image"		var="labelQuickReportResolveImage"/>
+

@@ -73,10 +73,11 @@ public class QuickReport extends BaseEntity {
     
 	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL,orphanRemoval=true)
 	@OrderBy("id asc")
+	@OrderColumn(name="image_order")
     private List<QuickReportImage> images 	= new ArrayList<QuickReportImage>();
 	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE})
 	@OrderBy("id asc")
-	@OrderColumn(name="id")
+	@OrderColumn(name="resolve_order")
 	private List<QuickReportResolve> resolves = new ArrayList<QuickReportResolve>();
 
 	public User getSubmitter() {

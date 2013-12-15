@@ -21,6 +21,5 @@ public interface QuickReportService {
 	public QuickReport			save(QuickReport quickReport,List<MultipartFile> newImageFiles,List<Long> needDeletedCheckImageIds);
 	public Page<QuickReport>	findByOrganization(Organization organization,Pageable pageable);
 	public Page<QuickReport>	findAllByOrganizationIdWithMedia(Long organizationId,Pageable pageable);
-	public void 	   			deleteById(Long id);
 	public void 	   			delete(QuickReport quickReport);	
 }
