@@ -19,6 +19,7 @@
     	<property name="filterChainDefinitions">
     	    <!-- authc 是shiro默认支持的filter，其他参见 http://shiro.apache.org/web.html#Web-DefaultFilters -->
         	<value>
+        	    /check-data/** = anon
         	    /api/v1/sessions/** = anon
             	/** = userRest
         	</value>

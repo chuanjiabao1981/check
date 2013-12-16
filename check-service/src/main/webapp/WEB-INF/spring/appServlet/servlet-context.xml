@@ -21,6 +21,11 @@
 	    </message-converters>
 	</annotation-driven>
 	
+	<!-- 这个是为了让 dispatch servlet 处理静态资源-->
+	
+	<default-servlet-handler/>
+	
+	
 	<context:component-scan base-package="com.check.v3.rest.controller" />
 	
 	<beans:bean id="localeResolver" class="org.springframework.web.servlet.i18n.FixedLocaleResolver">
