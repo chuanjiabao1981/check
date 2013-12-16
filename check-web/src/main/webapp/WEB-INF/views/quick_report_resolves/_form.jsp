@@ -21,7 +21,7 @@
 		<c:forEach items="${quick_report_resolve.images}" varStatus="i">
             <label for="image_files[]">tupian</label>
             <input name="image_files[]" type="file"/>
-             <c:if test="${not empty quick_report.images[i.index].id}">
+             <c:if test="${not empty quick_report_resolve.images[i.index].id}">
             	delete<form:checkbox path="images[${i.index}].del"/>
             </c:if>
             <div>
