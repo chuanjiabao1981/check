@@ -10,28 +10,11 @@ import org.springframework.beans.BeanUtils;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportImage;
 import com.check.v3.domain.QuickReportLevel;
+import com.check.v3.domain.QuickReportResolve;
 import com.check.v3.domain.QuickReportState;
 
 public class QuickReportDTO {
 	
-	public class CheckImageInfo{
-		private Long id;
-		private String path;
-		public Long getId() {
-			return id;
-		}
-		public void setId(Long id) {
-			this.id = id;
-		}
-		public String getPath() {
-			return path;
-		}
-		public void setPath(String path) {
-			this.path = path;
-		}
-		
-		
-	}
 	private Long					id;
 	private Long					submitterId;
 	private String					submitterName;
@@ -42,13 +25,13 @@ public class QuickReportDTO {
 	@JsonSerialize(using = JodaDateTimeSerializer.class)
 	private DateTime				deadline;
 	private QuickReportLevel		level;
-	private QuickReportState		state;
-	private String					description;
-	private List<CheckImageInfo> 	images = new LinkedList<CheckImageInfo>();
-
+	private QuickReportState			state;
+	private String						description;
+	private List<CheckImageInfo> 		images 		= new LinkedList<CheckImageInfo>();
+	private List<QuickReportResolveDTO>	resolves	= new LinkedList<QuickReportResolveDTO>();
 	public QuickReportDTO(QuickReport quickReport)
 	{
-		BeanUtils.copyProperties(quickReport, this,new String[]{"images"});
+		BeanUtils.copyProperties(quickReport, this,new String[]{"images","resolves"});
 
 		this.setSubmitterId(quickReport.getSubmitter().getId());
 		this.setSubmitterName(quickReport.getSubmitter().getName());
@@ -64,6 +47,12 @@ public class QuickReportDTO {
 				c.setId(image.getId());
 				c.setPath(image.getName());
 				images.add(c);
+			}
+		}
+		if (quickReport.getResolves() != null){
+			for(QuickReportResolve quickReportResolve:quickReport.getResolves()){
+				QuickReportResolveDTO r = new QuickReportResolveDTO(quickReportResolve);
+				this.resolves.add(r);
 			}
 		}
 	}
@@ -189,11 +178,13 @@ public class QuickReportDTO {
 	}
 
 
-	
-	
-	
+	public List<QuickReportResolveDTO> getResolves() {
+		return resolves;
+	}
 
 
-	
-	
+	public void setResolves(List<QuickReportResolveDTO> resolves) {
+		this.resolves = resolves;
+	}
+
 }

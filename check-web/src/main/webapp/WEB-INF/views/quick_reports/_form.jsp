@@ -50,13 +50,13 @@
 		<c:forEach items="${quick_report.images}" varStatus="i">
             <label for="image_files[]">tupian</label>
             <input name="image_files[]" type="file"/>
-            <c:if test="${not empty quick_report.images[i.index].id}">
-            	delete<form:checkbox path="images[${i.index}].del"/>
+            <c:if test="${not empty quick_report.listImages[i.index].id}">
+                 delete<form:checkbox path="listImages[${i.index}].del"/>
             </c:if>
             <div>
-            	 <form:errors path="images[${i.index}].name" cssClass="error" />
+            	 <form:errors path="listImages[${i.index}].name" cssClass="error" />
             </div>
-            
+                        
         </c:forEach>
 
 		

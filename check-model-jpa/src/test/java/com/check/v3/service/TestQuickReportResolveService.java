@@ -74,4 +74,11 @@ public class TestQuickReportResolveService {
 		System.err.println(quickReportResolve.getId());
 		assertNotNull(quickReportResolve.getQuickReport().getId());
 	}
+	@Test
+	public void testCompare()
+	{
+		Long a = null;
+		Long b = null;
+//		System.err.println(Long.compare(a, b));
+	}
 }

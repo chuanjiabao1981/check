@@ -96,12 +96,14 @@ public class QuickReportsRestController {
 		if (page == null)
 			page = 1;
 		PageRequest pageRequest = new PageRequest(page-1,rows,sort);
-		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationIdWithMedia(organizationId, pageRequest);
+		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationIdWithMediaAndResolve(organizationId, pageRequest);
+
 		QuickReportPageDTO	quickReportPageDTO	= new QuickReportPageDTO();
 		quickReportPageDTO.setCurrentPage(quickReports.getNumber());
 		quickReportPageDTO.setTotalPages(quickReports.getTotalPages());
 		quickReportPageDTO.setTotalRecords(quickReports.getTotalElements());
-		quickReportPageDTO.setQuickReports(Lists.transform(quickReports.getContent(), 
+		if (quickReports.getContent() != null && quickReports.getContent().size() != 0){
+			quickReportPageDTO.setQuickReports(Lists.transform(quickReports.getContent(), 
 					new Function<QuickReport,QuickReportDTO>(){
 						public QuickReportDTO apply(QuickReport q)
 						{
@@ -109,6 +111,8 @@ public class QuickReportsRestController {
 						}
 					}
 			));
+		}
+
 		return quickReportPageDTO;
 
 	}

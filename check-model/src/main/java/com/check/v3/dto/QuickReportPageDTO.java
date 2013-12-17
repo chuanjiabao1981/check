@@ -3,8 +3,6 @@ package com.check.v3.dto;
 import java.util.List;
 
 
-import com.check.v3.domain.QuickReport;
-
 public class QuickReportPageDTO {
 
 	

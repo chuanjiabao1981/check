@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.imageio.ImageIO;
 
@@ -35,7 +36,7 @@ public class CheckImageFileServiceImpl implements CheckImageFileService{
 	private static final String IMAGE_PATH_PREFIX = "/var/check_v3_data/check_data/";
 	
 	@Override
-	public void save(List<MultipartFile> imageFiles,List<CheckImage> checkImages) 
+	public void save(List<MultipartFile> imageFiles,SortedSet<CheckImage> checkImages) 
 	{
 		Iterator<CheckImage> i = checkImages.iterator();
 		for(MultipartFile file : imageFiles){
@@ -69,7 +70,7 @@ public class CheckImageFileServiceImpl implements CheckImageFileService{
 	}
 
 	@Override
-	public void delete(List<? extends CheckImage> checkImages) 
+	public void delete(SortedSet<? extends CheckImage> checkImages) 
 	{
 		if (checkImages == null)
 			return;

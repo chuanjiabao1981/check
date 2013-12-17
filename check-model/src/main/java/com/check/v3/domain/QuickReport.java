@@ -1,8 +1,9 @@
 package com.check.v3.domain;
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +20,8 @@ import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -26,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.google.common.collect.Lists;
 
 @Entity
 @Table(name="quick_reports")
@@ -74,12 +79,12 @@ public class QuickReport extends BaseEntity {
 	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL,orphanRemoval=true)
 	@OrderBy("id asc")
 	@OrderColumn(name="image_order")
-    private List<QuickReportImage> images 	= new ArrayList<QuickReportImage>();
+	@Sort(type=SortType.NATURAL)
+    private SortedSet<QuickReportImage> images 	= new TreeSet<QuickReportImage>();
 	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE})
 	@OrderBy("id asc")
-	@OrderColumn(name="resolve_order")
-	private List<QuickReportResolve> resolves = new ArrayList<QuickReportResolve>();
-
+	@Sort(type=SortType.NATURAL)
+	private SortedSet<QuickReportResolve> resolves = new TreeSet<QuickReportResolve>();
 	public User getSubmitter() {
 		return submitter;
 	}
@@ -132,17 +137,27 @@ public class QuickReport extends BaseEntity {
 		this.description = d;
 	}
 	
-	public List<QuickReportResolve> getResolves() {
+	public SortedSet<QuickReportResolve> getResolves() {
 		return resolves;
 	}
-	public void setResolves(List<QuickReportResolve> resolves) {
+	public void setResolves(SortedSet<QuickReportResolve> resolves) {
 		this.resolves = resolves;
 	}
-	public List<QuickReportImage> getImages() {
+	public SortedSet<QuickReportImage> getImages() {
 		return images;
 	}
-	public void setImages(List<QuickReportImage> images) {
+	public void setImages(SortedSet<QuickReportImage> images) {
 		this.images = images;
+	}
+	public List<QuickReportImage> getListImages()
+	{
+		return Lists.newArrayList(images.iterator());
+	}
+	public void setListImages(List<QuickReportImage> listimages)
+	{
+//		System.err.println("images size:"+images.size());
+//		System.err.println("listimages size"+listimages.size());
+		this.images.retainAll(listimages);
 	}
 	public QuickReportImage addImage(QuickReportImage image)
 	{
@@ -156,7 +171,7 @@ public class QuickReport extends BaseEntity {
 		}
 		image.setSubmitter(this.getSubmitter());
 		if (this.getImages().contains(image)){
-			this.getImages().set(this.getImages().indexOf(image), image);
+			this.getImages().add(image);
 		}else{
 			this.getImages().add(image);
 		}
@@ -177,6 +192,8 @@ public class QuickReport extends BaseEntity {
 	{
 		return addResolve(resolve,true);
 	}
+	
+	
 	public QuickReportResolve addResolve(QuickReportResolve resolve,boolean set)
 	{
 		if (resolve == null){
@@ -185,7 +202,7 @@ public class QuickReport extends BaseEntity {
 		}
 		resolve.setSubmitter(this.getSubmitter());
 		if (this.getResolves().contains(resolve)){
-			this.getResolves().set(this.getResolves().indexOf(resolve), resolve);
+			this.getResolves().add(resolve);
 		}else{
 			this.getResolves().add(resolve);
 		}

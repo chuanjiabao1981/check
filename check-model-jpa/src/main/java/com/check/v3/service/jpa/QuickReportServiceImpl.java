@@ -4,6 +4,8 @@ package com.check.v3.service.jpa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -104,8 +106,14 @@ public class QuickReportServiceImpl implements QuickReportService{
 		
 		FileAlignmentMediaResult result = null;
 		result = FileAlignmentMedia.getResult(imageFiles, quickReport.getImages());
+//		System.err.println("result.getEmptyCheckImages().size()="+result.getEmptyCheckImages().size());
+//		System.err.println("result.getNeededDeleteCheckImages().size()="+result.getNeededDeleteCheckImages().size());
+//		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
 		quickReport.getImages().removeAll(result.getEmptyCheckImages());
+//		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
 		quickReport.getImages().removeAll(result.getNeededDeleteCheckImages());
+//		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
+
 		QuickReport q = save(quickReport);
 		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
 		checkImageFileService.delete(result.getNeededDeleteCheckImages());
@@ -115,9 +123,9 @@ public class QuickReportServiceImpl implements QuickReportService{
 	//这个是用于api服务
 	@Override
 	public QuickReport save(QuickReport quickReport,List<MultipartFile> newImageFiles,List<Long> needDeletedCheckImageIds) {
-		List<CheckImage> 		neededStoreCheckImages 	= new ArrayList<CheckImage>();
-		List<MultipartFile>		emptyFiles			   	= new ArrayList<MultipartFile>();
-		List<CheckImage>		neededDeleteCheckImages = new ArrayList<CheckImage>();
+		SortedSet<CheckImage> 		neededStoreCheckImages 	= new TreeSet<CheckImage>();
+		List<MultipartFile>			emptyFiles			   	= new ArrayList<MultipartFile>();
+		SortedSet<CheckImage>		neededDeleteCheckImages = new TreeSet<CheckImage>();
 		
 		//需要被删除的image
 		if (quickReport.getImages() != null && needDeletedCheckImageIds != null){
@@ -150,6 +158,12 @@ public class QuickReportServiceImpl implements QuickReportService{
 		checkImageFileService.save(newImageFiles, neededStoreCheckImages);
 		checkImageFileService.delete(neededDeleteCheckImages);
 		return q;
+	}
+
+	@Override
+	public Page<QuickReport> findAllByOrganizationIdWithMediaAndResolve(
+			Long organizationId, Pageable pageable) {
+		return quickReportRepository.getAllByOrganizationIdWithMediaAndResolve(organizationId, pageable);
 	}
 
 }

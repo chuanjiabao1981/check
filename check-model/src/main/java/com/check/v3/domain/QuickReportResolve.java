@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="resolves")
 @DiscriminatorValue("quick_report_resolve")
-public class QuickReportResolve extends Resolve{
+public class QuickReportResolve extends Resolve {
 
 	/**
 	 * 

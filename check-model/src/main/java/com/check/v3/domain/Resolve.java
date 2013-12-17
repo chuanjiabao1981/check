@@ -1,8 +1,8 @@
 package com.check.v3.domain;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,9 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
@@ -26,7 +27,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="discriminator",discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="resolve")
-public class Resolve extends BaseEntity{
+public class Resolve extends BaseEntity {
 	
 
 	/**
@@ -45,8 +46,9 @@ public class Resolve extends BaseEntity{
 	
 	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL)
 	@OrderBy("id asc")
-	@OrderColumn(name="image_order")
-    private List<ResolveImage> images 	= new ArrayList<ResolveImage>();
+	@Sort(type=SortType.NATURAL)
+//	@OrderColumn(name="image_order")
+    private SortedSet<ResolveImage> images 	= new TreeSet<ResolveImage>();
 	
 	public User getSubmitter() {
 		return submitter;
@@ -65,12 +67,12 @@ public class Resolve extends BaseEntity{
 		this.description = description;
 	}
 
-	public List<ResolveImage> getImages() {
+	public SortedSet<ResolveImage> getImages() {
 		return images;
 	}
 
 
-	public void setImages(List<ResolveImage> images) {
+	public void setImages(SortedSet<ResolveImage> images) {
 		this.images = images;
 	}
 	public ResolveImage addImage(ResolveImage image)
@@ -84,7 +86,7 @@ public class Resolve extends BaseEntity{
 		}
 		image.setSubmitter(this.getSubmitter());
 		if (this.getImages().contains(image)){
-			this.getImages().set(this.getImages().indexOf(image), image);
+			this.getImages().add(image);
 		}else{
 			this.getImages().add(image);
 		}
@@ -117,6 +119,5 @@ public class Resolve extends BaseEntity{
 
 	}
 
-	
 
 }
