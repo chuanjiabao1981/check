@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Sort;
@@ -85,6 +86,12 @@ public class QuickReport extends BaseEntity {
 	@OrderBy("id asc")
 	@Sort(type=SortType.NATURAL)
 	private SortedSet<QuickReportResolve> resolves = new TreeSet<QuickReportResolve>();
+	@Version
+	private Integer version;
+	
+	@Column(name="resolve_num")
+	private Integer resolveNum;
+	
 	public User getSubmitter() {
 		return submitter;
 	}
@@ -155,8 +162,6 @@ public class QuickReport extends BaseEntity {
 	}
 	public void setListImages(List<QuickReportImage> listimages)
 	{
-//		System.err.println("images size:"+images.size());
-//		System.err.println("listimages size"+listimages.size());
 		this.images.retainAll(listimages);
 	}
 	public QuickReportImage addImage(QuickReportImage image)
@@ -218,6 +223,15 @@ public class QuickReport extends BaseEntity {
 		this.getResolves().remove(resolve);
 		resolve.setQuickReport(null);
 	}
+	
+	public Integer getVersion() {
+		return version;
+	}
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+	
+	
 	public boolean equals(Object object)
 	{
 		if (object == this){
@@ -235,6 +249,8 @@ public class QuickReport extends BaseEntity {
 		return false;
 
 	}
+	
+	
 	
 
 }
