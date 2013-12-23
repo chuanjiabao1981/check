@@ -60,8 +60,8 @@ public class QuickReportResolveServiceImpl implements QuickReportResolveService{
 		quickReportResolve.getImages().removeAll(result.getEmptyCheckImages());
 		quickReportResolve.getImages().removeAll(result.getNeededDeleteCheckImages());
 		QuickReportResolve q = save(quickReportResolve);
-		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
-		checkImageFileService.delete(result.getNeededDeleteCheckImages());
+//		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
+//		checkImageFileService.delete(result.getNeededDeleteCheckImages());
 		return q;
 
 	}
@@ -102,8 +102,8 @@ public class QuickReportResolveServiceImpl implements QuickReportResolveService{
 			newImageFiles.removeAll(emptyFiles);
 		}
 		QuickReportResolve q = save(quickReportResolve);
-		checkImageFileService.save(newImageFiles, neededStoreCheckImages);
-		checkImageFileService.delete(neededDeleteCheckImages);
+		//checkImageFileService.save(newImageFiles, neededStoreCheckImages);
+		//checkImageFileService.delete(neededDeleteCheckImages);
 		return q;
 	}
 	@Override
@@ -122,7 +122,7 @@ public class QuickReportResolveServiceImpl implements QuickReportResolveService{
 	@Transactional
 	public void delete(QuickReportResolve quickReportResolve) {
 		quickReportResolveRepository.delete(quickReportResolve);
-		checkImageFileService.delete(quickReportResolve.getImages());
+//		checkImageFileService.delete(quickReportResolve.getImages());
 	}
 
 

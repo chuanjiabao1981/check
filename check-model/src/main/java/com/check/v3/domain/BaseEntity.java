@@ -20,7 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable, Comparable{
+public abstract class BaseEntity implements Serializable{
 
 	/**
 	 * 
@@ -98,21 +98,4 @@ public abstract class BaseEntity implements Serializable, Comparable{
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
-	@Override
-	public int compareTo(Object o) {
-		final BaseEntity other = (BaseEntity) o;
-		if (this == o){
-			return 0;
-		}
-		if (o == null || other.getId() == null){
-			return -1;
-		}
-		if (this.getId() == null){
-			return 1;
-		}
-		return Long.compare(this.getId(),other.getId());
-				
-	}
-
-	
 }

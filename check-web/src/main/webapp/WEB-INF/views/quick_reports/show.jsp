@@ -44,7 +44,7 @@
 			${quick_report.createdAt}
 		</td>
 	</tr>
-	<c:forEach items="${quick_report.images}" var="image">
+	<c:forEach items="${quick_report.listImages}" var="image">
 		<spring:url    value="/check-data/${image.getName('normal')}.jpg" var="urlImage"></spring:url>
 	
 		<tr>

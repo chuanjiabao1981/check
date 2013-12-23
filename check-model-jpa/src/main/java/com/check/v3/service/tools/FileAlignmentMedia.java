@@ -1,10 +1,10 @@
 package com.check.v3.service.tools;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.joda.time.DateTime;
@@ -22,33 +22,33 @@ public class FileAlignmentMedia {
 	public static class FileAlignmentMediaResult
 	{
 		List<MultipartFile> 		emptyFiles;
-		SortedSet<CheckImage>			emptyCheckImages;
-		SortedSet<CheckImage>			neededStoreCheckImages;
-		SortedSet<CheckImage>			neededDeleteCheckImages;
+		Set<CheckImage>			emptyCheckImages;
+		Set<CheckImage>			neededStoreCheckImages;
+		Set<CheckImage>			neededDeleteCheckImages;
 		
 		
 		public List<MultipartFile> getEmptyFiles() {
 			return emptyFiles;
 		}
-		public SortedSet<CheckImage> getEmptyCheckImages() {
+		public Set<CheckImage> getEmptyCheckImages() {
 			return emptyCheckImages;
 		}
-		public SortedSet<CheckImage> getNeededStoreCheckImages() {
+		public Set<CheckImage> getNeededStoreCheckImages() {
 			return neededStoreCheckImages;
 		}
 		public void setEmptyFiles(List<MultipartFile> emptyFiles) {
 			this.emptyFiles = emptyFiles;
 		}
-		public void setEmptyCheckImages(SortedSet<CheckImage> emptyCheckImages) {
+		public void setEmptyCheckImages(Set<CheckImage> emptyCheckImages) {
 			this.emptyCheckImages = emptyCheckImages;
 		}
-		public void setNeededStoreCheckImages(SortedSet<CheckImage> neededStoreCheckImages) {
+		public void setNeededStoreCheckImages(Set<CheckImage> neededStoreCheckImages) {
 			this.neededStoreCheckImages = neededStoreCheckImages;
 		}
-		public SortedSet<CheckImage> getNeededDeleteCheckImages() {
+		public Set<CheckImage> getNeededDeleteCheckImages() {
 			return neededDeleteCheckImages;
 		}
-		public void setNeededDeleteCheckImages(SortedSet<CheckImage> neededDeleteCheckImages) {
+		public void setNeededDeleteCheckImages(Set<CheckImage> neededDeleteCheckImages) {
 			this.neededDeleteCheckImages = neededDeleteCheckImages;
 		}
 		
@@ -60,7 +60,7 @@ public class FileAlignmentMedia {
 	 * 1. imageFiles 全部的N个上传文件（有的可能为空）
 	 * 2. iterator 	 全部的N个多媒体对象
 	 */
-	public  static FileAlignmentMediaResult getResult(List<MultipartFile> imageFiles, SortedSet<? extends CheckImage> checkImages)
+	public  static FileAlignmentMediaResult getResult(List<MultipartFile> imageFiles, Set<? extends CheckImage> checkImages)
 	{
 		int idx = 0;
 		for(MultipartFile f:imageFiles){
@@ -77,11 +77,11 @@ public class FileAlignmentMedia {
 		//记录上传文件为空的多媒体文件
 		List<MultipartFile> 		emptyFiles 						= new ArrayList<MultipartFile>();
 		//无上传文件的CheckImage对象
-		TreeSet<CheckImage>			emptyCheckImages				= new TreeSet<CheckImage>();
+		Set<CheckImage>			emptyCheckImages				= new HashSet<CheckImage>();
 		//用户指定删除的CheckImage对象
-		TreeSet<CheckImage>			neededDeleteCheckImages 		= new TreeSet<CheckImage>();
+		Set<CheckImage>			neededDeleteCheckImages 		= new HashSet<CheckImage>();
 		//有上传文件的CheckImage（可能是更新或者是新创建）
-		TreeSet<CheckImage>			neededStoreCheckImages			= new TreeSet<CheckImage>();
+		Set<CheckImage>			neededStoreCheckImages			= new HashSet<CheckImage>();
 		
 		Iterator iterator = checkImages.iterator();
 		for(MultipartFile  f : imageFiles){

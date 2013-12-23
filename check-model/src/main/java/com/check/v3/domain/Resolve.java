@@ -1,6 +1,9 @@
 package com.check.v3.domain;
 
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -21,6 +24,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.google.common.collect.Lists;
 
 @Entity
 @Table(name = "resolves")
@@ -45,10 +50,7 @@ public class Resolve extends BaseEntity {
 	
 	
 	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL)
-	@OrderBy("id asc")
-	@Sort(type=SortType.NATURAL)
-//	@OrderColumn(name="image_order")
-    private SortedSet<ResolveImage> images 	= new TreeSet<ResolveImage>();
+    private Set<ResolveImage> images 	= new HashSet<ResolveImage>();
 	
 	public User getSubmitter() {
 		return submitter;
@@ -67,12 +69,12 @@ public class Resolve extends BaseEntity {
 		this.description = description;
 	}
 
-	public SortedSet<ResolveImage> getImages() {
+	public Set<ResolveImage> getImages() {
 		return images;
 	}
 
 
-	public void setImages(SortedSet<ResolveImage> images) {
+	public void setImages(Set<ResolveImage> images) {
 		this.images = images;
 	}
 	public ResolveImage addImage(ResolveImage image)
@@ -101,6 +103,15 @@ public class Resolve extends BaseEntity {
 		this.getImages().remove(image);
 		image.setResolve(null);
 	}
+	public List<ResolveImage> getListImages()
+	{
+		return Lists.newArrayList(images.iterator());
+	}
+	public void setListImages(List<ResolveImage> listimages)
+	{
+		this.images.retainAll(listimages);
+	}
+
 	public boolean equals(Object object)
 	{
 		if (object == this){

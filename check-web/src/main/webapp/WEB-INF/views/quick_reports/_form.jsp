@@ -47,16 +47,15 @@
 			<form:hidden path="organization" value="${organization_id}" />
 		</c:if>
 		
-		<c:forEach items="${quick_report.images}" varStatus="i">
+		<c:forEach items="${quick_report.listImages}" varStatus="i">
             <label for="image_files[]">tupian</label>
-            <input name="image_files[]" type="file"/>
+            <form:input path="listImages[${i.index}].file" type="file"/>
             <c:if test="${not empty quick_report.listImages[i.index].id}">
                  delete<form:checkbox path="listImages[${i.index}].del"/>
             </c:if>
             <div>
-            	 <form:errors path="listImages[${i.index}].name" cssClass="error" />
+            	 <form:errors path="listImages[${i.index}].file" cssClass="error" />
             </div>
-                        
         </c:forEach>
 
 		

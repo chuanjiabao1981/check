@@ -22,4 +22,9 @@ public class QuickReportImageServiceImpl implements QuickReportImageService {
 	public void delete(QuickReportImage quickReportImage) {
 		this.quickReportImageRepository.delete(quickReportImage);
 	}
+
+	@Override
+	public void save(QuickReportImage quickReportImage) {
+		quickReportImageRepository.save(quickReportImage);
+	}
 }

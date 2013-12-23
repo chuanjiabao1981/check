@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
+import com.check.v3.domain.QuickReportImage;
 import com.check.v3.domain.User;
 import com.check.v3.dto.QuickReportDTO;
 import com.check.v3.dto.QuickReportPageDTO;
@@ -66,8 +67,9 @@ public class QuickReportsRestController {
 		quickReport.setSubmitter(user);
 		quickReport.setDepartment(user.getDepartment());
 		BeanUtils.copyProperties(quickReportRequestDTO, quickReport);
+		initCheckImage(quickReport,newImageFiles);
 		quickReport = quickReportService.save(quickReport, newImageFiles, null);
-		return new QuickReportDTO(quickReport);
+		return new QuickReportDTO(quickReport,false);
 	}
 	@RequestMapping(value="/api/v1/quick_reports/{id}",method=RequestMethod.POST)
 	@ResponseBody
@@ -76,14 +78,13 @@ public class QuickReportsRestController {
 								 HttpServletRequest httpServletRequest,
 								 @RequestPart("quickReportImages") List<MultipartFile> newImageFiles)
 	{
-		QuickReport quickReport = quickReportService.findByIdWithMedia(id);
+		QuickReport quickReport = quickReportService.findByIdWithMediaAndResolve(id);
 		quickReportRequestDTO.setId(quickReport.getId());
 		BeanUtils.copyProperties(quickReportRequestDTO, quickReport);
-		
+		initCheckImage(quickReport,newImageFiles);
 		quickReport = quickReportService.save(quickReport, newImageFiles, quickReportRequestDTO.getNeededdeleteImagesId());
-
-		quickReportService.save(quickReport,newImageFiles);
-		return new QuickReportDTO(quickReport);
+//		quickReport = quickReportService.findByIdWithMediaAndResolve(id);
+		return new QuickReportDTO(quickReport,false);
 	}
 	@RequestMapping(value="/api/v1/organizations/{organization_id}/quick_reports",method=RequestMethod.GET)
 	@ResponseBody
@@ -107,7 +108,7 @@ public class QuickReportsRestController {
 					new Function<QuickReport,QuickReportDTO>(){
 						public QuickReportDTO apply(QuickReport q)
 						{
-							return new QuickReportDTO(q);
+							return new QuickReportDTO(q,true);
 						}
 					}
 			));
@@ -116,12 +117,18 @@ public class QuickReportsRestController {
 		return quickReportPageDTO;
 
 	}
+	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, WebDataBinder binder) 
 	{
 		binder.addValidators(new ReportRequestDTOValidator());
 	}
-
+	private void initCheckImage(QuickReport quickReport,List<MultipartFile> newImageFiles)
+	{
+		for(int i =0 ;i < newImageFiles.size();i++){
+			quickReport.buildCheckImage();
+		}
+	}
 	public class ReportRequestDTOValidator implements Validator {
 
 		@Override

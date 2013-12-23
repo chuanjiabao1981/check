@@ -3,7 +3,12 @@ package com.check.v3.service.jpa;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -11,6 +16,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -25,8 +31,10 @@ import com.check.v3.domain.QuickReportImage;
 import com.check.v3.domain.QuickReportResolve;
 import com.check.v3.repository.QuickReportRepository;
 import com.check.v3.service.CheckImageFileService;
+import com.check.v3.service.QuickReportImageService;
 import com.check.v3.service.QuickReportService;
 import com.check.v3.service.exception.ImageTypeWrongException;
+import com.check.v3.service.tools.CheckImageFileUploadUtil;
 import com.check.v3.service.tools.FileAlignmentMedia;
 import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
@@ -46,6 +54,9 @@ public class QuickReportServiceImpl implements QuickReportService{
 	@Resource
 	CheckImageFileService checkImageFileService;
 	
+	@Resource
+	QuickReportImageService quickReportImageService;
+	
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -62,15 +73,15 @@ public class QuickReportServiceImpl implements QuickReportService{
 	@Override
 	@Transactional
 	public void delete(QuickReport quickReport) {
-		quickReportRepository.delete(quickReport);
-		checkImageFileService.delete(quickReport.getImages());
 		if (quickReport.getResolves()!=null){
 			for(QuickReportResolve r : quickReport.getResolves()){
 				if (r.getImages()!=null){
-					checkImageFileService.delete(r.getImages());
+					checkImageFileService.delete(r.getListImages());
 				}
 			}
 		}
+		checkImageFileService.delete(quickReport.getListImages());
+		quickReportRepository.delete(quickReport);
 	}
 
 	@Override
@@ -106,24 +117,54 @@ public class QuickReportServiceImpl implements QuickReportService{
 		
 		FileAlignmentMediaResult result = null;
 		result = FileAlignmentMedia.getResult(imageFiles, quickReport.getImages());
-//		System.err.println("result.getEmptyCheckImages().size()="+result.getEmptyCheckImages().size());
-//		System.err.println("result.getNeededDeleteCheckImages().size()="+result.getNeededDeleteCheckImages().size());
-//		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
+		for(CheckImage checkImage:quickReport.getImages()){
+			System.err.println(checkImage+"|"+ String.valueOf(checkImage.getId()));
+		}
+		System.err.println("result.getEmptyCheckImages().size()="+result.getEmptyCheckImages().size());
+		System.err.println("result.getNeededDeleteCheckImages().size()="+result.getNeededDeleteCheckImages().size());
+		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
+		System.err.println(quickReport.getImages().containsAll(result.getEmptyCheckImages()));
+		for(CheckImage checkImage1:quickReport.getImages()){
+			for(CheckImage checkImage2:result.getEmptyCheckImages()){
+				if (checkImage1 == checkImage2){
+					System.err.println(checkImage1+"=="+checkImage2);
+				}
+			}
+		}
+		for(CheckImage checkImage:result.getEmptyCheckImages()){
+			System.err.println(quickReport.getImages().contains(checkImage));
+			System.err.println(checkImage+"|"+ String.valueOf(checkImage.getId()));
+		}
 		quickReport.getImages().removeAll(result.getEmptyCheckImages());
-//		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
+		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
 		quickReport.getImages().removeAll(result.getNeededDeleteCheckImages());
-//		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
+		System.err.println("quickReport.getImages().size()="+quickReport.getImages().size());
 
 		QuickReport q = save(quickReport);
-		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
-		checkImageFileService.delete(result.getNeededDeleteCheckImages());
+//		checkImageFileService.save(imageFiles, result.getNeededStoreCheckImages());
+//		checkImageFileService.delete(result.getNeededDeleteCheckImages());
 		return q;
 	}
+	//这个是用于api服务
+	@Override
+	public QuickReport save(QuickReport quickReport,
+							List<MultipartFile> newImageFiles,
+						    Map<Long,MultipartFile> editImageFiles,
+							List<Long> needDeletedCheckImageIds) throws ImageTypeWrongException {
 
+		
+		List<CheckImage> checkImages = CheckImageFileUploadUtil.getNeededHandleCheckImage(quickReport.getImages());
+		for(CheckImage checkImage:checkImages){
+			quickReportImageService.save((QuickReportImage) checkImage);
+		}
+		QuickReport 			 q 	= quickReportRepository.save(quickReport);
+
+		return q;
+	}
 	//这个是用于api服务
 	@Override
 	public QuickReport save(QuickReport quickReport,List<MultipartFile> newImageFiles,List<Long> needDeletedCheckImageIds) {
-		SortedSet<CheckImage> 		neededStoreCheckImages 	= new TreeSet<CheckImage>();
+	/*
 		List<MultipartFile>			emptyFiles			   	= new ArrayList<MultipartFile>();
 		SortedSet<CheckImage>		neededDeleteCheckImages = new TreeSet<CheckImage>();
 		
@@ -142,21 +183,24 @@ public class QuickReportServiceImpl implements QuickReportService{
 		if (newImageFiles != null && newImageFiles.size() !=0){
 			for(MultipartFile f  : newImageFiles){
 				if (!f.isEmpty()){
-					QuickReportImage quickReportImage = new QuickReportImage();
-					quickReportImage.setSubmitter(quickReport.getSubmitter());
-					quickReportImage.setDepartment(quickReport.getDepartment());
-					quickReportImage.setName(FileAlignmentMedia.BuildImageName(quickReportImage));
-					quickReport.addImage(quickReportImage);
-					neededStoreCheckImages.add(quickReportImage);
+					QuickReportImage quickReportImage = (QuickReportImage) quickReport.buildCheckImage();
+					if (f.getOriginalFilename() != null && !f.getOriginalFilename().isEmpty()){
+						quickReportImage.setName(f.getOriginalFilename());
+					}
+					quickReportImage.setFile(f);
+//					neededStoreCheckImages.add(quickReportImage);
 				}else{
 					emptyFiles.add(f);
 				}
 			}
 			newImageFiles.removeAll(emptyFiles);
+		}*/
+		List<CheckImage> checkImages = CheckImageFileUploadUtil.getNeededHandleCheckImage(quickReport.getImages(),newImageFiles,needDeletedCheckImageIds);
+		for(CheckImage checkImage:checkImages){
+			quickReportImageService.save((QuickReportImage) checkImage);
 		}
-		QuickReport q = save(quickReport);
-		checkImageFileService.save(newImageFiles, neededStoreCheckImages);
-		checkImageFileService.delete(neededDeleteCheckImages);
+		QuickReport 			 q 	= quickReportRepository.save(quickReport);
+
 		return q;
 	}
 

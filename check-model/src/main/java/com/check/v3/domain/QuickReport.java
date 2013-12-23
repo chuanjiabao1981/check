@@ -1,9 +1,12 @@
 package com.check.v3.domain;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,14 +18,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -31,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.check.v3.domain.util.BaseEntityComparer;
+import com.check.v3.domain.util.CheckImageUtil;
 import com.google.common.collect.Lists;
 
 @Entity
@@ -38,7 +39,7 @@ import com.google.common.collect.Lists;
 @NamedQueries({
 	@NamedQuery(name="QuickReport.findAllByOrganizationId",query="select distinct u from User u where u.department.id = :id and u.role in :roles")
 })
-public class QuickReport extends BaseEntity {
+public class QuickReport extends BaseEntity implements MultiCheckImagesEntity {
 
 	private static final Logger logger = LoggerFactory.getLogger(QuickReport.class);
 
@@ -78,14 +79,9 @@ public class QuickReport extends BaseEntity {
 	private QuickReportState    state  		= QuickReportState.OPENED;
     
 	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL,orphanRemoval=true)
-	@OrderBy("id asc")
-	@OrderColumn(name="image_order")
-	@Sort(type=SortType.NATURAL)
-    private SortedSet<QuickReportImage> images 	= new TreeSet<QuickReportImage>();
+    private Set<QuickReportImage> images 	= new HashSet<QuickReportImage>();
 	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE})
-	@OrderBy("id asc")
-	@Sort(type=SortType.NATURAL)
-	private SortedSet<QuickReportResolve> resolves = new TreeSet<QuickReportResolve>();
+	private Set<QuickReportResolve> resolves = new HashSet<QuickReportResolve>();
 	@Version
 	private Integer version;
 	
@@ -144,25 +140,23 @@ public class QuickReport extends BaseEntity {
 		this.description = d;
 	}
 	
-	public SortedSet<QuickReportResolve> getResolves() {
+	public Set<QuickReportResolve> getResolves() {
 		return resolves;
 	}
-	public void setResolves(SortedSet<QuickReportResolve> resolves) {
+	public void setResolves(Set<QuickReportResolve> resolves) {
 		this.resolves = resolves;
 	}
-	public SortedSet<QuickReportImage> getImages() {
+	public Set<QuickReportImage> getImages() {
 		return images;
 	}
-	public void setImages(SortedSet<QuickReportImage> images) {
+	public void setImages(Set<QuickReportImage> images) {
 		this.images = images;
 	}
 	public List<QuickReportImage> getListImages()
 	{
-		return Lists.newArrayList(images.iterator());
-	}
-	public void setListImages(List<QuickReportImage> listimages)
-	{
-		this.images.retainAll(listimages);
+		 ArrayList<QuickReportImage> l = Lists.newArrayList(images.iterator());
+		 Collections.sort(l,new BaseEntityComparer());
+		 return l;
 	}
 	public QuickReportImage addImage(QuickReportImage image)
 	{
@@ -232,6 +226,12 @@ public class QuickReport extends BaseEntity {
 	}
 	
 	
+	public Integer getResolveNum() {
+		return resolveNum;
+	}
+	public void setResolveNum(Integer resolveNum) {
+		this.resolveNum = resolveNum;
+	}
 	public boolean equals(Object object)
 	{
 		if (object == this){
@@ -249,8 +249,46 @@ public class QuickReport extends BaseEntity {
 		return false;
 
 	}
-	
-	
-	
+	@Override
+	public CheckImage buildCheckImage() {
+		QuickReportImage quickReportImage = new QuickReportImage();
+		quickReportImage.setSubmitter(this.getSubmitter());
+		quickReportImage.setDepartment(this.getDepartment());
+		quickReportImage.setName(CheckImageUtil.BuildImageName(quickReportImage));
+		this.addImage(quickReportImage);
+		return quickReportImage;
+	}
+	@Override
+	public CheckImage removeCheckImage(Long id) {
+		for(QuickReportImage image :this.images){
+			if (id == image.getId()){
+				this.removeImage(image);
+				return image;
+			}
+		}
+		return null;
+	}
+	@Override
+	public QuickReportImage getImage(Long id)
+	{
+		for(QuickReportImage image :this.images){
+			if (id == image.getId()){
+				return image;
+			}
+		}
+		return null;
+	}
+	@Override
+	public void removeAllEmptyCheckImage() {
+		Iterator<QuickReportImage> i = this.images.iterator();
+		while(i.hasNext()){
+			QuickReportImage quickReportImage = i.next();
+			if (quickReportImage.getId() == null){
+				quickReportImage.setQuickReport(null);
+				i.remove();
+			}
+		}
+		
+	}
 
 }

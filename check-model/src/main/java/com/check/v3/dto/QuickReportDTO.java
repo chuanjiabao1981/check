@@ -29,7 +29,7 @@ public class QuickReportDTO {
 	private String						description;
 	private List<CheckImageInfo> 		images 		= new LinkedList<CheckImageInfo>();
 	private List<QuickReportResolveDTO>	resolves	= new LinkedList<QuickReportResolveDTO>();
-	public QuickReportDTO(QuickReport quickReport)
+	public QuickReportDTO(QuickReport quickReport,boolean hasResolves)
 	{
 		BeanUtils.copyProperties(quickReport, this,new String[]{"images","resolves"});
 
@@ -49,10 +49,12 @@ public class QuickReportDTO {
 				images.add(c);
 			}
 		}
-		if (quickReport.getResolves() != null){
-			for(QuickReportResolve quickReportResolve:quickReport.getResolves()){
-				QuickReportResolveDTO r = new QuickReportResolveDTO(quickReportResolve);
-				this.resolves.add(r);
+		if (hasResolves){
+			if (quickReport.getResolves() != null && quickReport.getResolves().size() != 0){
+				for(QuickReportResolve quickReportResolve:quickReport.getResolves()){
+					QuickReportResolveDTO r = new QuickReportResolveDTO(quickReportResolve);
+					this.resolves.add(r);
+				}
 			}
 		}
 	}

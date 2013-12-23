@@ -45,7 +45,7 @@ public class QuickReportResolvesEditController extends QuickReportResolvesContro
 		try{
 			quickReportResolveService.save(quickReportResolve, imageFiles);
 		}catch( ImageTypeWrongException e){
-			bindingResult.rejectValue("images["+e.getIdx()+"].name", "validation.checkImage.type.message");
+			bindingResult.rejectValue("listImages["+e.getIdx()+"].name", "validation.checkImage.type.message");
 			return VIEW_EDIT;
 		}
 

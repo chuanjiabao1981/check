@@ -52,9 +52,9 @@ public class QuickReportsEditController extends QuickReportsController{
 			return VIEW_EDIT;
 		}
 		try{
-			quickReportService.save(quickReport, imageFiles);
+			quickReportService.save(quickReport, null,null,null);
 		}catch( ImageTypeWrongException e){
-			bindingResult.rejectValue("listImages["+e.getIdx()+"].name", "validation.checkImage.type.message");
+			bindingResult.rejectValue("listImages["+e.getIdx()+"].file", "validation.checkImage.type.message");
 			return VIEW_EDIT;
 		}
 
@@ -75,10 +75,7 @@ public class QuickReportsEditController extends QuickReportsController{
 		QuickReport q =  this.quickReportService.findByIdWithMedia(id);
 		int num		  =  ApplicationConstant.CHECK_IMAGES_NUM - q.getImages().size();
 		for(int i =0;i< num;i++){
-			QuickReportImage image = new QuickReportImage();
-			image.setDepartment(q.getDepartment());
-			image.setSubmitter(q.getSubmitter());
-			q.addImage(image);
+			q.buildCheckImage();
 		}
 		return q;
 	}
