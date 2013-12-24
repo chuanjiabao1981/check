@@ -44,7 +44,7 @@
 			${quick_report.createdAt}
 		</td>
 	</tr>
-	<c:forEach items="${quick_report.images}" var="image">
+	<c:forEach items="${quick_report.listImages}" var="image">
 		<spring:url    value="/check-data/${image.getName('normal')}.jpg" var="urlImage"></spring:url>
 	
 		<tr>
@@ -57,5 +57,32 @@
 		</tr>
 	</c:forEach>
 </table>
-
+<table>
+	<c:forEach items="${quick_report.resolves}" var="resolve">
+		<spring:url value="/quick_report_resolves/${resolve.id}/edit" var="urlEditQuickReportResolve"/>
+		<spring:url value="/quick_report_resolves/${resolve.id}"      var="urlDestroyQuickReportResolve"/>
+		<form:form  action="${urlEditQuickReportResolve}" method="GET">
+			<button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+     			<span class="ui-button-text">${buttonEdit}</span>
+    		</button> 
+		</form:form>
+		<form:form  action="${urlDestroyQuickReportResolve}" method="DELETE">
+			<button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
+     			<span class="ui-button-text">${buttonDestroy}</span>
+    		</button> 
+		</form:form>
+		<tr>
+			<td>${labelQuickReportResolveDescription}</td>
+			<td>${resolve.description}</td>
+		</tr>
+		<c:forEach items="${resolve.listImages}" var="image">
+			<spring:url value="/check-data/${image.getName('normal')}.jpg" var="urlImage"></spring:url>
+			<tr>
+				<td>${labelQuickReportResolveImage}</td>
+				<td><img src="${urlImage}"></td>
+			</tr>		
+		</c:forEach>
+	
+	</c:forEach>
+</table>
 ${quick_report.resolves.size() }

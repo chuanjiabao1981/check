@@ -32,6 +32,7 @@ import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.User;
 import com.check.v3.dto.QuickReportDTO;
+import com.check.v3.dto.QuickReportDetailDTO;
 import com.check.v3.dto.QuickReportPageDTO;
 import com.check.v3.dto.QuickReportRequestDTO;
 import com.check.v3.security.annotation.InstanceId;
@@ -66,6 +67,7 @@ public class QuickReportsRestController {
 		quickReport.setSubmitter(user);
 		quickReport.setDepartment(user.getDepartment());
 		BeanUtils.copyProperties(quickReportRequestDTO, quickReport);
+		initCheckImage(quickReport,newImageFiles);
 		quickReport = quickReportService.save(quickReport, newImageFiles, null);
 		return new QuickReportDTO(quickReport);
 	}
@@ -76,13 +78,11 @@ public class QuickReportsRestController {
 								 HttpServletRequest httpServletRequest,
 								 @RequestPart("quickReportImages") List<MultipartFile> newImageFiles)
 	{
-		QuickReport quickReport = quickReportService.findByIdWithMedia(id);
+		QuickReport quickReport = quickReportService.findByIdWithMediaAndResolve(id);
 		quickReportRequestDTO.setId(quickReport.getId());
 		BeanUtils.copyProperties(quickReportRequestDTO, quickReport);
-		
+		initCheckImage(quickReport,newImageFiles);
 		quickReport = quickReportService.save(quickReport, newImageFiles, quickReportRequestDTO.getNeededdeleteImagesId());
-
-		quickReportService.save(quickReport,newImageFiles);
 		return new QuickReportDTO(quickReport);
 	}
 	@RequestMapping(value="/api/v1/organizations/{organization_id}/quick_reports",method=RequestMethod.GET)
@@ -97,11 +97,13 @@ public class QuickReportsRestController {
 			page = 1;
 		PageRequest pageRequest = new PageRequest(page-1,rows,sort);
 		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationIdWithMedia(organizationId, pageRequest);
+
 		QuickReportPageDTO	quickReportPageDTO	= new QuickReportPageDTO();
 		quickReportPageDTO.setCurrentPage(quickReports.getNumber());
 		quickReportPageDTO.setTotalPages(quickReports.getTotalPages());
 		quickReportPageDTO.setTotalRecords(quickReports.getTotalElements());
-		quickReportPageDTO.setQuickReports(Lists.transform(quickReports.getContent(), 
+		if (quickReports.getContent() != null && quickReports.getContent().size() != 0){
+			quickReportPageDTO.setQuickReports(Lists.transform(quickReports.getContent(), 
 					new Function<QuickReport,QuickReportDTO>(){
 						public QuickReportDTO apply(QuickReport q)
 						{
@@ -109,15 +111,31 @@ public class QuickReportsRestController {
 						}
 					}
 			));
+		}
+
 		return quickReportPageDTO;
 
 	}
+	@RequestMapping(value="/api/v1/quick_reports/{quick_report_id}",method=RequestMethod.GET)
+	@ResponseBody
+	public QuickReportDetailDTO show(@InstanceId @PathVariable("quick_report_id") Long quickReportId,HttpServletRequest httpServletRequest)
+	{
+		QuickReport quickReport = quickReportService.findByIdWithMediaAndResolve(quickReportId);
+		QuickReportDetailDTO quickReportDetailDTO = new QuickReportDetailDTO(quickReport);
+		return quickReportDetailDTO;
+	}
+	
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, WebDataBinder binder) 
 	{
 		binder.addValidators(new ReportRequestDTOValidator());
 	}
-
+	private void initCheckImage(QuickReport quickReport,List<MultipartFile> newImageFiles)
+	{
+		for(int i =0 ;i < newImageFiles.size();i++){
+			quickReport.buildCheckImage();
+		}
+	}
 	public class ReportRequestDTOValidator implements Validator {
 
 		@Override

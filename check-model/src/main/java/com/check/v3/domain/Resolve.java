@@ -1,7 +1,11 @@
 package com.check.v3.domain;
 
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,65 +18,46 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.check.v3.domain.util.BaseEntityComparer;
+import com.check.v3.domain.util.CheckImageUtil;
+import com.google.common.collect.Lists;
 
 @Entity
 @Table(name = "resolves")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="discriminator",discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="resolve")
-public class Resolve extends BaseEntity{
-	
-	private static final Logger logger = LoggerFactory.getLogger(Resolve.class);
-
+public class Resolve extends BaseEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7264315979569436753L;
 	
-	
-	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL)
-	@OrderBy("id asc")
-	@OrderColumn(name="id")
-    private List<ResolveImage> images 	= new ArrayList<ResolveImage>();
-
-	
 	@ManyToOne
     @JoinColumn(name="submitter_id")
 	private User 				submitter;
 	
+	@Column(name="description")
+	@NotEmpty
 	private String				description;
-
-
-	public List<ResolveImage> getImages() {
-		return images;
-	}
-
-
-	public void setImages(List<ResolveImage> images) {
-		this.images = images;
-	}
 	
 	
+	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL,orphanRemoval=true)
+    private Set<ResolveImage> images 	= new HashSet<ResolveImage>();
 	
 	public User getSubmitter() {
 		return submitter;
 	}
 
-
 	public void setSubmitter(User submitter) {
 		this.submitter = submitter;
 	}
 
-	@Column(name="description")
-	@NotEmpty
 	public String getDescription() {
 		return description;
 	}
@@ -82,7 +67,14 @@ public class Resolve extends BaseEntity{
 		this.description = description;
 	}
 
+	public Set<ResolveImage> getImages() {
+		return images;
+	}
 
+
+	public void setImages(Set<ResolveImage> images) {
+		this.images = images;
+	}
 	public ResolveImage addImage(ResolveImage image)
 	{
 		return addImage(image,true);
@@ -90,12 +82,11 @@ public class Resolve extends BaseEntity{
 	public ResolveImage addImage(ResolveImage image,boolean set)
 	{
 		if (image == null){
-			logger.trace("add null image to quick report");
 			return image;
 		}
 		image.setSubmitter(this.getSubmitter());
 		if (this.getImages().contains(image)){
-			this.getImages().set(this.getImages().indexOf(image), image);
+			this.getImages().add(image);
 		}else{
 			this.getImages().add(image);
 		}
@@ -110,8 +101,23 @@ public class Resolve extends BaseEntity{
 		this.getImages().remove(image);
 		image.setResolve(null);
 	}
+	public List<ResolveImage> getListImages()
+	{
+		 ArrayList<ResolveImage> l = Lists.newArrayList(images.iterator());
+		 Collections.sort(l,new BaseEntityComparer());
+		 return l;
 
-	
+	}
+	public CheckImage buildCheckImage()
+	{
+		ResolveImage resolveImage = new ResolveImage();
+		resolveImage.setDepartment(this.getDepartment());
+		resolveImage.setSubmitter(this.getSubmitter());
+		resolveImage.setName(CheckImageUtil.BuildImageName(resolveImage));
+		this.addImage(resolveImage);
+		return resolveImage;
+
+	}
 	public boolean equals(Object object)
 	{
 		if (object == this){
@@ -130,6 +136,5 @@ public class Resolve extends BaseEntity{
 
 	}
 
-	
 
 }

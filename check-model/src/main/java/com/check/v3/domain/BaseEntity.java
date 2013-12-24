@@ -98,6 +98,4 @@ public abstract class BaseEntity implements Serializable{
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
-
-	
 }

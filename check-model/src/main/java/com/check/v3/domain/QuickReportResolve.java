@@ -1,5 +1,6 @@
 package com.check.v3.domain;
 
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="resolves")
 @DiscriminatorValue("quick_report_resolve")
-public class QuickReportResolve extends Resolve{
+public class QuickReportResolve extends Resolve {
 
 	/**
 	 * 
@@ -21,8 +22,7 @@ public class QuickReportResolve extends Resolve{
     @JoinColumn(name="quick_report_id")
 	@NotNull
 	private QuickReport quickReport;
-
-
+	
 	public QuickReport getQuickReport() {
 		return quickReport;
 	}
@@ -41,7 +41,6 @@ public class QuickReportResolve extends Resolve{
 		}
 
 	}
-	
 	
 	
 

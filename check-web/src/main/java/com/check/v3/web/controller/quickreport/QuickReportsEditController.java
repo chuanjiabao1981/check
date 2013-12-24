@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.QuickReport;
-import com.check.v3.domain.QuickReportImage;
 import com.check.v3.security.SecurityConstant;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.service.exception.ImageTypeWrongException;
@@ -52,9 +51,9 @@ public class QuickReportsEditController extends QuickReportsController{
 			return VIEW_EDIT;
 		}
 		try{
-			quickReportService.save(quickReport, imageFiles);
+			quickReportService.save(quickReport);
 		}catch( ImageTypeWrongException e){
-			bindingResult.rejectValue("images["+e.getIdx()+"].name", "validation.checkImage.type.message");
+			bindingResult.rejectValue("listImages["+e.getIdx()+"].file", "validation.checkImage.type.message");
 			return VIEW_EDIT;
 		}
 
@@ -64,8 +63,8 @@ public class QuickReportsEditController extends QuickReportsController{
 	public String destroy(@InstanceId @PathVariable("quick_report_id") Long id,
 						  @ModelAttribute("quick_report") @Valid QuickReport quickReport)
 	{
-		this.quickReportService.deleteById(id);
-		this.checkImageFileService.delete(quickReport.getImages());
+		QuickReport q =  this.quickReportService.findByIdWithMediaAndResolve(id);
+		quickReportService.delete(q);
 		return "redirect:/organizations/"+quickReport.getOrganization().getId()+"/quick_reports";
 	}
 	
@@ -75,10 +74,7 @@ public class QuickReportsEditController extends QuickReportsController{
 		QuickReport q =  this.quickReportService.findByIdWithMedia(id);
 		int num		  =  ApplicationConstant.CHECK_IMAGES_NUM - q.getImages().size();
 		for(int i =0;i< num;i++){
-			QuickReportImage image = new QuickReportImage();
-			image.setDepartment(q.getDepartment());
-			image.setSubmitter(q.getSubmitter());
-			q.addImage(image);
+			q.buildCheckImage();
 		}
 		return q;
 	}

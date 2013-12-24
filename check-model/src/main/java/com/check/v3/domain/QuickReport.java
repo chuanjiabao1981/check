@@ -2,7 +2,10 @@ package com.check.v3.domain;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,8 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -27,12 +28,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.check.v3.domain.util.BaseEntityComparer;
+import com.check.v3.domain.util.CheckImageUtil;
+import com.google.common.collect.Lists;
+
 @Entity
 @Table(name="quick_reports")
 @NamedQueries({
 	@NamedQuery(name="QuickReport.findAllByOrganizationId",query="select distinct u from User u where u.department.id = :id and u.role in :roles")
 })
-public class QuickReport extends BaseEntity {
+public class QuickReport extends BaseEntity{
 
 	private static final Logger logger = LoggerFactory.getLogger(QuickReport.class);
 
@@ -72,13 +77,12 @@ public class QuickReport extends BaseEntity {
 	private QuickReportState    state  		= QuickReportState.OPENED;
     
 	@OneToMany(mappedBy = "quickReport", cascade=CascadeType.ALL,orphanRemoval=true)
-	@OrderBy("id asc")
-    private List<QuickReportImage> images 	= new ArrayList<QuickReportImage>();
+    private Set<QuickReportImage> images 	= new HashSet<QuickReportImage>();
 	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE})
-	@OrderBy("id asc")
-	@OrderColumn(name="id")
-	private List<QuickReportResolve> resolves = new ArrayList<QuickReportResolve>();
-
+	private Set<QuickReportResolve> resolves = new HashSet<QuickReportResolve>();
+	@Column(name="resolve_num")
+	private Integer resolveNum=0;
+	
 	public User getSubmitter() {
 		return submitter;
 	}
@@ -131,17 +135,23 @@ public class QuickReport extends BaseEntity {
 		this.description = d;
 	}
 	
-	public List<QuickReportResolve> getResolves() {
+	public Set<QuickReportResolve> getResolves() {
 		return resolves;
 	}
-	public void setResolves(List<QuickReportResolve> resolves) {
+	public void setResolves(Set<QuickReportResolve> resolves) {
 		this.resolves = resolves;
 	}
-	public List<QuickReportImage> getImages() {
+	public Set<QuickReportImage> getImages() {
 		return images;
 	}
-	public void setImages(List<QuickReportImage> images) {
+	public void setImages(Set<QuickReportImage> images) {
 		this.images = images;
+	}
+	public List<QuickReportImage> getListImages()
+	{
+		 ArrayList<QuickReportImage> l = Lists.newArrayList(images.iterator());
+		 Collections.sort(l,new BaseEntityComparer());
+		 return l;
 	}
 	public QuickReportImage addImage(QuickReportImage image)
 	{
@@ -155,7 +165,7 @@ public class QuickReport extends BaseEntity {
 		}
 		image.setSubmitter(this.getSubmitter());
 		if (this.getImages().contains(image)){
-			this.getImages().set(this.getImages().indexOf(image), image);
+			this.getImages().add(image);
 		}else{
 			this.getImages().add(image);
 		}
@@ -176,6 +186,8 @@ public class QuickReport extends BaseEntity {
 	{
 		return addResolve(resolve,true);
 	}
+	
+	
 	public QuickReportResolve addResolve(QuickReportResolve resolve,boolean set)
 	{
 		if (resolve == null){
@@ -184,7 +196,7 @@ public class QuickReport extends BaseEntity {
 		}
 		resolve.setSubmitter(this.getSubmitter());
 		if (this.getResolves().contains(resolve)){
-			this.getResolves().set(this.getResolves().indexOf(resolve), resolve);
+			this.getResolves().add(resolve);
 		}else{
 			this.getResolves().add(resolve);
 		}
@@ -199,6 +211,23 @@ public class QuickReport extends BaseEntity {
 	{
 		this.getResolves().remove(resolve);
 		resolve.setQuickReport(null);
+	}
+	public Integer getResolveNum() {
+		return resolveNum;
+	}
+	public void setResolveNum(Integer resolveNum) {
+		this.resolveNum = resolveNum;
+	}
+	public void incResolveNum()
+	{
+		resolveNum++;
+	}
+	public void decResolveNum()
+	{
+		resolveNum--;
+		if (resolveNum <=0){
+			resolveNum =0;
+		}
 	}
 	public boolean equals(Object object)
 	{
@@ -217,6 +246,31 @@ public class QuickReport extends BaseEntity {
 		return false;
 
 	}
-	
+	public CheckImage buildCheckImage() {
+		QuickReportImage quickReportImage = new QuickReportImage();
+		quickReportImage.setSubmitter(this.getSubmitter());
+		quickReportImage.setDepartment(this.getDepartment());
+		quickReportImage.setName(CheckImageUtil.BuildImageName(quickReportImage));
+		this.addImage(quickReportImage);
+		return quickReportImage;
+	}
+	public CheckImage removeCheckImage(Long id) {
+		for(QuickReportImage image :this.images){
+			if (id == image.getId()){
+				this.removeImage(image);
+				return image;
+			}
+		}
+		return null;
+	}
+	public QuickReportImage getImage(Long id)
+	{
+		for(QuickReportImage image :this.images){
+			if (id == image.getId()){
+				return image;
+			}
+		}
+		return null;
+	}
 
 }

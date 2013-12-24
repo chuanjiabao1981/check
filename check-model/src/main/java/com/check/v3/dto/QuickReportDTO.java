@@ -14,24 +14,6 @@ import com.check.v3.domain.QuickReportState;
 
 public class QuickReportDTO {
 	
-	public class CheckImageInfo{
-		private Long id;
-		private String path;
-		public Long getId() {
-			return id;
-		}
-		public void setId(Long id) {
-			this.id = id;
-		}
-		public String getPath() {
-			return path;
-		}
-		public void setPath(String path) {
-			this.path = path;
-		}
-		
-		
-	}
 	private Long					id;
 	private Long					submitterId;
 	private String					submitterName;
@@ -42,13 +24,14 @@ public class QuickReportDTO {
 	@JsonSerialize(using = JodaDateTimeSerializer.class)
 	private DateTime				deadline;
 	private QuickReportLevel		level;
-	private QuickReportState		state;
-	private String					description;
-	private List<CheckImageInfo> 	images = new LinkedList<CheckImageInfo>();
-
+	private QuickReportState			state;
+	private String						description;
+	private Integer						resolveNum;
+	private List<CheckImageInfo> 		images 		= new LinkedList<CheckImageInfo>();
+	//private List<QuickReportResolveDTO>	resolves	= new LinkedList<QuickReportResolveDTO>();
 	public QuickReportDTO(QuickReport quickReport)
 	{
-		BeanUtils.copyProperties(quickReport, this,new String[]{"images"});
+		BeanUtils.copyProperties(quickReport, this,new String[]{"images","resolves"});
 
 		this.setSubmitterId(quickReport.getSubmitter().getId());
 		this.setSubmitterName(quickReport.getSubmitter().getName());
@@ -66,6 +49,14 @@ public class QuickReportDTO {
 				images.add(c);
 			}
 		}
+//		if (hasResolves){
+//			if (quickReport.getResolves() != null && quickReport.getResolves().size() != 0){
+//				for(QuickReportResolve quickReportResolve:quickReport.getResolves()){
+//					QuickReportResolveDTO r = new QuickReportResolveDTO(quickReportResolve);
+//					this.resolves.add(r);
+//				}
+//			}
+//		}
 	}
 
 
@@ -188,12 +179,15 @@ public class QuickReportDTO {
 		this.images = images;
 	}
 
+	public Integer getResolveNum() {
+		return resolveNum;
+	}
 
-	
+
+	public void setResolveNum(Integer resolveNum) {
+		this.resolveNum = resolveNum;
+	}
 	
 	
 
-
-	
-	
 }

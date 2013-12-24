@@ -3,7 +3,7 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-	<definition extends="default" name="quick_reports/*"> 
-	    <put-attribute name="body" value="/WEB-INF/views/quick_reports/{1}.jsp" /> 
+	<definition extends="default" name="quick_report_resolves/*"> 
+	    <put-attribute name="body" value="/WEB-INF/views/quick_report_resolves/{1}.jsp" /> 
 	</definition>
 </tiles-definitions>
