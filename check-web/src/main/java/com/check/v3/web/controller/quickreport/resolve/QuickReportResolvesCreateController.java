@@ -20,7 +20,6 @@ import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.Department;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportResolve;
-import com.check.v3.domain.ResolveImage;
 import com.check.v3.domain.User;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
@@ -51,9 +50,9 @@ public class QuickReportResolvesCreateController  extends QuickReportResolvesCon
 			return VIEW_NEW;
 		}
 		try{
-			quickReportResolveService.save(quickReportResolve,imageFiles);
+			quickReportResolveService.save(quickReportResolve);
 		}catch( ImageTypeWrongException e){
-			bindingResult.rejectValue("listImages["+e.getIdx()+"].name", "validation.checkImage.type.message");
+			bindingResult.rejectValue("listImages["+e.getIdx()+"].file", "validation.checkImage.type.message");
 			return VIEW_NEW;
 		}
 		return "redirect:/quick_reports/"+quickReportResolve.getQuickReport().getId();
@@ -68,14 +67,13 @@ public class QuickReportResolvesCreateController  extends QuickReportResolvesCon
 
 		r.setDepartment(department);
 		r.setSubmitter(user);
-		for(int i =0;i<ApplicationConstant.CHECK_IMAGES_NUM;i++){
-			ResolveImage image = new ResolveImage();
-			image.setDepartment(department);
-			image.setSubmitter(user);
-			r.addImage(image);
-		}
 		QuickReport q = quickReportService.findById(quickReportId);
+		System.err.println(q+"++++++++++++++++++");
 		r.setQuickReport(q);
+
+		for(int i =0;i<ApplicationConstant.CHECK_IMAGES_NUM;i++){
+			r.buildCheckImage();
+		}
 		return r;
 	}
 }

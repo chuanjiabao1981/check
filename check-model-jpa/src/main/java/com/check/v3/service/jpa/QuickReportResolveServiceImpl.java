@@ -1,9 +1,6 @@
 package com.check.v3.service.jpa;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.annotation.Resource;
 
@@ -16,13 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.check.v3.domain.CheckImage;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportResolve;
-import com.check.v3.domain.QuickReportState;
 import com.check.v3.domain.ResolveImage;
 import com.check.v3.repository.QuickReportRepository;
 import com.check.v3.repository.QuickReportResolveRepository;
-import com.check.v3.service.CheckImageFileService;
 import com.check.v3.service.QuickReportResolveService;
+import com.check.v3.service.ResolveImageService;
 import com.check.v3.service.exception.ImageTypeWrongException;
+import com.check.v3.service.tools.CheckImageFileUploadUtil;
 import com.check.v3.service.tools.FileAlignmentMedia;
 import com.check.v3.service.tools.FileAlignmentMedia.FileAlignmentMediaResult;
 
@@ -36,20 +33,24 @@ public class QuickReportResolveServiceImpl implements QuickReportResolveService{
 	@Resource
 	private QuickReportRepository quickReportReporsitory;
 	@Resource
-	CheckImageFileService checkImageFileService;
+	private ResolveImageService resolveImageService;
 
 	@Override
 	@Transactional
 	public QuickReportResolve save(QuickReportResolve quickReportResolve) {
+		
+		List<CheckImage> checkImages = CheckImageFileUploadUtil.getNeededHandleCheckImage(quickReportResolve.getImages());
+		for(CheckImage checkImage:checkImages){
+			resolveImageService.save( (ResolveImage) checkImage);
+		}
+		QuickReport quickReport  = quickReportResolve.getQuickReport();
+		if (quickReportResolve.getId() == null){
+			quickReport.incResolveNum();
+			quickReportReporsitory.save(quickReport);
+		}
 
-		QuickReportResolve s = quickReportResolveRepository.save(quickReportResolve);
-
-		QuickReport q = quickReportResolve.getQuickReport();
-		//这个会设置resolve_order
-		q.setState(QuickReportState.CLOSED);
-		quickReportReporsitory.save(q);
-
-		return s;
+		QuickReportResolve q = quickReportResolveRepository.save(quickReportResolve);
+		return q;
 	}
 
 	@Override
@@ -70,40 +71,17 @@ public class QuickReportResolveServiceImpl implements QuickReportResolveService{
 	@Transactional
 	public QuickReportResolve save(QuickReportResolve quickReportResolve,List<MultipartFile> newImageFiles,List<Long> needDeletedCheckImageIds)
 	{
-		SortedSet<CheckImage> 		neededStoreCheckImages 	= new TreeSet<CheckImage>();
-		List<MultipartFile>		emptyFiles			   	= new ArrayList<MultipartFile>();
-		SortedSet<CheckImage>		neededDeleteCheckImages = new TreeSet<CheckImage>();
-		
-		//需要被删除的image
-		if (quickReportResolve.getImages() != null && needDeletedCheckImageIds != null){
-			for(Long id : needDeletedCheckImageIds){
-				for(CheckImage checkImage:quickReportResolve.getImages()){
-					if (checkImage.getId().equals(id)){
-						neededDeleteCheckImages.add(checkImage);
-					}
-				}
-			}
-			quickReportResolve.getImages().removeAll(neededDeleteCheckImages);
+		List<CheckImage> checkImages = CheckImageFileUploadUtil.getNeededHandleCheckImage(quickReportResolve.getImages(),newImageFiles,needDeletedCheckImageIds);
+		for(CheckImage checkImage:checkImages){
+			resolveImageService.save( (ResolveImage) checkImage);
 		}
-		//新增加的image
-		if (newImageFiles != null && newImageFiles.size() !=0){
-			for(MultipartFile f  : newImageFiles){
-				if (!f.isEmpty()){
-					ResolveImage resolveImage = new ResolveImage();
-					resolveImage.setSubmitter(quickReportResolve.getSubmitter());
-					resolveImage.setDepartment(quickReportResolve.getDepartment());
-					resolveImage.setName(FileAlignmentMedia.BuildImageName(resolveImage));
-					quickReportResolve.addImage(resolveImage);
-					neededStoreCheckImages.add(resolveImage);
-				}else{
-					emptyFiles.add(f);
-				}
-			}
-			newImageFiles.removeAll(emptyFiles);
+		QuickReport quickReport  = quickReportResolve.getQuickReport();
+		if (quickReportResolve.getId() == null){
+			quickReport.incResolveNum();
+			quickReportReporsitory.save(quickReport);
 		}
-		QuickReportResolve q = save(quickReportResolve);
-		//checkImageFileService.save(newImageFiles, neededStoreCheckImages);
-		//checkImageFileService.delete(neededDeleteCheckImages);
+
+		QuickReportResolve q = quickReportResolveRepository.save(quickReportResolve);
 		return q;
 	}
 	@Override
@@ -121,8 +99,10 @@ public class QuickReportResolveServiceImpl implements QuickReportResolveService{
 	@Override
 	@Transactional
 	public void delete(QuickReportResolve quickReportResolve) {
+		QuickReport quickReport  = quickReportResolve.getQuickReport();
+		quickReport.decResolveNum();
+		quickReportReporsitory.save(quickReport);
 		quickReportResolveRepository.delete(quickReportResolve);
-//		checkImageFileService.delete(quickReportResolve.getImages());
 	}
 
 

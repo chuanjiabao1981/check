@@ -10,7 +10,6 @@ import org.springframework.beans.BeanUtils;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.QuickReportImage;
 import com.check.v3.domain.QuickReportLevel;
-import com.check.v3.domain.QuickReportResolve;
 import com.check.v3.domain.QuickReportState;
 
 public class QuickReportDTO {
@@ -27,9 +26,10 @@ public class QuickReportDTO {
 	private QuickReportLevel		level;
 	private QuickReportState			state;
 	private String						description;
+	private Integer						resolveNum;
 	private List<CheckImageInfo> 		images 		= new LinkedList<CheckImageInfo>();
-	private List<QuickReportResolveDTO>	resolves	= new LinkedList<QuickReportResolveDTO>();
-	public QuickReportDTO(QuickReport quickReport,boolean hasResolves)
+	//private List<QuickReportResolveDTO>	resolves	= new LinkedList<QuickReportResolveDTO>();
+	public QuickReportDTO(QuickReport quickReport)
 	{
 		BeanUtils.copyProperties(quickReport, this,new String[]{"images","resolves"});
 
@@ -49,14 +49,14 @@ public class QuickReportDTO {
 				images.add(c);
 			}
 		}
-		if (hasResolves){
-			if (quickReport.getResolves() != null && quickReport.getResolves().size() != 0){
-				for(QuickReportResolve quickReportResolve:quickReport.getResolves()){
-					QuickReportResolveDTO r = new QuickReportResolveDTO(quickReportResolve);
-					this.resolves.add(r);
-				}
-			}
-		}
+//		if (hasResolves){
+//			if (quickReport.getResolves() != null && quickReport.getResolves().size() != 0){
+//				for(QuickReportResolve quickReportResolve:quickReport.getResolves()){
+//					QuickReportResolveDTO r = new QuickReportResolveDTO(quickReportResolve);
+//					this.resolves.add(r);
+//				}
+//			}
+//		}
 	}
 
 
@@ -179,14 +179,15 @@ public class QuickReportDTO {
 		this.images = images;
 	}
 
-
-	public List<QuickReportResolveDTO> getResolves() {
-		return resolves;
+	public Integer getResolveNum() {
+		return resolveNum;
 	}
 
 
-	public void setResolves(List<QuickReportResolveDTO> resolves) {
-		this.resolves = resolves;
+	public void setResolveNum(Integer resolveNum) {
+		this.resolveNum = resolveNum;
 	}
+	
+	
 
 }

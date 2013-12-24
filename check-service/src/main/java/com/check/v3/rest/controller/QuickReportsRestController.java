@@ -30,9 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
-import com.check.v3.domain.QuickReportImage;
 import com.check.v3.domain.User;
 import com.check.v3.dto.QuickReportDTO;
+import com.check.v3.dto.QuickReportDetailDTO;
 import com.check.v3.dto.QuickReportPageDTO;
 import com.check.v3.dto.QuickReportRequestDTO;
 import com.check.v3.security.annotation.InstanceId;
@@ -69,7 +69,7 @@ public class QuickReportsRestController {
 		BeanUtils.copyProperties(quickReportRequestDTO, quickReport);
 		initCheckImage(quickReport,newImageFiles);
 		quickReport = quickReportService.save(quickReport, newImageFiles, null);
-		return new QuickReportDTO(quickReport,false);
+		return new QuickReportDTO(quickReport);
 	}
 	@RequestMapping(value="/api/v1/quick_reports/{id}",method=RequestMethod.POST)
 	@ResponseBody
@@ -83,8 +83,7 @@ public class QuickReportsRestController {
 		BeanUtils.copyProperties(quickReportRequestDTO, quickReport);
 		initCheckImage(quickReport,newImageFiles);
 		quickReport = quickReportService.save(quickReport, newImageFiles, quickReportRequestDTO.getNeededdeleteImagesId());
-//		quickReport = quickReportService.findByIdWithMediaAndResolve(id);
-		return new QuickReportDTO(quickReport,false);
+		return new QuickReportDTO(quickReport);
 	}
 	@RequestMapping(value="/api/v1/organizations/{organization_id}/quick_reports",method=RequestMethod.GET)
 	@ResponseBody
@@ -97,7 +96,7 @@ public class QuickReportsRestController {
 		if (page == null)
 			page = 1;
 		PageRequest pageRequest = new PageRequest(page-1,rows,sort);
-		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationIdWithMediaAndResolve(organizationId, pageRequest);
+		Page<QuickReport> quickReports = quickReportService.findAllByOrganizationIdWithMedia(organizationId, pageRequest);
 
 		QuickReportPageDTO	quickReportPageDTO	= new QuickReportPageDTO();
 		quickReportPageDTO.setCurrentPage(quickReports.getNumber());
@@ -108,7 +107,7 @@ public class QuickReportsRestController {
 					new Function<QuickReport,QuickReportDTO>(){
 						public QuickReportDTO apply(QuickReport q)
 						{
-							return new QuickReportDTO(q,true);
+							return new QuickReportDTO(q);
 						}
 					}
 			));
@@ -116,6 +115,14 @@ public class QuickReportsRestController {
 
 		return quickReportPageDTO;
 
+	}
+	@RequestMapping(value="/api/v1/quick_reports/{quick_report_id}",method=RequestMethod.GET)
+	@ResponseBody
+	public QuickReportDetailDTO show(@InstanceId @PathVariable("quick_report_id") Long quickReportId,HttpServletRequest httpServletRequest)
+	{
+		QuickReport quickReport = quickReportService.findByIdWithMediaAndResolve(quickReportId);
+		QuickReportDetailDTO quickReportDetailDTO = new QuickReportDetailDTO(quickReport);
+		return quickReportDetailDTO;
 	}
 	
 	@InitBinder

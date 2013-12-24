@@ -18,18 +18,16 @@
             <form:errors path="description" cssClass="error" />
 		</div>
 		
-		<c:forEach items="${quick_report_resolve.images}" varStatus="i">
+		<c:forEach items="${quick_report_resolve.listImages}" varStatus="i">
             <label for="image_files[]">tupian</label>
-            <input name="image_files[]" type="file"/>
-             <c:if test="${not empty quick_report_resolve.listImages[i.index].id}">
-            	delete<form:checkbox path="listImages[${i.index}].del"/>
+            <form:input path="listImages[${i.index}].file" type="file"/>
+            <c:if test="${not empty quick_report_resolve.listImages[i.index].id}">
+                 delete<form:checkbox path="listImages[${i.index}].del"/>
             </c:if>
             <div>
-            	 <form:errors path="listImages[${i.index}].name" cssClass="error" />
+            	 <form:errors path="listImages[${i.index}].file" cssClass="error" />
             </div>
-            
         </c:forEach>
-
 		
 			
         <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">

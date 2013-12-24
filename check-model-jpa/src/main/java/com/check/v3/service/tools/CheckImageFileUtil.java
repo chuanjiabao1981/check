@@ -2,12 +2,10 @@ package com.check.v3.service.tools;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.domain.CheckImage;
-import com.check.v3.domain.MultiCheckImagesEntity;
 
 public class CheckImageFileUtil {
 
@@ -37,7 +35,7 @@ public class CheckImageFileUtil {
 			return neededDeleteCheckImage;
 		}
 	}
-	
+	/*
 	public static NeededHandleFile getNeededHandleFile(
 			MultiCheckImagesEntity multiCheckImagesEntity,
 			List<MultipartFile> newImageFiles,
@@ -75,5 +73,5 @@ public class CheckImageFileUtil {
 			}
 		}
 		return neededHandleFile;
-	}
+	}*/
 }

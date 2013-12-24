@@ -1,11 +1,11 @@
 package com.check.v3.domain;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,13 +18,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.check.v3.domain.util.BaseEntityComparer;
+import com.check.v3.domain.util.CheckImageUtil;
 import com.google.common.collect.Lists;
 
 @Entity
@@ -33,7 +32,6 @@ import com.google.common.collect.Lists;
 @DiscriminatorColumn(name="discriminator",discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="resolve")
 public class Resolve extends BaseEntity {
-	
 
 	/**
 	 * 
@@ -49,7 +47,7 @@ public class Resolve extends BaseEntity {
 	private String				description;
 	
 	
-	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "resolve", cascade=CascadeType.ALL,orphanRemoval=true)
     private Set<ResolveImage> images 	= new HashSet<ResolveImage>();
 	
 	public User getSubmitter() {
@@ -105,13 +103,21 @@ public class Resolve extends BaseEntity {
 	}
 	public List<ResolveImage> getListImages()
 	{
-		return Lists.newArrayList(images.iterator());
-	}
-	public void setListImages(List<ResolveImage> listimages)
-	{
-		this.images.retainAll(listimages);
-	}
+		 ArrayList<ResolveImage> l = Lists.newArrayList(images.iterator());
+		 Collections.sort(l,new BaseEntityComparer());
+		 return l;
 
+	}
+	public CheckImage buildCheckImage()
+	{
+		ResolveImage resolveImage = new ResolveImage();
+		resolveImage.setDepartment(this.getDepartment());
+		resolveImage.setSubmitter(this.getSubmitter());
+		resolveImage.setName(CheckImageUtil.BuildImageName(resolveImage));
+		this.addImage(resolveImage);
+		return resolveImage;
+
+	}
 	public boolean equals(Object object)
 	{
 		if (object == this){

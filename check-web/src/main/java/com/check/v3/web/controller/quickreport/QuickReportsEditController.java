@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.QuickReport;
-import com.check.v3.domain.QuickReportImage;
 import com.check.v3.security.SecurityConstant;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.service.exception.ImageTypeWrongException;
@@ -52,7 +51,7 @@ public class QuickReportsEditController extends QuickReportsController{
 			return VIEW_EDIT;
 		}
 		try{
-			quickReportService.save(quickReport, null,null,null);
+			quickReportService.save(quickReport);
 		}catch( ImageTypeWrongException e){
 			bindingResult.rejectValue("listImages["+e.getIdx()+"].file", "validation.checkImage.type.message");
 			return VIEW_EDIT;

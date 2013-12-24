@@ -75,7 +75,7 @@
 			<td>${labelQuickReportResolveDescription}</td>
 			<td>${resolve.description}</td>
 		</tr>
-		<c:forEach items="${resolve.images}" var="image">
+		<c:forEach items="${resolve.listImages}" var="image">
 			<spring:url value="/check-data/${image.getName('normal')}.jpg" var="urlImage"></spring:url>
 			<tr>
 				<td>${labelQuickReportResolveImage}</td>

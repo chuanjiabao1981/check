@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.domain.CheckImage;
-import com.check.v3.domain.QuickReportImage;
 import com.check.v3.domain.util.BaseEntityComparer;
 import com.check.v3.service.exception.ImageTypeWrongException;
 import com.google.common.collect.Lists;

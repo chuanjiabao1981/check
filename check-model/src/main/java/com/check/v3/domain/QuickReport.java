@@ -4,7 +4,6 @@ package com.check.v3.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
@@ -39,7 +37,7 @@ import com.google.common.collect.Lists;
 @NamedQueries({
 	@NamedQuery(name="QuickReport.findAllByOrganizationId",query="select distinct u from User u where u.department.id = :id and u.role in :roles")
 })
-public class QuickReport extends BaseEntity implements MultiCheckImagesEntity {
+public class QuickReport extends BaseEntity{
 
 	private static final Logger logger = LoggerFactory.getLogger(QuickReport.class);
 
@@ -82,11 +80,8 @@ public class QuickReport extends BaseEntity implements MultiCheckImagesEntity {
     private Set<QuickReportImage> images 	= new HashSet<QuickReportImage>();
 	@OneToMany(mappedBy = "quickReport", cascade={CascadeType.REMOVE})
 	private Set<QuickReportResolve> resolves = new HashSet<QuickReportResolve>();
-	@Version
-	private Integer version;
-	
 	@Column(name="resolve_num")
-	private Integer resolveNum;
+	private Integer resolveNum=0;
 	
 	public User getSubmitter() {
 		return submitter;
@@ -217,20 +212,22 @@ public class QuickReport extends BaseEntity implements MultiCheckImagesEntity {
 		this.getResolves().remove(resolve);
 		resolve.setQuickReport(null);
 	}
-	
-	public Integer getVersion() {
-		return version;
-	}
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-	
-	
 	public Integer getResolveNum() {
 		return resolveNum;
 	}
 	public void setResolveNum(Integer resolveNum) {
 		this.resolveNum = resolveNum;
+	}
+	public void incResolveNum()
+	{
+		resolveNum++;
+	}
+	public void decResolveNum()
+	{
+		resolveNum--;
+		if (resolveNum <=0){
+			resolveNum =0;
+		}
 	}
 	public boolean equals(Object object)
 	{
@@ -249,7 +246,6 @@ public class QuickReport extends BaseEntity implements MultiCheckImagesEntity {
 		return false;
 
 	}
-	@Override
 	public CheckImage buildCheckImage() {
 		QuickReportImage quickReportImage = new QuickReportImage();
 		quickReportImage.setSubmitter(this.getSubmitter());
@@ -258,7 +254,6 @@ public class QuickReport extends BaseEntity implements MultiCheckImagesEntity {
 		this.addImage(quickReportImage);
 		return quickReportImage;
 	}
-	@Override
 	public CheckImage removeCheckImage(Long id) {
 		for(QuickReportImage image :this.images){
 			if (id == image.getId()){
@@ -268,7 +263,6 @@ public class QuickReport extends BaseEntity implements MultiCheckImagesEntity {
 		}
 		return null;
 	}
-	@Override
 	public QuickReportImage getImage(Long id)
 	{
 		for(QuickReportImage image :this.images){
@@ -277,18 +271,6 @@ public class QuickReport extends BaseEntity implements MultiCheckImagesEntity {
 			}
 		}
 		return null;
-	}
-	@Override
-	public void removeAllEmptyCheckImage() {
-		Iterator<QuickReportImage> i = this.images.iterator();
-		while(i.hasNext()){
-			QuickReportImage quickReportImage = i.next();
-			if (quickReportImage.getId() == null){
-				quickReportImage.setQuickReport(null);
-				i.remove();
-			}
-		}
-		
 	}
 
 }

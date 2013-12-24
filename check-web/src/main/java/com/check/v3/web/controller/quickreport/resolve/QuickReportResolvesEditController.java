@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.check.v3.ApplicationConstant;
 import com.check.v3.domain.QuickReportResolve;
-import com.check.v3.domain.ResolveImage;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.service.exception.ImageTypeWrongException;
 
@@ -43,9 +42,9 @@ public class QuickReportResolvesEditController extends QuickReportResolvesContro
 			return VIEW_EDIT;
 		}
 		try{
-			quickReportResolveService.save(quickReportResolve, imageFiles);
+			quickReportResolveService.save(quickReportResolve);
 		}catch( ImageTypeWrongException e){
-			bindingResult.rejectValue("listImages["+e.getIdx()+"].name", "validation.checkImage.type.message");
+			bindingResult.rejectValue("listImages["+e.getIdx()+"].file", "validation.checkImage.type.message");
 			return VIEW_EDIT;
 		}
 
@@ -70,10 +69,7 @@ public class QuickReportResolvesEditController extends QuickReportResolvesContro
 		int num		 		 =  ApplicationConstant.CHECK_IMAGES_NUM - r.getImages().size();
 
 		for(int i =0;i<num;i++){
-			ResolveImage image = new ResolveImage();
-			image.setDepartment(r.getDepartment());
-			image.setSubmitter(r.getSubmitter());
-			r.addImage(image);
+			r.buildCheckImage();
 		}
 		return r;
 	}

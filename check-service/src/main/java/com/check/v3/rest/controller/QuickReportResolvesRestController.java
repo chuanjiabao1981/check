@@ -47,6 +47,7 @@ public class QuickReportResolvesRestController {
 		quickReportResolve.setDepartment(user.getDepartment());
 		quickReportResolve.setQuickReport(quickReport);
 		BeanUtils.copyProperties(quickReportResolveRequestDTO, quickReportResolve);
+		initCheckImage(quickReportResolve,newImageFiles);
 		quickReportResolve 					  =  quickReportResolveService.save(quickReportResolve, newImageFiles, null);
 		return new QuickReportResolveDTO(quickReportResolve);
 	}
@@ -60,6 +61,7 @@ public class QuickReportResolvesRestController {
 		QuickReportResolve quickReportResolve = quickReportResolveService.findByIdWithMedia(quickReportResolveId);
 		quickReportResolveRequestDTO.setId(quickReportResolve.getId());
 		BeanUtils.copyProperties(quickReportResolveRequestDTO, quickReportResolve);
+		initCheckImage(quickReportResolve,newImageFiles);
 		quickReportResolve = quickReportResolveService.save(quickReportResolve, newImageFiles, quickReportResolveRequestDTO.getNeededdeleteImagesId());
 		return new QuickReportResolveDTO(quickReportResolve);
 	}
@@ -72,5 +74,12 @@ public class QuickReportResolvesRestController {
 		QuickReportResolve quickReportResolve = quickReportResolveService.findByIdWithMedia(quickReportResolveId);
 		quickReportResolveService.delete(quickReportResolve);
 		return new IdDTO(quickReportResolveId);
+	}
+	private void initCheckImage(QuickReportResolve quickReportResolve,List<MultipartFile> newImageFiles)
+	{
+		for(int i =0 ;i < newImageFiles.size();i++){
+			quickReportResolve.buildCheckImage();
+		}
+
 	}
 }
