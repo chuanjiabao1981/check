@@ -6,16 +6,20 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.check.v3.ControllerActionConstant;
+import com.check.v3.domain.CheckTemplate;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.security.permission.PermissionPolicy;
+import com.check.v3.service.CheckTemplateService;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.QuickReportService;
 import com.check.v3.service.UserService;
 import com.check.v3.web.controller.OrganizationsController;
 import com.check.v3.web.controller.UsersController;
+import com.check.v3.web.controller.checktemplate.CheckTemplatesCreateController;
+import com.check.v3.web.controller.checktemplate.CheckTemplatesEditController;
 import com.check.v3.web.controller.quickreport.QuickReportsEditController;
 
 
@@ -28,6 +32,8 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 	UserService			userService;
 	@Resource
 	QuickReportService 	quickReportService;
+	@Resource
+	CheckTemplateService checkTemplateService;
 	
 	public DepartmentAdminPermissionSet()
 	{
@@ -42,10 +48,10 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 		
 		super.sharePermissionSet();
 		
-		OrganizationPermissionPolicy organizationPermissionPolicy = new OrganizationPermissionPolicy(organizationService);
-		UserPermissionPolicy         userPermissionPolicy		  = new UserPermissionPolicy();
-		QuickReportPermissionPolicy	 quickReportPermissionPolicy	  = new QuickReportPermissionPolicy();
-		
+		OrganizationPermissionPolicy 	organizationPermissionPolicy 	= new OrganizationPermissionPolicy(organizationService);
+		UserPermissionPolicy         	userPermissionPolicy		  	= new UserPermissionPolicy();
+		QuickReportPermissionPolicy	 	quickReportPermissionPolicy	  	= new QuickReportPermissionPolicy();
+		CheckTemplatePermissionPolicy 	checkTemplatePermissionPolicy	= new CheckTemplatePermissionPolicy();
 		this.allow(OrganizationsController.class.getSimpleName(), ControllerActionConstant.INDEX);
 		this.allow(OrganizationsController.class.getSimpleName(), ControllerActionConstant.NEW);
 		this.allow(OrganizationsController.class.getSimpleName(), ControllerActionConstant.CREATE);
@@ -60,6 +66,12 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 		this.allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.EDIT,quickReportPermissionPolicy);
 		this.allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.UPDATE,quickReportPermissionPolicy);
 		this.allow(QuickReportsEditController.class.getSimpleName(),ControllerActionConstant.DESTORY,quickReportPermissionPolicy);
+		this.allow(CheckTemplatesCreateController.class.getSimpleName(),ControllerActionConstant.NEW);
+		this.allow(CheckTemplatesCreateController.class.getSimpleName(),ControllerActionConstant.CREATE);
+		this.allow(CheckTemplatesEditController.class.getSimpleName(),ControllerActionConstant.EDIT, checkTemplatePermissionPolicy);
+		this.allow(CheckTemplatesEditController.class.getSimpleName(),ControllerActionConstant.UPDATE, checkTemplatePermissionPolicy);
+		this.allow(CheckTemplatesEditController.class.getSimpleName(),ControllerActionConstant.DESTORY, checkTemplatePermissionPolicy);
+
 
 	}
 	
@@ -78,7 +90,6 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 
 		@Override
 		public Object getInstance(Long id) {
-			System.err.println(id);
 			return quickReportService.findById(id);
 		}
 		
@@ -125,6 +136,26 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 		@Override
 		public Object getInstance(Long id) {
 			return userService.findById(id);
+		}
+		
+	}
+	public class CheckTemplatePermissionPolicy implements PermissionPolicy
+	{
+
+		@Override
+		public boolean filter(User user, Object instance) {
+			CheckTemplate checkTemplate = (CheckTemplate) instance;
+			if (checkTemplate != null ){
+				if (user.getDepartment().equals(checkTemplate.getDepartment())){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public Object getInstance(Long id) {
+			return checkTemplateService.findById(id);
 		}
 		
 	}

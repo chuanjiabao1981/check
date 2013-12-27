@@ -98,4 +98,21 @@ public abstract class BaseEntity implements Serializable{
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
+	
+	public boolean equals(Object object)
+	{
+		if (object == this){
+			return true;
+		}
+		if ((object == null) || ! (object instanceof BaseEntity)){
+			return false;
+		}
+		
+		final BaseEntity other = (BaseEntity)object;
+		
+		if ((other.getId()!=null) && (this.getId() !=null)){
+			return other.getId().equals(this.getId());
+		}
+		return false;
+	}
 }

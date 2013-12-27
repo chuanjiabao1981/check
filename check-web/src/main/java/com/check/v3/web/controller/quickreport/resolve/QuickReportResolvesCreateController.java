@@ -68,7 +68,6 @@ public class QuickReportResolvesCreateController  extends QuickReportResolvesCon
 		r.setDepartment(department);
 		r.setSubmitter(user);
 		QuickReport q = quickReportService.findById(quickReportId);
-		System.err.println(q+"++++++++++++++++++");
 		r.setQuickReport(q);
 
 		for(int i =0;i<ApplicationConstant.CHECK_IMAGES_NUM;i++){

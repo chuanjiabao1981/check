@@ -19,6 +19,9 @@ import com.check.v3.service.QuickReportService;
 import com.check.v3.service.UserService;
 import com.check.v3.web.controller.HomeController;
 import com.check.v3.web.controller.UsersController;
+import com.check.v3.web.controller.checktemplate.CheckTemplatesCreateController;
+import com.check.v3.web.controller.checktemplate.CheckTemplatesIndexController;
+import com.check.v3.web.controller.checktemplate.CheckTemplatesShowController;
 import com.check.v3.web.controller.quickreport.QuickReportsCreateController;
 import com.check.v3.web.controller.quickreport.QuickReportsEditController;
 import com.check.v3.web.controller.quickreport.QuickReportsIndexController;
@@ -64,6 +67,10 @@ public abstract class DepartmentUserSharePermissionSet extends PermissionSet{
 		allow(QuickReportResolvesEditController.class.getSimpleName(),ControllerActionConstant.EDIT,quickReportResolveEditPermission);
 		allow(QuickReportResolvesEditController.class.getSimpleName(),ControllerActionConstant.UPDATE,quickReportResolveEditPermission);
 		allow(QuickReportResolvesEditController.class.getSimpleName(),ControllerActionConstant.DESTORY,quickReportResolveEditPermission);
+		allow(CheckTemplatesIndexController.class.getSimpleName(),ControllerActionConstant.INDEX);
+				//简单处理
+		allow(CheckTemplatesShowController.class.getSimpleName(),ControllerActionConstant.SHOW);
+
 
 	}
 	
