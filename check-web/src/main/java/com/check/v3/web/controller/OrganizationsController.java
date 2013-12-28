@@ -1,23 +1,29 @@
 package com.check.v3.web.controller;
 
+import java.beans.PropertyEditorSupport;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.check.v3.domain.CheckTemplate;
 import com.check.v3.domain.Department;
 import com.check.v3.domain.Organization;
 import com.check.v3.domain.OrganizationType;
 import com.check.v3.security.annotation.InstanceId;
 import com.check.v3.security.util.SecurityTools;
+import com.check.v3.service.CheckTemplateService;
 import com.check.v3.service.OrganizationService;
 
 
@@ -26,6 +32,8 @@ public class OrganizationsController {
 
 	@Resource
 	OrganizationService organizationService;
+	@Resource
+	CheckTemplateService checkTemplateService;
 	
 	public final static String VIEW_LIST = "organizations/index";
 	public final static String VIEW_NEW	 = "organizations/new";
@@ -95,6 +103,29 @@ public class OrganizationsController {
 		o.setDepartment(SecurityTools.getCurrentDepartment(),false);
 		return o;
 	}
+	
+	@ModelAttribute("checkTemplates")
+	public List<CheckTemplate> populateCheckTemplates()
+	{
+		List<CheckTemplate> oo = checkTemplateService.findAllByDepartment(SecurityTools.getCurrentDepartment());
+		return oo;
+	}
+	@InitBinder
+	protected void initBinder(HttpServletRequest request, WebDataBinder binder) 
+	{
+		binder.registerCustomEditor(CheckTemplate.class, new CheckTemplateEditor());
+	}
+	
+
+	
+	public class CheckTemplateEditor extends PropertyEditorSupport
+	{
+		public void setAsText(String text)
+		{
+			setValue(checkTemplateService.findById(Long.valueOf(text)));
+		}
+	}
+
  
 
 }

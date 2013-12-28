@@ -12,6 +12,7 @@ import com.check.v3.domain.QuickReport;
 import com.check.v3.domain.Role;
 import com.check.v3.domain.User;
 import com.check.v3.security.permission.PermissionPolicy;
+import com.check.v3.service.CheckPointService;
 import com.check.v3.service.CheckTemplateService;
 import com.check.v3.service.OrganizationService;
 import com.check.v3.service.QuickReportService;
@@ -20,6 +21,8 @@ import com.check.v3.web.controller.OrganizationsController;
 import com.check.v3.web.controller.UsersController;
 import com.check.v3.web.controller.checktemplate.CheckTemplatesCreateController;
 import com.check.v3.web.controller.checktemplate.CheckTemplatesEditController;
+import com.check.v3.web.controller.checktemplate.checkpoint.CheckPointsCreateController;
+import com.check.v3.web.controller.checktemplate.checkpoint.CheckPointsEditController;
 import com.check.v3.web.controller.quickreport.QuickReportsEditController;
 
 
@@ -34,6 +37,9 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 	QuickReportService 	quickReportService;
 	@Resource
 	CheckTemplateService checkTemplateService;
+	
+	@Resource
+	CheckPointPermission checkPointPermission;
 	
 	public DepartmentAdminPermissionSet()
 	{
@@ -71,6 +77,11 @@ public class DepartmentAdminPermissionSet extends DepartmentUserSharePermissionS
 		this.allow(CheckTemplatesEditController.class.getSimpleName(),ControllerActionConstant.EDIT, checkTemplatePermissionPolicy);
 		this.allow(CheckTemplatesEditController.class.getSimpleName(),ControllerActionConstant.UPDATE, checkTemplatePermissionPolicy);
 		this.allow(CheckTemplatesEditController.class.getSimpleName(),ControllerActionConstant.DESTORY, checkTemplatePermissionPolicy);
+		this.allow(CheckPointsCreateController.class.getSimpleName(), ControllerActionConstant.NEW,checkTemplatePermissionPolicy);
+		this.allow(CheckPointsCreateController.class.getSimpleName(), ControllerActionConstant.CREATE,checkTemplatePermissionPolicy);
+		this.allow(CheckPointsEditController.class.getSimpleName(), ControllerActionConstant.DESTORY,checkPointPermission);
+		this.allow(CheckPointsEditController.class.getSimpleName(), ControllerActionConstant.EDIT,checkPointPermission);
+		this.allow(CheckPointsEditController.class.getSimpleName(), ControllerActionConstant.UPDATE,checkPointPermission);
 
 
 	}

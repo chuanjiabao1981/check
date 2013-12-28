@@ -3,8 +3,11 @@ package com.check.v3.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,6 +30,8 @@ import org.slf4j.LoggerFactory;
 
 
 import com.check.v3.domain.exception.OrganizationRingException;
+import com.check.v3.domain.util.BaseEntityComparer;
+import com.google.common.collect.Lists;
 
 
 @Entity
@@ -65,8 +70,11 @@ public class Organization extends Unit implements Serializable{
     
     @OneToMany(mappedBy = "organization", cascade={CascadeType.REMOVE,CascadeType.MERGE})
     private List<QuickReport> quickReports = new ArrayList<QuickReport>();
-    
-    
+    @ManyToMany
+    @JoinTable(name="organization_check_templates", 
+                joinColumns={@JoinColumn(name="organization_id")}, 
+                inverseJoinColumns={@JoinColumn(name="check_template_id")})
+    private Set<CheckTemplate> checkTemplates = new HashSet<CheckTemplate>();
     
 	public Organization()
 	{
@@ -214,12 +222,25 @@ public class Organization extends Unit implements Serializable{
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
-	
 	public List<QuickReport> getQuickReports() {
 		return quickReports;
 	}
 	public void setQuickReports(List<QuickReport> quickReports) {
 		this.quickReports = quickReports;
+	}
+	
+	public Set<CheckTemplate> getCheckTemplates() {
+		return checkTemplates;
+	}
+	public void setCheckTemplates(Set<CheckTemplate> checkTemplates) {
+		this.checkTemplates = checkTemplates;
+	}
+	public List<CheckTemplate> getListCheckTemplates()
+	{
+		 ArrayList<CheckTemplate> l = Lists.newArrayList(checkTemplates.iterator());
+		 Collections.sort(l,new BaseEntityComparer());
+		 return l;
+
 	}
 	public boolean equals(Object object)
 	{

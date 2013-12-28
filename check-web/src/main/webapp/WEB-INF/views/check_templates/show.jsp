@@ -13,6 +13,9 @@
 
 ${checkTemplate.name}
 
+
+${fn:length(checkTemplate.listCheckPoints)}
+
 <table>
 	<thead>
 		<tr>
@@ -22,7 +25,7 @@ ${checkTemplate.name}
 		</tr> 
     </thead>
     <tbody>
-    	<c:forEach items="${check_template.listCheckPoints}" var="checkPoint">
+    	<c:forEach items="${checkTemplate.listCheckPoints}" var="checkPoint">
     		<spring:url    value="/check_points/${checkPoint.id}/edit"  var="urlEditCheckPoint"></spring:url>
     		<spring:url    value="/check_points/${checkPoint.id}"  		var="urlDestroyCheckPoint"></spring:url>
     		<tr>

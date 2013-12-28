@@ -10,6 +10,7 @@ public interface UserService extends InstanceLoaderService{
 	public User 		findById(Long id);
 	public User 		findByAccount(String account);
 	public User			findByIdWithOrganizations(Long id);
+	public User			findByIdWithOrganizationsAndCheckTemplates(Long id);
 	public List<User>	findAllByDepartmentId(Long departmentId);
 	public User 		save(User user) throws UserAccountDuplicateException;
 	public User 		createDepartmentAdmin(User user,Long department_id);

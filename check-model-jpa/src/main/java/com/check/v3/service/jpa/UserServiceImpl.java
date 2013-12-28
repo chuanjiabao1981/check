@@ -102,4 +102,10 @@ public class UserServiceImpl implements UserService {
 		return em.createNamedQuery("User.findByIdWithOrganizations", User.class).setParameter("id", id).getSingleResult();
 	}
 
+	@Override
+	@Transactional(readOnly=true)
+	public User findByIdWithOrganizationsAndCheckTemplates(Long id) {
+		return userRepository.findByIdWithOrganizationsAndCheckTemplates(id);
+	}
+
 }

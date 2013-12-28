@@ -19,16 +19,19 @@ public class CheckPointServiceImpl implements CheckPointService{
 	private CheckPointRepository checkPointRepository;
 	
 	@Override
+	@Transactional
 	public CheckPoint save(CheckPoint checkPoint) {
 		return checkPointRepository.save(checkPoint);
 	}
 
 	@Override
+	@Transactional
 	public void delete(CheckPoint checkPoint) {
 		checkPointRepository.delete(checkPoint);	
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public CheckPoint findById(Long id) {
 		return checkPointRepository.findOne(id);
 	}

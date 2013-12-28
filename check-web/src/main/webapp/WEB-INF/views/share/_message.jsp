@@ -22,3 +22,7 @@
 <spring:message code="label_check_template_name" 			var="labelCheckTemplateName"/>
 
 <spring:message code="label_check_point_name"				var="labelCheckPointName"/>
+
+<spring:message code="label_organization_check_templates" 	var="labelOrganizationCheckTemplates"/>
+<spring:message code="label_organization_name" 				var="labelOrganizationName" />
+

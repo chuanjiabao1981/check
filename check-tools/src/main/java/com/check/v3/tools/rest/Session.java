@@ -27,7 +27,7 @@ public class Session {
 		restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
 		restTemplate.setErrorHandler(new CustomResponseErrorHandler());
 		UserPasswordDTO userPasswordDTO = new UserPasswordDTO();
-		userPasswordDTO.setName("ceshi_001");
+		userPasswordDTO.setName("ceshi_002");
 		userPasswordDTO.setPassword("12345");
 		try{
 			System.err.println(SESSION_CREATE);

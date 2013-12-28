@@ -1,5 +1,6 @@
 package com.check.v3.web.controller.checktemplate.checkpoint;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -18,13 +19,13 @@ import com.check.v3.security.annotation.InstanceId;
 public class CheckPointsCreateController extends CheckPointsController{
 
 	@RequestMapping(value="/check_templates/{check_template_id}/check_points/new",method=RequestMethod.GET)
-	public String newForm()
+	public String newForm(@InstanceId @PathVariable("check_template_id") Long checkTemplateId,HttpServletRequest httpServletRequest,Model model)
 	{
-		
 		return VIEW_NEW;
 	}
 	@RequestMapping(value="/check_templates/{check_template_id}/check_points",method=RequestMethod.POST)
-	public String create(@ModelAttribute("checkPoint") @Valid CheckPoint checkPoint,
+	public String create(@InstanceId @PathVariable("check_template_id") Long checkTemplateId,
+						 @ModelAttribute("checkPoint") @Valid CheckPoint checkPoint,
 			  			 BindingResult bindingResult,
 			  			 Model model)
 	{
@@ -34,7 +35,6 @@ public class CheckPointsCreateController extends CheckPointsController{
 		checkPoint = checkPointService.save(checkPoint);
 		return "redirect:/check_templates/"+checkPoint.getCheckTemplate().getId();
 	}
-	
 	
 	
 
