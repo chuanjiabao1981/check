@@ -25,7 +25,6 @@ public class CheckTemplatesShowController extends CheckTemplatesController{
 	public CheckTemplate populateCheckTemplate(@PathVariable("check_template_id") Long id)
 	{
 		CheckTemplate checkTemplate= this.checkTemplateService.findByIdWithCheckPoints(id);
-		System.err.println(checkTemplate.getListCheckPoints().size());
 		return checkTemplate;
 	}
 

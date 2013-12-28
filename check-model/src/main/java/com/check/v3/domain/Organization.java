@@ -60,11 +60,10 @@ public class Organization extends Unit implements Serializable{
     @JoinColumn(name="department_id")
     @NotNull
     private Department department;
-    //(cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @ManyToMany
     @JoinTable(name="user_organizations", 
-                joinColumns={@JoinColumn(name="organization_id")}, 
-                inverseJoinColumns={@JoinColumn(name="user_id")})
+                joinColumns={@JoinColumn(name="organization_id",insertable=false,updatable=false)}, 
+                inverseJoinColumns={@JoinColumn(name="user_id",insertable=false,updatable=false)})
     private List<User> users = new ArrayList<User>();
     
     
