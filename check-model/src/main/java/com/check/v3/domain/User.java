@@ -205,7 +205,7 @@ public class User implements Serializable {
 	public void setOrganizations(Set<Organization> organizations) {
 		this.organizations = organizations;
 	}
-	
+	@Transient
 	public List<Organization> getListOrganizations()
 	{
 		return Lists.newArrayList(organizations.iterator());
