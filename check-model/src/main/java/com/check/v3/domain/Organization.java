@@ -62,7 +62,7 @@ public class Organization extends Unit implements Serializable{
     private Department department;
     @ManyToMany(mappedBy="organizations")
 
-    private Set<User> users ;//= new HashSet<User>();
+    private Set<User> users = new HashSet<User>();
     
 //  @JoinTable(name="user_organizations", 
 //  joinColumns={@JoinColumn(name="organization_id",referencedColumnName="id",insertable=false, updatable=false)}, 
