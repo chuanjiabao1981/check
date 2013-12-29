@@ -4,7 +4,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,7 +64,7 @@ public class User implements Serializable {
 	private Department				department;
     private Role					role;
     
-    private List<Organization>		organizations	= new ArrayList<Organization>();
+    private Set<Organization>		organizations	= new HashSet<Organization>();
     
 	@OneToMany(mappedBy = "submitter", cascade={CascadeType.REMOVE,CascadeType.MERGE})
     private List<QuickReport>		submittedQuickReport 	= new ArrayList<QuickReport>();
@@ -195,11 +197,11 @@ public class User implements Serializable {
     @JoinTable(name="user_organizations", 
                 joinColumns={@JoinColumn(name="user_id")}, 
                 inverseJoinColumns={@JoinColumn(name="organization_id")})
-	@OrderColumn(name="organization_order")
-	public List<Organization> getOrganizations() {
+//	@OrderColumn(name="organization_order")
+	public Set<Organization> getOrganizations() {
 		return organizations;
 	}
-	public void setOrganizations(List<Organization> organizations) {
+	public void setOrganizations(Set<Organization> organizations) {
 		this.organizations = organizations;
 	}
 	

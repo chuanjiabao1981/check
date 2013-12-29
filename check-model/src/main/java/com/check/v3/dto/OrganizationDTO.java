@@ -27,7 +27,7 @@ public class OrganizationDTO implements Serializable{
 		name 	= organization.getName();
 		id 		= organization.getId();
 		if (containUser){
-			users 	= Lists.transform(organization.getUsers(), new Function<User, UserDTO>(){
+			users 	= Lists.transform(organization.getListUsers(), new Function<User, UserDTO>(){
 				public UserDTO apply(User user){
 					return new UserDTO(user);
 				}
