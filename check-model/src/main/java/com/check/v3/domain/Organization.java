@@ -60,11 +60,13 @@ public class Organization extends Unit implements Serializable{
     @JoinColumn(name="department_id")
     @NotNull
     private Department department;
-    @ManyToMany
-    @JoinTable(name="user_organizations", 
-                joinColumns={@JoinColumn(name="organization_id",insertable=false,updatable=false)}, 
-                inverseJoinColumns={@JoinColumn(name="user_id",insertable=false,updatable=false)})
-    private List<User> users = new ArrayList<User>();
+    @ManyToMany(mappedBy="organizations")
+
+    private Set<User> users ;//= new HashSet<User>();
+    
+//  @JoinTable(name="user_organizations", 
+//  joinColumns={@JoinColumn(name="organization_id",referencedColumnName="id",insertable=false, updatable=false)}, 
+//  inverseJoinColumns={@JoinColumn(name="user_id",referencedColumnName="id",insertable=false, updatable=false)})
     
     
     @OneToMany(mappedBy = "organization", cascade={CascadeType.REMOVE,CascadeType.MERGE})
@@ -215,11 +217,16 @@ public class Organization extends Unit implements Serializable{
 		this.getUsers().remove(user);
 		user.removeOrganization(this);
 	}
-	public List<User> getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
-	public void setUsers(List<User> users) {
+	public void setUsers(Set<User> users) {
 		this.users = users;
+	}
+	public List<User> getListUsers()
+	{
+		 ArrayList<User> l = Lists.newArrayList(users.iterator());
+		 return l;
 	}
 	public List<QuickReport> getQuickReports() {
 		return quickReports;
