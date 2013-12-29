@@ -88,7 +88,7 @@ public class QuickReportsController {
 	protected List<User> getResponsiblePersons(Long id)
 	{
 		Organization o 	= organizationService.findByIdWithUsers(id);
-		return o.getUsers();
+		return o.getListUsers();
 	}
 
 }
