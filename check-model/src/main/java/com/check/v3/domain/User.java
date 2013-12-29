@@ -32,6 +32,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
+
 
 @Entity
 @Table(name = "users")
@@ -197,12 +199,16 @@ public class User implements Serializable {
     @JoinTable(name="user_organizations", 
                 joinColumns={@JoinColumn(name="user_id")}, 
                 inverseJoinColumns={@JoinColumn(name="organization_id")})
-//	@OrderColumn(name="organization_order")
 	public Set<Organization> getOrganizations() {
 		return organizations;
 	}
 	public void setOrganizations(Set<Organization> organizations) {
 		this.organizations = organizations;
+	}
+	
+	public List<Organization> getListOrganizations()
+	{
+		return Lists.newArrayList(organizations.iterator());
 	}
 	
 	@Transient

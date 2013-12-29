@@ -29,7 +29,7 @@ public class OrganizationsRestController {
 	{
 		User user = (User) SecurityUtils.getSubject().getPrincipal();
 		User userWithOrganizations = userService.findByIdWithOrganizationsAndCheckTemplates(user.getId());
-	    List<Organization> 	  s = userWithOrganizations.getOrganizations();
+	    List<Organization> 	  s = userWithOrganizations.getListOrganizations();
 	    List<OrganizationDTO> k = Lists.transform(s, new Function<Organization, OrganizationDTO>(){
 	        public OrganizationDTO apply(Organization organization) 
 	        {
