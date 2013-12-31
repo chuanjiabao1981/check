@@ -13,8 +13,8 @@ import com.check.v3.dto.UserPasswordDTO;
 
 public class Session {
 	
-	public static final String HOST 				= "localhost:8088";
-//	public static final String HOST					= "42.121.55.211:8088";
+//	public static final String HOST 				= "localhost:8088";
+	public static final String HOST					= "42.121.55.211:8088";
 	public static final String CONTEXT_ROOT 		= "/check-service";
 	public static final String URI_PREFIX 			= "http://"+HOST+CONTEXT_ROOT;
 	public static final String API_PREFIX			= "/api/v1";
@@ -27,7 +27,7 @@ public class Session {
 		restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
 		restTemplate.setErrorHandler(new CustomResponseErrorHandler());
 		UserPasswordDTO userPasswordDTO = new UserPasswordDTO();
-		userPasswordDTO.setName("ceshi_002");
+		userPasswordDTO.setName("ceshi_001");
 		userPasswordDTO.setPassword("12345");
 		try{
 			System.err.println(SESSION_CREATE);
