@@ -25,7 +25,20 @@
 		<tiles:insertAttribute name="menu" ignore="true" /> 
 		
 		<div class="main-container" id="main-container">
-			<tiles:insertAttribute name="body"/>
+			<a class="menu-toggler" id="menu-toggler" href="#">
+				<span class="menu-text"></span>
+			</a>
+			<div class="main-content">
+				<%@include file="_breadcrumbs.jsp" %>
+				<div class="page-content">
+					<%@include file="_page_header.jsp" %>
+					<div class="row">
+						<div class="col-xs-12">
+							<tiles:insertAttribute name="body"/>
+						</div>
+					</div>
+				</div>
+			</div><!-- /.main-content -->
       	</div>
       	
       	<!-- basic scripts -->
@@ -33,27 +46,27 @@
 		<!--[if !IE]> -->
 
 		<script type="text/javascript">
-			window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='${pageContext.request.contextPath}/assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
 		</script>
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
 			<script type="text/javascript">
- 				window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+ 				window.jQuery || document.write("<script src='${pageContext.request.contextPath}/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
 			</script>
 		<![endif]-->
 		
 		<script type="text/javascript">
-			if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+			if("ontouchend" in document) document.write("<script src='${pageContext.request.contextPath}/assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 		</script>
-		<script src="assets/js/bootstrap.min.js"></script>
-		<script src="assets/js/typeahead-bs2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/typeahead-bs2.min.js"></script>
 
 		<!-- page specific plugin scripts -->
 
 		<!--[if lte IE 8]>
-		  <script src="assets/js/excanvas.min.js"></script>
+		  <script src="${pageContext.request.contextPath}/assets/js/excanvas.min.js"></script>
 		<![endif]-->
 		
 		<tiles:insertAttribute name="footer" ignore="true"/> 
