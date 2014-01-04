@@ -6,44 +6,38 @@
 
 
 <%@include file="../share/_message.jsp" %>
-
-
 <spring:url    value="/check_templates/new" var="urlNewCheckTemplates"></spring:url>
-
 <jsp:directive.page contentType="text/html;charset=UTF-8" />
-<a href="${urlNewCheckTemplates}">${buttonAdd}</a>
+<a href="${urlNewCheckTemplates}" class="btn btn-sm btn-primary">${buttonAdd}</a>
+<br/>
+<br/>
 <c:if test="${not empty check_templates}">
-	<table>
+<table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th>Name</th>
-			<th>Submitter</th>
-			<th>Delete</th>
-			<th>Edit</th>
+			<th>${labelCheckTemplateName}</th>
+			<th>${textAction}</th>
 		</tr> 
     </thead>
 	<tbody>
 		<c:forEach items="${check_templates}" var="checkTemplate">
 			<spring:url    value="/check_templates/${checkTemplate.id}/edit"  var="urlEditCheckTemplate"></spring:url>
 			<spring:url	   value="/check_templates/${checkTemplate.id}" 	  var="urlDestroyCheckTemplate"></spring:url>
-			<spring:url    value="/check_templates/${checkTemplate.id}"		  var="urlShowCheckTemplate"></spring:url>	
+			<spring:url    value="/check_templates/${checkTemplate.id}"		  var="urlShowCheckTemplate"></spring:url>
+			<c:set 		   var="css_check_tempalte_id" 	value="check_template_${organization.id}" />
 			<tr>
 				<td><a href="${urlShowCheckTemplate}">${checkTemplate.name}</a></td>
 				<td>
-					<form:form  action="${urlDestroyCheckTemplate}" method="DELETE">
-						 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-            				<span class="ui-button-text">${buttonDestroy}</span>
-        				</button> 
-        			</form:form>
-				
-				</td>
-				<td>
-					<form:form  action="${urlEditCheckTemplate}" method="GET">
-						 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-            				<span class="ui-button-text">${buttonEdit}</span>
-        				</button> 
-        			</form:form>
-				
+					<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+						<a class="btn btn-xs btn-success" href="${urlEditCheckTemplate}">
+							<i class="icon-edit bigger-120"></i>
+						</a>
+						<a onclick="document.getElementById('${css_check_tempalte_id}').submit();" class="btn btn-xs btn-danger">
+						  	<i class="icon-trash bigger-120"></i>
+						</a>
+						<form:form  id="${css_check_tempalte_id}" action="${urlDestroyCheckTemplate}" method="DELETE"  >
+        				</form:form>
+					</div>
 				</td>
 			 </tr>
 		</c:forEach>

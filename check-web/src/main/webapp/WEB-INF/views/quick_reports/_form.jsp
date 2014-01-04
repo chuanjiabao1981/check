@@ -1,66 +1,30 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@include file="_message.jsp" %>
-
-
+<%@include file="../share/_message.jsp" %>
 
 <form:form modelAttribute="quick_report"  
  		  id="quick_report" 
  		  name="quick_report" 
- 		  method="post" enctype="multipart/form-data" action="${param.post_url}">
-		<form:label path="level">
-			${labelQuickReportLevel}
-		</form:label>
-		<form:select path="level">
-	         <form:options items="${levels}"  />
-	    </form:select>
-		<div>
-            <form:errors path="level" cssClass="error" />
-		</div>
-		<form:label path="responsiblePerson">
-			${labelQuickReportPerson}
-		</form:label>
-		<form:select path="responsiblePerson">
-		    <form:option value="" label="${labelPleaseSelect}"/>
-			<form:options items="${responsiblePersons}" itemValue="id" itemLabel="name"/>
-		</form:select>
-		<div>
-            <form:errors path="responsiblePerson" cssClass="error" />
-		</div>
-		<form:label path="deadline">
-			${labelQuickReportDeadLine}
-		</form:label>
-		<form:input path="deadline"/>
-		<div>
-            <form:errors path="deadline" cssClass="error" />
-		</div>
-		<form:label path="description">
-			${labelQuickReportDescription}
-		</form:label>
-		<form:input path="description"/>
-		<div>
-            <form:errors path="description" cssClass="error" />
-		</div>
+ 		  method="post" enctype="multipart/form-data" action="${param.post_url}"
+ 		  class="form-horizontal" 
+ 		  role="form">
+ 		<t:select path="level" 				labelName="${labelQuickReportLevel}" items="${levels}"/>
+	 	<t:select path="responsiblePerson"  labelName="${labelPleaseSelect}" items="${responsiblePersons}" itemValue="id" itemLabel="name"/>
+	 	<t:input  path="deadline" 		    label="${labelQuickReportDeadLine}"/>
+	 	<t:input  path="description" 		label="${labelQuickReportDescription}"/>
 		<c:if test="${empty quick_report.id}">
 			<form:hidden path="organization" value="${organization_id}" />
 		</c:if>
 		
 		<c:forEach items="${quick_report.listImages}" varStatus="i">
-            <label for="image_files[]">tupian</label>
-            <form:input path="listImages[${i.index}].file" type="file"/>
-            <c:if test="${not empty quick_report.listImages[i.index].id}">
-                 delete<form:checkbox path="listImages[${i.index}].del"/>
-            </c:if>
-            <div>
-            	 <form:errors path="listImages[${i.index}].file" cssClass="error" />
-            </div>
+        	<t:inputfile path="listImages[${i.index}].file" 
+        				 delPath="listImages[${i.index}].del"
+        				 labelName="${labelQuickReportImage}"
+        				 canBeDeleted="${not empty quick_report.listImages[i.index].id ? true : false}"/>
         </c:forEach>
 
-		
-			
-        <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-            <span class="ui-button-text">${buttonSave}</span>
-        </button> 
+		<%@include file="../share/_button_save_cancel.jsp" %>
 </form:form>

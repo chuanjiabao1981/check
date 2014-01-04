@@ -21,6 +21,7 @@
 <spring:message code="label_quick_report_resolve_image"		var="labelQuickReportResolveImage"/>
 
 <spring:message code="label_check_template_name" 			var="labelCheckTemplateName"/>
+<spring:message code="label_check_template_index"			var="labelCheckTemplateIndex"/>
 
 <spring:message code="label_check_point_name"				var="labelCheckPointName"/>
 

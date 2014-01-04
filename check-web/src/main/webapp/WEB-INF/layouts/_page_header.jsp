@@ -1,9 +1,9 @@
 <div class="page-header">
 	<h1>
-		Form Elements
+		${moduleName}
 		<small>
 			<i class="icon-double-angle-right"></i>
-			Common form elements and layouts
+			${moduleDescription}
 		</small>
 	</h1>
 </div><!-- /.page-header -->

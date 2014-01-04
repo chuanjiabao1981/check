@@ -15,7 +15,7 @@
 <table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th>${labelCheckTemplateName}</th>
+			<th>${labelOrganizationName}</th>
 			<th>${textAction}</th>
 		</tr> 
     </thead>

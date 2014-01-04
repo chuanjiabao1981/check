@@ -8,43 +8,37 @@
 <%@include file="../share/_message.jsp" %>
 
 <spring:url    value="/check_templates/${check_template_id}/check_points/new" var="urlNewCheckPoint"></spring:url>
+<spring:url    value="/check_templates/" var="urlCheckTemplates"></spring:url>
+<a href="${urlNewCheckPoint}" class="btn btn-sm btn-primary">${buttonAdd}</a>
+<a href="${urlCheckTemplates}" class="btn btn-sm btn-success">${labelCheckTemplateIndex}</a>
 
-<a href="${urlNewCheckPoint}">${buttonAdd}</a>
-
-${checkTemplate.name}
-
-
-${fn:length(checkTemplate.listCheckPoints)}
-
-<table>
+<h4 class="header smaller lighter blue">${checkTemplate.name}</h4>
+<table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th>Name</th>
-			<th>Delete</th>
-			<th>Edit</th>
+			<th>${labelCheckPointName}</th>
+			<th>${textAction}</th>
 		</tr> 
     </thead>
     <tbody>
     	<c:forEach items="${checkTemplate.listCheckPoints}" var="checkPoint">
     		<spring:url    value="/check_points/${checkPoint.id}/edit"  var="urlEditCheckPoint"></spring:url>
     		<spring:url    value="/check_points/${checkPoint.id}"  		var="urlDestroyCheckPoint"></spring:url>
+    		<c:set 		   var="css_check_point_id" 	value="check_point_${checkPoint.id}" />
+    		
     		<tr>
 				<td>${checkPoint.name}</td>
 				<td>
-					<form:form  action="${urlDestroyCheckPoint}" method="DELETE">
-						 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-            				<span class="ui-button-text">${buttonDestroy}</span>
-        				</button> 
-        			</form:form>
-				
-				</td>
-				<td>
-					<form:form  action="${urlEditCheckPoint}" method="GET">
-						 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-            				<span class="ui-button-text">${buttonEdit}</span>
-        				</button> 
-        			</form:form>
-				
+					<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+						<a class="btn btn-xs btn-success" href="${urlEditCheckPoint}">
+							<i class="icon-edit bigger-120"></i>
+						</a>
+						<a onclick="document.getElementById('${css_check_point_id}').submit();" class="btn btn-xs btn-danger">
+						  	<i class="icon-trash bigger-120"></i>
+						</a>
+						<form:form  id="${css_check_point_id}" action="${urlDestroyCheckPoint}" method="DELETE"  >
+        				</form:form>
+					</div>
 				</td>
 			 </tr>
     	</c:forEach>

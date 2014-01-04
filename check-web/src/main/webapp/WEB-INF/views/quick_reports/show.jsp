@@ -30,10 +30,28 @@
 	</tr>
 	<tr>
 		<td>
+			${labelQuickReportPerson}
+		</td>
+		<td>
+			<c:if test="${not empty quick_report.responsiblePerson}">
+				${quick_report.responsiblePerson.name}
+			</c:if>
+		</td>
+	</tr>
+	<tr>
+		<td>
 			${labelQuickReportSubmiiter}
 		</td>
 		<td>
 			${quick_report.submitter.name}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			${labelQuickReportLevel}
+		</td>
+		<td>
+			${quick_report.level.text}
 		</td>
 	</tr>
 	<tr>
