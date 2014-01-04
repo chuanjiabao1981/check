@@ -69,6 +69,26 @@
 		  <script src="${pageContext.request.contextPath}/assets/js/excanvas.min.js"></script>
 		<![endif]-->
 		
+		<script src="${pageContext.request.contextPath}/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/chosen.jquery.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/fuelux/fuelux.spinner.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/date-time/bootstrap-datepicker.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/date-time/bootstrap-timepicker.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/date-time/moment.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/date-time/daterangepicker.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/bootstrap-colorpicker.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/jquery.knob.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/jquery.autosize.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/jquery.maskedinput.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/bootstrap-tag.min.js"></script>
+		
+		<!-- ace scripts -->
+
+		<script src="${pageContext.request.contextPath}/assets/js/ace-elements.min.js"></script>
+		<script src="${pageContext.request.contextPath}/assets/js/ace.min.js"></script>
+		
 		<tiles:insertAttribute name="footer" ignore="true"/> 
 		
    	  </body>

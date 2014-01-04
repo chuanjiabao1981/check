@@ -2,6 +2,7 @@
 
 <spring:message code="button_save" 			var="buttonSave"/>
 <spring:message code="button_add" 			var="buttonAdd"/>
+<spring:message code="button_cancel"		var="buttonCancel"/>
 <spring:message code="button_save"			var="buttonSave"/>
 <spring:message code="button_destroy"		var="buttonDestroy"/>
 <spring:message code="button_edit" 			var="buttonEdit"/>
@@ -25,4 +26,6 @@
 
 <spring:message code="label_organization_check_templates" 	var="labelOrganizationCheckTemplates"/>
 <spring:message code="label_organization_name" 				var="labelOrganizationName" />
+
+<spring:message code="text_action"							var="textAction"/>
 
