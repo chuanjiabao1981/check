@@ -9,72 +9,40 @@
 
 <spring:url    value="/quick_reports/${quick_report.id}/edit" var="urlEditQuickReport"></spring:url>
 <spring:url	   value="/quick_reports/${quick_report.id}/quick_report_resolves/new" var="urlNewQuickReportResolve"/>
-<form:form  action="${urlEditQuickReport}" method="GET">
-	<button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-     	<span class="ui-button-text">${buttonEdit}</span>
-    </button> 
-</form:form>
-<form:form  action="${urlNewQuickReportResolve}" method="GET">
-	<button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-     	<span class="ui-button-text">${buttonResolve}</span>
-    </button> 
-</form:form>
-<table>
-	<tr>
-		<td>
-			${labelQuickReportDescription}
-		</td>
-		<td>
-			${quick_report.description}
-		</td>
-	</tr>
-	<tr>
-		<td>
-			${labelQuickReportPerson}
-		</td>
-		<td>
-			<c:if test="${not empty quick_report.responsiblePerson}">
-				${quick_report.responsiblePerson.name}
-			</c:if>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			${labelQuickReportSubmiiter}
-		</td>
-		<td>
-			${quick_report.submitter.name}
-		</td>
-	</tr>
-	<tr>
-		<td>
-			${labelQuickReportLevel}
-		</td>
-		<td>
-			${quick_report.level.text}
-		</td>
-	</tr>
-	<tr>
-		<td>
-			${labelQuickReportCreatedAt}
-		</td>
-		<td>
-			${quick_report.createdAt}
-		</td>
-	</tr>
-	<c:forEach items="${quick_report.listImages}" var="image">
-		<spring:url    value="/check-data/${image.getName('normal')}.jpg" var="urlImage"></spring:url>
-	
-		<tr>
-			<td>
-				${labelQuickReportImage}
-			</td>
-			<td>
-				<img src="${urlImage}"/>
-			</td>
-		</tr>
-	</c:forEach>
-</table>
+<div class="col-xs-12 widget-container-span ui-sortable">
+	<div class="widget-box">
+		<div class="widget-header header-color-blue">
+			<h5>${labelQuickReportDescription}</h5>
+			<div class="widget-toolbar">
+				<a href="#" data-action="collapse">
+					<i class="1 bigger-125 icon-chevron-up"></i>
+				</a>
+			</div>
+			<div class="widget-toolbar no-border">
+				<a href="${urlNewQuickReportResolve}">
+					<button class="btn btn-xs btn-light bigger">
+						<i class="icon-wrench"></i>
+						${buttonResolve}
+					</button>
+				</a>
+				
+				<a href="${urlEditQuickReport}">
+					<button class="btn btn-xs btn-light bigger">
+						<i class="icon-pencil"></i>
+							${buttonEdit}
+					</button>
+				</a>
+								
+			</div>
+		</div>
+		<div class="widget-body">
+			<div class="widget-main no-padding">
+				<%@include file="_quick_report.jsp" %>
+			</div>
+		</div>
+	</div>
+</div>
+
 <table>
 	<c:forEach items="${quick_report.resolves}" var="resolve">
 		<spring:url value="/quick_report_resolves/${resolve.id}/edit" var="urlEditQuickReportResolve"/>
@@ -103,4 +71,3 @@
 	
 	</c:forEach>
 </table>
-${quick_report.resolves.size() }
