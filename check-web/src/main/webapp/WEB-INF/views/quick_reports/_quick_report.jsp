@@ -51,11 +51,9 @@
 							<c:forEach items="${quick_report.listImages}" var="image">
 								<spring:url    value="/check-data/${image.getName('normal')}.jpg" 		var="urlImage"></spring:url>
 								<spring:url    value="/check-data/${image.getName('thumbnail')}.jpg"	var="urlThumbnailImage"></spring:url>
-								<li>
 									<a href="${urlImage}" data-rel="colorbox" class="cboxElement">
 										<img alt="150x150" src="${urlThumbnailImage}">
 									</a>
-								</li>
 							</c:forEach>
 						</ul>
 					</div>

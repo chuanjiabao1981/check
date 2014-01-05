@@ -33,9 +33,9 @@
 				<div class="page-content">
 					<%@include file="_page_header.jsp" %>
 					<div class="row">
-						<div class="col-xs-12">
+						<!--div class="col-xs-12"-->
 							<tiles:insertAttribute name="body"/>
-						</div>
+						<!-- /div-->
 					</div>
 				</div>
 			</div><!-- /.main-content -->
