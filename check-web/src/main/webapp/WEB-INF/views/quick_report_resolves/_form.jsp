@@ -1,22 +1,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@include file="_message.jsp" %>
+<%@include file="../share/_message.jsp" %>
 
 
 
 <form:form modelAttribute="quick_report_resolve"  
  		  id="quick_report_resolve" 
  		  name="quick_report_resolve" 
- 		  method="post" enctype="multipart/form-data" action="${param.post_url}">
-		<form:label path="description">
-			${labelQuickReportDescription}
-		</form:label>
-		<form:input path="description"/>
-		<div>
-            <form:errors path="description" cssClass="error" />
-		</div>
+ 		  method="post" 
+ 		  enctype="multipart/form-data"
+ 		  class="form-horizontal" 
+ 		  role="form" 
+ 		  action="${param.post_url}">
+ 		<t:input  path="description" 		label="${labelQuickReportResolveDescription}"/>
 		
 		<c:forEach items="${quick_report_resolve.listImages}" varStatus="i">
             <label for="image_files[]">tupian</label>
