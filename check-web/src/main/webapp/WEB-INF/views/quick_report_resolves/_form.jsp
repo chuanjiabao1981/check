@@ -16,20 +16,13 @@
  		  role="form" 
  		  action="${param.post_url}">
  		<t:input  path="description" 		label="${labelQuickReportResolveDescription}"/>
-		
 		<c:forEach items="${quick_report_resolve.listImages}" varStatus="i">
-            <label for="image_files[]">tupian</label>
-            <form:input path="listImages[${i.index}].file" type="file"/>
-            <c:if test="${not empty quick_report_resolve.listImages[i.index].id}">
-                 delete<form:checkbox path="listImages[${i.index}].del"/>
-            </c:if>
-            <div>
-            	 <form:errors path="listImages[${i.index}].file" cssClass="error" />
-            </div>
+        	<t:inputfile path="listImages[${i.index}].file" 
+        				 delPath="listImages[${i.index}].del"
+        				 labelName="${labelQuickReportImage}"
+        				 canBeDeleted="${not empty quick_report_resolve.listImages[i.index].id ? true : false}"/>
         </c:forEach>
-		
+
+		<%@include file="../share/_button_save_cancel.jsp" %>
 			
-        <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-            <span class="ui-button-text">${buttonSave}</span>
-        </button> 
 </form:form>
