@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -29,6 +30,9 @@ import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr.Mode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -38,12 +42,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="discriminator",discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue(value="check_image")
+@Configurable(autowire = Autowire.BY_NAME)
 public class CheckImage extends BaseEntity{
 	
 	private static final String IMAGE_TYPE="jpg";
 	private static final String IMAGE_SUFFIX="."+IMAGE_TYPE;
-	private static final String IMAGE_PATH_PREFIX = "/var/check_v3_data/check_data/";
-	
+	@Transient
+	@Resource(name="imagePathPrefix")
+	private String IMAGE_PATH_PREFIX = "/var/check_v3_data/check_data/";
 
 	private static final Logger logger = LoggerFactory.getLogger(CheckImage.class);
 
@@ -173,6 +179,19 @@ public class CheckImage extends BaseEntity{
 	 {
 		 return name+"-"+type.getText()+IMAGE_SUFFIX;
 	 }
+	 @Transient
+	 public String getTestMe()
+	 {
+		 return this.IMAGE_PATH_PREFIX;
+	 }
 	 
+	 public static void main(String[] args) {
+	        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("application-model.xml");
+	        CheckImage checkImage = new CheckImage();
+	        System.err.println(ctx.getBean("testMe"));
+
+	        System.err.println(checkImage.getTestMe());
+	        
+	 }
 
 }

@@ -15,6 +15,9 @@ import com.check.v3.service.CheckPointService;
 @Repository
 public class CheckPointServiceImpl implements CheckPointService{
 
+	@Resource(name="testMe")
+	String testMe;
+	
 	@Resource
 	private CheckPointRepository checkPointRepository;
 	
@@ -33,8 +36,8 @@ public class CheckPointServiceImpl implements CheckPointService{
 	@Override
 	@Transactional(readOnly=true)
 	public CheckPoint findById(Long id) {
+		System.err.println("==========="+testMe);
 		return checkPointRepository.findOne(id);
 	}
-
 
 }

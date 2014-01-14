@@ -9,12 +9,11 @@
 						   http://www.springframework.org/schema/context/spring-context-3.1.xsd
 						   http://www.springframework.org/schema/aop
 						   http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">	
+	<context:spring-configured/>
+	<context:property-placeholder location="classpath:model.properties"/>
 	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-	<context:annotation-config/>
-	<context:component-scan base-package="com.check.v3.service.jpa,com.check.v3.service.file" />
-	<import resource="classpath:application-datasource-jpa-context.xml" />
-	<bean id="testMe" class="java.lang.String">
-		<constructor-arg value="test"/>
+	<bean name="imagePathPrefix" class="java.lang.String">
+		<constructor-arg value="${model.checkImage.path.prefix}"/>
 	</bean>
+	<context:component-scan base-package="com.check.v3.domain"/>
 </beans>
