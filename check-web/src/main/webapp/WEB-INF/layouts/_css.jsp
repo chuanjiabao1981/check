@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/datepicker.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap-timepicker.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/daterangepicker.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/colorpicker.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/colorbox.css" />
 
 <!-- fonts -->
 

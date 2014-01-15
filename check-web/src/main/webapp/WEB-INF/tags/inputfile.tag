@@ -4,17 +4,24 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@attribute name="path" required="true" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
+<%@attribute name="delPath"  required="false" type="java.lang.String"%>
+<%@attribute name="labelName" required="false" type="java.lang.String"%>
 <%@attribute name="cssClass" required="false" type="java.lang.String"%>
 <%@attribute name="required" required="false" type="java.lang.Boolean"%>
+<%@attribute name="canBeDeleted" required="false" type="java.lang.Boolean" %>
+
+<%@include file="../views/share/_message.jsp" %>
+
 <spring:bind path="${path}">
 	<div class="form-group ${status.error ? 'has-error' : '' }">
-		<label class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right" for="${path}">${label}</label>
+		<label class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right" for="${path}">${labelName}</label>
 		<div class="col-xs-12 col-sm-5">
-			<span class="block input-icon input-icon-right">
-	            <form:input path="${path}" cssClass="${empty cssClass ? 'width-100' : cssClass}"/>
-	            <c:if test="${status.error}">
-	           		<i class="icon-remove-sign"></i>
+			<span class="input-icon input-icon-right">
+	            <form:input path="${path}" cssClass="${empty cssClass ? 'width-90' : cssClass}" type="file"/>
+	        </span>
+	        <span>
+	        	 <c:if test="${canBeDeleted}">
+	            	<form:checkbox path="${delPath}"/> ${buttonDestroy}
 	            </c:if>
 	        </span>
         </div>

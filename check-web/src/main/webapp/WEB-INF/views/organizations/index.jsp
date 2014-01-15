@@ -5,19 +5,18 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:directive.page contentType="text/html;charset=UTF-8" />
+<%@include file="../share/_message.jsp" %>
 
 <spring:url    value="/organizations/new" var="urlNewOrganization"></spring:url>
-
-<a href="${urlNewOrganization}">Add</a>
-
+<a href="${urlNewOrganization}" class="btn btn-sm btn-primary">${buttonAdd}</a>
+<br/>
+<br/>
 <c:if test="${not empty organizations}">
-	${fn:length(organizations)}
-	<table>
+<table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<th>Name</th>
-			<th>Delete</th>
-			<th>Edit</th>
+			<th>${labelOrganizationName}</th>
+			<th>${textAction}</th>
 		</tr> 
     </thead>
 	<tbody>
@@ -27,23 +26,20 @@
 			<tr>
 				<td>${organization.name}</td>
 				<td>
-					<form:form  action="${urlDelDepartment}" method="DELETE">
-						 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-            				<span class="ui-button-text">Delete</span>
-        				</button> 
+				<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">
+					<a class="btn btn-xs btn-success" href="${urlEditDepartment}">
+					<i class="icon-edit bigger-120"></i>
+					</a>
+					<a onclick="document.getElementById('organization_${organization.id}').submit();" class="btn btn-xs btn-danger">
+						  	<i class="icon-trash bigger-120"></i>
+					</a>
+					<form:form  id="organization_${organization.id}" action="${urlDelDepartment}" method="DELETE"  >
         			</form:form>
-				
-				</td>
-				<td>
-					<form:form  action="${urlEditDepartment}" method="GET">
-						 <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
-            				<span class="ui-button-text">Edit</span>
-        				</button> 
-        			</form:form>
+				</div>
 				</td>
 			 </tr>
 		</c:forEach>
 	</tbody>
-	</table>
+</table>
 	
 </c:if>

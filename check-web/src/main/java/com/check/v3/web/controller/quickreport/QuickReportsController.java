@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +22,11 @@ import com.check.v3.service.QuickReportService;
 
 
 public class QuickReportsController {
-	
+	@Value("#{ messageSource.getMessage('module_name_quick_report',null,'zh_CN')}")
+	private String moduleName;
+	@Value("#{ messageSource.getMessage('module_description_quick_report',null,'zh_CN')}")
+	private String moduleDescription;
+
 	@Resource
 	OrganizationService organizationService;
 	@Resource
@@ -89,6 +94,16 @@ public class QuickReportsController {
 	{
 		Organization o 	= organizationService.findByIdWithUsers(id);
 		return o.getListUsers();
+	}
+	@ModelAttribute("moduleName")
+	public String getmoduleName()
+	{
+		return moduleName;
+	}
+	@ModelAttribute("moduleDescription")
+	public String getmoduleDescription()
+	{
+		return moduleDescription;
 	}
 
 }
