@@ -36,13 +36,72 @@ public class CheckTemplate extends BaseEntity{
 
     @OneToMany(mappedBy = "checkTemplate", cascade=CascadeType.ALL,orphanRemoval=true)
     private Set<CheckPoint> checkPoints 	= new HashSet<CheckPoint>();
+    
 	@ManyToMany
     @JoinTable(name="organization_check_templates", 
                 joinColumns={@JoinColumn(name="check_template_id")}, 
                 inverseJoinColumns={@JoinColumn(name="organization_id")})
     private Set<Organization> organizations = new HashSet<Organization>();
     
+	/*
+	 * Modified by chensong.zjd, add relation between checkTemplate and checkTemplateReports
+	 * */
+	
+	@OneToMany(mappedBy = "checkTemplate", cascade=CascadeType.ALL,orphanRemoval=true)
+	private Set<CheckTemplateReport> checkTemplateReports = new HashSet<CheckTemplateReport>();
+	
     
+	public Set<CheckTemplateReport> getCheckTemplateReports() {
+		return checkTemplateReports;
+	}
+
+	public void setCheckTemplateReports(
+			Set<CheckTemplateReport> checkTemplateReports) {
+		this.checkTemplateReports = checkTemplateReports;
+	}
+	
+	public CheckTemplateReport addCheckTemplateReport(CheckTemplateReport checkTemplateReport) {
+		return addCheckTemplateReport(checkTemplateReport, true);
+	}
+	
+	public CheckTemplateReport addCheckTemplateReport(CheckTemplateReport checkTemplateReport, boolean set) {
+		if (null == checkTemplateReport){
+			logger.trace("add null checkTemplateReport to checkTemplate");
+			return checkTemplateReport;
+		}
+		
+		if (!this.getCheckTemplateReports().contains(checkTemplateReport)){
+			this.getCheckTemplateReports().add(checkTemplateReport);
+		}
+		
+		if (set) {
+			checkTemplateReport.setCheckTemplate(this, false);
+		}
+		
+		return checkTemplateReport;
+	}
+	
+	public CheckTemplateReport buildCheckTemplateReport(Organization organization) {
+		CheckTemplateReport checkTemplateReport = new CheckTemplateReport();
+		checkTemplateReport.setDepartment(this.getDepartment());
+		checkTemplateReport.setOrganization(organization);
+		this.addCheckTemplateReport(checkTemplateReport);
+		
+		return checkTemplateReport;
+	}
+	
+	public List<CheckTemplateReport> getListCheckTemplateReports()
+	{
+		 ArrayList<CheckTemplateReport> l = Lists.newArrayList(this.checkTemplateReports.iterator());
+		 Collections.sort(l,new BaseEntityComparer());
+		 return l;
+	}
+	
+	/*
+	 * modify end.
+	 * */
+	
+
 	public String getName() {
 		return name;
 	}
@@ -104,6 +163,4 @@ public class CheckTemplate extends BaseEntity{
 	public void setOrganizations(Set<Organization> organizations) {
 		this.organizations = organizations;
 	}
-	
-	
 }

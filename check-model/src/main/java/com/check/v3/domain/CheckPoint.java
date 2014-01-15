@@ -17,6 +17,7 @@ public class CheckPoint extends BaseEntity{
 	@Column(name = "name")
 	@NotEmpty
 	private String name;
+	
 	@ManyToOne
     @JoinColumn(name="check_template_id")
 	private CheckTemplate checkTemplate;

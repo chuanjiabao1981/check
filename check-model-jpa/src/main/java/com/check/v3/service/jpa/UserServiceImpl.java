@@ -58,8 +58,6 @@ public class UserServiceImpl implements UserService {
 			}else{
 				throw ex;
 			}
-		}catch (Exception ex){
-			throw ex;
 		}
 	}
 
