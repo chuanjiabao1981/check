@@ -116,6 +116,7 @@ public class CheckTemplateReport extends BaseEntity {
 	public CheckTemplateReportItem buildCheckTemplateReportItem(CheckPoint checkPoint) {
 		CheckTemplateReportItem checkTemplateReportItem = new CheckTemplateReportItem();
 		checkTemplateReportItem.setCheckPoint(checkPoint);
+		checkTemplateReportItem.setDepartment(this.getDepartment());
 		this.addCheckTemplateReportItem(checkTemplateReportItem);
 		return checkTemplateReportItem;
 	}

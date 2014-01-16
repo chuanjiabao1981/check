@@ -19,7 +19,7 @@ public class TestCheckImage {
 	{
 		
 		System.err.println(testMe);
-		CheckImage checkImage  = new CheckImage();
+		CheckImage checkImage  = new QuickReportImage();
 		System.err.println(checkImage.getTestMe());
 	}
 }

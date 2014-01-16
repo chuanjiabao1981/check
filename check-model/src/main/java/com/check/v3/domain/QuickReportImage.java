@@ -6,9 +6,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Configurable;
+
 @Entity
 @Table(name="check_images")
 @DiscriminatorValue("quick_report_image")
+@Configurable(autowire = Autowire.BY_NAME)
 public class QuickReportImage extends CheckImage{
 
 	
