@@ -32,7 +32,6 @@ import com.google.common.collect.Lists;
 
 @Entity
 @Table(name="check_template_report_items")
-
 public class CheckTemplateReportItem extends BaseEntity{
 
 	private static final long serialVersionUID = -5320172590211268812L;

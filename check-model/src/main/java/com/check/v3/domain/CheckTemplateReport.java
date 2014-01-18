@@ -46,7 +46,7 @@ public class CheckTemplateReport extends BaseEntity {
 	@NotEmpty
 	private User submitter;
 	
-	@OneToMany(mappedBy = "CheckTemplateReport", cascade=CascadeType.ALL,orphanRemoval=true)
+	@OneToMany(mappedBy = "checkTemplateReport", cascade=CascadeType.ALL,orphanRemoval=true)
 	private Set<CheckTemplateReportItem> checkTemplateReportItems = new HashSet<CheckTemplateReportItem>();
 
 	
